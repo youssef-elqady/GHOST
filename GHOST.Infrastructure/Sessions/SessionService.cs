@@ -68,6 +68,11 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
         var bill = billingCalculator.Calculate(session.StartedAt, now, pausedSeconds, session.RatePerHour, BillingPolicy.Default);
         session.EndedAt = now; session.TotalPausedSeconds = pausedSeconds; session.TotalAmount = bill.Amount; session.Status = SessionStatus.Completed; session.IsActive = false; session.EndedById = actorId; session.UpdatedAt = now; session.Device.Status = DeviceStatus.Available;
+        if (session.CustomerId is not null)
+        {
+            var customer = await dbContext.Customers.SingleAsync(x => x.Id == session.CustomerId, cancellationToken);
+            customer.LastVisitAt = now; customer.TotalVisits++; customer.TotalSpent += bill.Amount; customer.TotalMinutes += (int)bill.BillableDuration.TotalMinutes;
+        }
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken);
     }
 

@@ -1,8 +1,10 @@
 using GHOST.Application.Authentication;
 using GHOST.Application.Devices;
+using GHOST.Application.Day4;
 using GHOST.Application.Sessions;
 using GHOST.Infrastructure.Authentication;
 using GHOST.Infrastructure.Devices;
+using GHOST.Infrastructure.Day4;
 using GHOST.Infrastructure.Persistence;
 using GHOST.Infrastructure.Sessions;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,7 @@ public static class DependencyInjection
         services.AddSingleton<IClock, SystemClock>();
         services.AddSingleton<ISessionRateProvider, DeviceRateProvider>();
         services.AddScoped<ISessionService, SessionService>();
+        services.AddScoped<IDay4Service, Day4Service>();
         return services;
     }
 }
