@@ -1,8 +1,10 @@
 using GHOST.Application.Authentication;
 using GHOST.Application.Devices;
+using GHOST.Application.Sessions;
 using GHOST.Infrastructure.Authentication;
 using GHOST.Infrastructure.Devices;
 using GHOST.Infrastructure.Persistence;
+using GHOST.Infrastructure.Sessions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +22,10 @@ public static class DependencyInjection
         services.AddScoped<IDeviceAdministrationService, DeviceAdministrationService>();
         services.AddScoped<CreateDeviceRequestValidator>();
         services.AddScoped<CreateRoomRequestValidator>();
+        services.AddSingleton<IBillingCalculator, BillingCalculator>();
+        services.AddSingleton<IClock, SystemClock>();
+        services.AddSingleton<ISessionRateProvider, DeviceRateProvider>();
+        services.AddScoped<ISessionService, SessionService>();
         return services;
     }
 }

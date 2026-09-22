@@ -21,7 +21,7 @@ public sealed class DeviceAdministrationService(
         await deviceValidator.ValidateAndThrowAsync(request, cancellationToken);
         if (await dbContext.Devices.AnyAsync(x => x.Name == request.Name.Trim(), cancellationToken)) throw new InvalidOperationException("A device with this name already exists.");
         if (request.RoomId is not null && !await dbContext.Rooms.AnyAsync(x => x.Id == request.RoomId, cancellationToken)) throw new KeyNotFoundException("The selected room does not exist.");
-        var device = new Device { Name = request.Name.Trim(), DeviceType = request.DeviceType.Trim(), RoomId = request.RoomId };
+        var device = new Device { Name = request.Name.Trim(), DeviceType = request.DeviceType.Trim(), RoomId = request.RoomId, HourlyRate = 100m };
         dbContext.Devices.Add(device);
         await dbContext.SaveChangesAsync(cancellationToken);
         return new DeviceSummary(device.Id, device.Name, device.DeviceType, device.Status, null, null, null, null, null);

@@ -1,8 +1,10 @@
 using GHOST.Application.Devices;
+using GHOST.Application.Sessions;
 using GHOST.Domain.Entities;
 using GHOST.Domain.Enums;
 using GHOST.Infrastructure.Devices;
 using GHOST.Infrastructure.Persistence;
+using GHOST.Infrastructure.Sessions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,7 +49,7 @@ public sealed class DeviceManagementTests : IAsyncLifetime
 
     [Fact] public async Task Dashboard_exposes_all_seeded_devices_with_truthful_unavailable_values()
     {
-        var dashboard = new DeviceDashboardService(db);
+        var dashboard = new DeviceDashboardService(db, new SystemClock(), new BillingCalculator());
         var devices = await dashboard.GetDevicesAsync();
         Assert.Equal(10, devices.Count); Assert.All(devices, x => { Assert.Null(x.CurrentPrice); Assert.Null(x.ActiveSessionId); Assert.Null(x.Runtime); Assert.Null(x.CurrentAmount); });
     }

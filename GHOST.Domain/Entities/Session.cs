@@ -15,6 +15,7 @@ public sealed class Session
     public int TotalPausedSeconds { get; set; }
     public decimal? TotalAmount { get; set; }
     public SessionStatus Status { get; set; } = SessionStatus.Running;
+    public bool IsActive { get; set; }
     public Guid? StartedById { get; set; }
     public User? StartedBy { get; set; }
     public Guid? EndedById { get; set; }

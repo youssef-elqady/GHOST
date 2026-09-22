@@ -12,7 +12,7 @@ public sealed class DatabaseInitializer(AppDbContext dbContext)
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         await dbContext.Database.MigrateAsync(cancellationToken);
-        if (!await dbContext.Devices.AnyAsync(cancellationToken)) dbContext.Devices.AddRange(Devices.Select(x => new Device { Name = x.Name, DeviceType = x.Type }));
+        if (!await dbContext.Devices.AnyAsync(cancellationToken)) dbContext.Devices.AddRange(Devices.Select(x => new Device { Name = x.Name, DeviceType = x.Type, HourlyRate = 100m }));
         var existing = await dbContext.Roles.Select(x => x.Name).ToListAsync(cancellationToken);
         dbContext.Roles.AddRange(Roles.Where(x => !existing.Contains(x)).Select(x => new Role { Name = x }));
         await dbContext.SaveChangesAsync(cancellationToken);
