@@ -9,3 +9,5 @@ The `AddSessionIntegrityAndDeviceRates` migration adds each device's current hou
 `AddCustomerRewardsAndAudit` adds Discounts, LoyaltyTransactions, Gifts, GiftCards, Offers, and AuditLogs. It enforces unique gift-card codes, one discount record per session, and indexes customer/period gift history and audit lookup fields.
 
 `AddInventoryOrdersAndShifts` adds categories, products, inventory transactions, orders/items, shifts, and cash transactions. Product names and category names are unique; a filtered unique open-shift index enforces the single-open-shift rule.
+
+Production backups use SQLite's online backup API and are saved as timestamped files outside the database directory. Each backup passes `PRAGMA integrity_check` and confirms core schema tables. Restore validates the selected backup, retains a separate pre-restore safety copy, stages the replacement, and verifies the restored file before completion.

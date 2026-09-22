@@ -2,11 +2,13 @@ using GHOST.Application.Authentication;
 using GHOST.Application.Devices;
 using GHOST.Application.Day4;
 using GHOST.Application.Day5;
+using GHOST.Application.Day6;
 using GHOST.Application.Sessions;
 using GHOST.Infrastructure.Authentication;
 using GHOST.Infrastructure.Devices;
 using GHOST.Infrastructure.Day4;
 using GHOST.Infrastructure.Day5;
+using GHOST.Infrastructure.Day6;
 using GHOST.Infrastructure.Persistence;
 using GHOST.Infrastructure.Sessions;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,8 @@ public static class DependencyInjection
         services.AddScoped<ISessionService, SessionService>();
         services.AddScoped<IDay4Service, Day4Service>();
         services.AddScoped<IDay5Service, Day5Service>();
+        services.AddScoped<IReportingService, ReportingService>();
+        services.AddSingleton<IBackupService, SqliteBackupService>();
         return services;
     }
 }

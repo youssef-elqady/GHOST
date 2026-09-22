@@ -9,3 +9,5 @@ Day 3 tests cover start/pause/resume/end transitions, pause persistence, frozen 
 Day 4 tests cover customer phone search and uniqueness, blocking, discount approval authorization, loyalty ledger constraints, period-limited gifts, gift-card redemption, admin-only offers, and audit records.
 
 Day 5 tests cover stock mutation tracing, negative-stock prevention, POS atomicity, historical price snapshots, product availability, cash transactions, opening/closing shifts, and discrepancy reasons.
+
+Day 6 tests cover report values from persisted sessions/products, device utilization, backup naming/rotation/validation, corrupt-backup rejection, and restore verification with a preserved pre-restore copy.

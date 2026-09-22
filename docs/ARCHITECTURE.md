@@ -11,3 +11,5 @@ Day 3 adds `ISessionService`, implemented transactionally in Infrastructure. It 
 Day 4 adds `IDay4Service` for customer profiles/search, discount approval, loyalty ledger entries, gifts, gift cards, offers, and immutable audit events. Authorization is evaluated in the service layer; ViewModels do not access EF Core directly.
 
 Day 5 adds `IDay5Service`, which performs product, inventory, order, cash, and shift mutations in EF Core transactions. POS completion snapshots item prices and writes stock, order, inventory, cash, and audit records atomically.
+
+Day 6 adds read-only `IReportingService` projections for database-backed management metrics and `IBackupService` for validated SQLite online backups and staged restores. Reports use async projections and do not expose persistence to WPF ViewModels.
