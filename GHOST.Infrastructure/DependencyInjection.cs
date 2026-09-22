@@ -1,5 +1,7 @@
 using GHOST.Application.Authentication;
+using GHOST.Application.Devices;
 using GHOST.Infrastructure.Authentication;
+using GHOST.Infrastructure.Devices;
 using GHOST.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,10 @@ public static class DependencyInjection
         services.AddScoped<DatabaseInitializer>();
         services.AddScoped<IAdminSetupService, AdminSetupService>();
         services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+        services.AddScoped<IDeviceDashboardService, DeviceDashboardService>();
+        services.AddScoped<IDeviceAdministrationService, DeviceAdministrationService>();
+        services.AddScoped<CreateDeviceRequestValidator>();
+        services.AddScoped<CreateRoomRequestValidator>();
         return services;
     }
 }

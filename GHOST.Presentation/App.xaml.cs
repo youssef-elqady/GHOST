@@ -6,6 +6,7 @@ using GHOST.Application.Authentication;
 using GHOST.Infrastructure;
 using GHOST.Infrastructure.Persistence;
 using Microsoft.Extensions.DependencyInjection;
+using GHOST.Presentation.ViewModels;
 using Serilog;
 
 namespace GHOST.Presentation;
@@ -17,7 +18,7 @@ public partial class App : System.Windows.Application
     {
         Log.Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.File(@"C:\ProgramData\GHOST\Logs\ghost-.log", rollingInterval: RollingInterval.Day).CreateLogger();
         DispatcherUnhandledException += (_, args) => { Log.Error(args.Exception, "Unhandled UI exception"); MessageBox.Show("حدث خطأ غير متوقع. تم تسجيل المشكلة ويمكن متابعة التشغيل.", "GHOST", MessageBoxButton.OK, MessageBoxImage.Error); args.Handled = true; };
-        serviceProvider = new ServiceCollection().AddGhostInfrastructure().BuildServiceProvider();
+        serviceProvider = new ServiceCollection().AddGhostInfrastructure().AddSingleton<MainViewModel>().BuildServiceProvider();
         try
         {
             using var scope = serviceProvider.CreateScope();
@@ -27,7 +28,7 @@ public partial class App : System.Windows.Application
             {
                 if (new AdminSetupWindow(setup).ShowDialog() != true) { Shutdown(); return; }
             }
-            new MainWindow().Show();
+            new MainWindow(serviceProvider.GetRequiredService<MainViewModel>()).Show();
         }
         catch (Exception exception) { Log.Fatal(exception, "Application initialization failed"); MessageBox.Show("تعذر بدء قاعدة البيانات. راجع سجلات التطبيق.", "GHOST", MessageBoxButton.OK, MessageBoxImage.Error); Shutdown(-1); }
     }

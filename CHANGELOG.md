@@ -2,4 +2,5 @@
 
 ## Unreleased
 
+- Added Day 2 device and room administration services, authorization gates, dashboard projections, and the Arabic-first device dashboard foundation.
 - Initialized the Day 1 layered GHOST solution, EF Core SQLite database model, migrations, required seed data, secure first-run administrator service, WPF bootstrap logging, and database tests.
