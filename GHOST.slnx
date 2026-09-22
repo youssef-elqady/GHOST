@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="GHOST.Application/GHOST.Application.csproj" />
+  <Project Path="GHOST.Domain/GHOST.Domain.csproj" />
+  <Project Path="GHOST.Infrastructure/GHOST.Infrastructure.csproj" />
+  <Project Path="GHOST.Presentation/GHOST.Presentation.csproj" />
+  <Project Path="GHOST.Tests/GHOST.Tests.csproj" />
+</Solution>
