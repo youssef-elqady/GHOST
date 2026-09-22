@@ -7,3 +7,5 @@ The `InitialCreate` migration configures required foreign keys, unique device, r
 The `AddSessionIntegrityAndDeviceRates` migration adds each device's current hourly rate and a session `IsActive` marker. A filtered unique index on active device sessions prevents duplicate active sessions at the SQLite boundary; a unique payment-session index prevents duplicate final settlement. Session records preserve their resolved rate and finalized total independently of future device-rate changes.
 
 `AddCustomerRewardsAndAudit` adds Discounts, LoyaltyTransactions, Gifts, GiftCards, Offers, and AuditLogs. It enforces unique gift-card codes, one discount record per session, and indexes customer/period gift history and audit lookup fields.
+
+`AddInventoryOrdersAndShifts` adds categories, products, inventory transactions, orders/items, shifts, and cash transactions. Product names and category names are unique; a filtered unique open-shift index enforces the single-open-shift rule.
