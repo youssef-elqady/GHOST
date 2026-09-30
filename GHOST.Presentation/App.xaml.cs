@@ -143,10 +143,11 @@ public partial class App : System.Windows.Application
                 services.GetRequiredService<MainViewModel>();
 
             var mainWindow =
-                new MainWindow(
-                    mainViewModel,
-                    services.GetRequiredService<IServiceScopeFactory>(),
-                    currentUserContext);
+    new MainWindow(
+        mainViewModel,
+        services.GetRequiredService<IServiceScopeFactory>(),
+        currentUserContext,
+        services.GetRequiredService<IDay5Service>());
 
             MainWindow = mainWindow;
 
