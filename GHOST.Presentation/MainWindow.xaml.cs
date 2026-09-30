@@ -13,6 +13,7 @@ public partial class MainWindow : Window
     private readonly IServiceScopeFactory scopeFactory;
     private readonly ICurrentUserContext currentUser;
     private readonly IDay5Service day5Service;
+    private readonly AdminDashboardViewModel adminDashboardViewModel;
 
     private MainViewModel ViewModel =>
         (MainViewModel)DataContext;
@@ -33,6 +34,13 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         DataContext = viewModel;
+
+        adminDashboardViewModel = new AdminDashboardViewModel(scopeFactory);
+        DashboardHost.Content = new AdminDashboardView
+        {
+            DataContext = adminDashboardViewModel
+        };
+
         InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
     }
 
@@ -260,5 +268,6 @@ public partial class MainWindow : Window
         CancelEventArgs e)
     {
         ViewModel.Dispose();
+        adminDashboardViewModel.Dispose();
     }
 }
