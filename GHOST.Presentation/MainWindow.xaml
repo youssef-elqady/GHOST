@@ -118,6 +118,10 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Root" Property="Background" Value="#20252D"/>
                             </Trigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}" Value="Active">
+                                <Setter TargetName="Root" Property="Background" Value="#242019"/>
+                                <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+                            </DataTrigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="Root" Property="Opacity" Value="0.35"/>
                             </Trigger>
@@ -153,6 +157,38 @@
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Root" Property="Opacity" Value="0.72"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WindowControlButton" TargetType="Button">
+            <Setter Property="Width" Value="34"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#20252D"/>
+                                <Setter Property="Foreground" Value="{StaticResource White}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.7"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -512,8 +548,7 @@
                     <TextBlock Text="OPERATIONS"
                                Style="{StaticResource Eyebrow}"
                                Margin="7,0,7,7"/>
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Dashboard_Click">
+                    <Button x:Name="NavDashboard" Style="{StaticResource NavigationButton}" Click="Dashboard_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M3,11 L12,3 L21,11 L21,21 L14,21 L14,14 L10,14 L10,21 L3,21 Z"
                                   Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -526,8 +561,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Devices_Click">
+                    <Button x:Name="NavDevices" Style="{StaticResource NavigationButton}" Click="Devices_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M4,4 L20,4 L20,20 L4,20 Z M8,8 L16,8 L16,16 L8,16 Z"
                                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -540,8 +574,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Payments_Click">
+                    <Button x:Name="NavPayments" Style="{StaticResource NavigationButton}" Click="Payments_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M3,6 L21,6 L21,18 L3,18 Z M3,10 L21,10 M7,14 L12,14"
                                   Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -555,8 +588,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Customers_Click">
+                    <Button x:Name="NavCustomers" Style="{StaticResource NavigationButton}" Click="Customers_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M12,12 A4,4 0 1 0 12,4 A4,4 0 1 0 12,12
                                        M4,21 C4,16 20,16 20,21"
@@ -572,8 +604,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Inventory_Click">
+                    <Button x:Name="NavInventory" Style="{StaticResource NavigationButton}" Click="Inventory_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M4,6 L20,6 L18,20 L6,20 Z M8,6 A4,4 0 0 1 16,6"
                                   Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -592,8 +623,7 @@
                                Style="{StaticResource Eyebrow}"
                                Margin="7,25,7,7"/>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Shifts_Click">
+                    <Button x:Name="NavShifts" Style="{StaticResource NavigationButton}" Click="Shifts_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M12,3 L12,21 M4,8 L20,8 M7,3 L7,8 M17,3 L17,8"
                                   Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -607,8 +637,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Reports_Click">
+                    <Button x:Name="NavReports" Style="{StaticResource NavigationButton}" Click="Reports_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M4,20 L4,11 L8,11 L8,20 M10,20 L10,5 L14,5 L14,20 M16,20 L16,8 L20,8 L20,20"
                                   Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -622,8 +651,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Style="{StaticResource NavigationButton}"
-                            Click="Administration_Click">
+                    <Button x:Name="NavAdministration" Style="{StaticResource NavigationButton}" Click="Administration_Click">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="M12,3 L14,7 L18,8 L15,11 L16,16 L12,14 L8,16 L9,11 L6,8 L10,7 Z"
                                   Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
@@ -727,6 +755,28 @@
                 <StackPanel Grid.Column="1"
                             Orientation="Horizontal"
                             VerticalAlignment="Center">
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,8,0">
+                        <Button Style="{StaticResource WindowControlButton}"
+                                Click="WindowMinimize_Click"
+                                ToolTip="تصغير">
+                            <TextBlock Text="−"/>
+                        </Button>
+
+                        <Button x:Name="MaximizeButton"
+                                Style="{StaticResource WindowControlButton}"
+                                Click="WindowMaximize_Click"
+                                ToolTip="تكبير / استعادة">
+                            <TextBlock Text="□"/>
+                        </Button>
+
+                        <Button Style="{StaticResource WindowControlButton}"
+                                Click="WindowClose_Click"
+                                ToolTip="إغلاق">
+                            <TextBlock Text="×"/>
+                        </Button>
+                    </StackPanel>
 
                     <Border Background="{StaticResource Surface}"
                             BorderBrush="{StaticResource Line}"
