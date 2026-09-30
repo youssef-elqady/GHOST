@@ -21,7 +21,8 @@ public partial class MainWindow : Window
         MainViewModel viewModel,
         IServiceScopeFactory scopeFactory,
         ICurrentUserContext currentUser,
-        IDay5Service day5Service)
+        IDay5Service day5Service,
+        IDeviceDashboardService dashboardService)
     {
         this.scopeFactory = scopeFactory;
         this.currentUser = currentUser;
