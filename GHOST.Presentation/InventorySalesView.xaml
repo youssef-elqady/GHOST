@@ -1,0 +1,17 @@
+<UserControl x:Class="GHOST.Presentation.InventorySalesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             Background="Transparent">
+    <TabControl x:Name="SalesInventoryTabs"
+                Background="Transparent"
+                BorderThickness="0"
+                SelectionChanged="SalesInventoryTabs_SelectionChanged">
+        <TabItem Header="نقطة البيع">
+            <ContentControl x:Name="SalesHost"/>
+        </TabItem>
+        <TabItem Header="المنتجات والمخزون">
+            <ContentControl x:Name="InventoryHost"/>
+        </TabItem>
+    </TabControl>
+</UserControl>
