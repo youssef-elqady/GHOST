@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows;
 using GHOST.Application.Authentication;
 using GHOST.Application.Day5;
+using GHOST.Application.Devices;
 using GHOST.Presentation.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +32,8 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         DataContext = viewModel;
-        InventoryHost.Content = new InventoryView(day5Service, currentUser);
+        var dashboardService = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDeviceDashboardService>();
+        InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
     }
 
     private async void Window_Loaded(
