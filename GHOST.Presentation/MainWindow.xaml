@@ -1558,76 +1558,8 @@
                     <!-- ================================================= -->
 
                     <TabItem>
-
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
-
-                            <StackPanel>
-
-                                <TextBlock Text="COMMERCE"
-                                           Style="{StaticResource Eyebrow}"/>
-
-                                <TextBlock Text="المبيعات والمخزون"
-                                           FontSize="27"
-                                           FontWeight="SemiBold"/>
-
-                                <TextBlock Text="المنتجات والطلبات وحركة المخزون."
-                                           Foreground="{StaticResource Muted}"
-                                           FontSize="11"
-                                           Margin="0,5,0,18"/>
-
-                                <UniformGrid Columns="3">
-
-                                    <Border Style="{StaticResource Panel}"
-                                            Margin="0,0,10,0">
-                                        <StackPanel>
-                                            <TextBlock Text="المنتجات"
-                                                       FontSize="18"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="الأسعار والتصنيفات وإدارة المنتجات."
-                                                       Foreground="{StaticResource Muted}"
-                                                       FontSize="10"
-                                                       TextWrapping="Wrap"
-                                                       Margin="0,8,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <Border Style="{StaticResource Panel}"
-                                            Margin="0,0,10,0">
-                                        <StackPanel>
-                                            <TextBlock Text="المخزون"
-                                                       FontSize="18"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="الكميات والحركات والمخزون المنخفض."
-                                                       Foreground="{StaticResource Muted}"
-                                                       FontSize="10"
-                                                       TextWrapping="Wrap"
-                                                       Margin="0,8,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                    <Border Style="{StaticResource Panel}">
-                                        <StackPanel>
-                                            <TextBlock Text="الطلبات"
-                                                       FontSize="18"
-                                                       FontWeight="SemiBold"/>
-                                            <TextBlock Text="المبيعات والطلبات المرتبطة بالجلسات."
-                                                       Foreground="{StaticResource Muted}"
-                                                       FontSize="10"
-                                                       TextWrapping="Wrap"
-                                                       Margin="0,8,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-
-                                </UniformGrid>
-                            </StackPanel>
-                        </ScrollViewer>
-                    </TabItem>
-
-                    <!-- ================================================= -->
-                    <!-- SHIFTS                                              -->
-                    <!-- ================================================= -->
-
-                    <TabItem>
+                        <ContentControl x:Name="InventoryHost"/>
+                    </TabItem><TabItem>
 
                         <Grid>
 
