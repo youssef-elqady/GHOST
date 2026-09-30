@@ -33,7 +33,6 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         DataContext = viewModel;
-        var dashboardService = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<IDeviceDashboardService>();
         InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
     }
 
