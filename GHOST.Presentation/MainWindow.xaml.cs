@@ -72,7 +72,7 @@ public partial class MainWindow : Window
         NavigateTo(
             0,
             "الرئيسية",
-            "نظرة مباشرة على حالة المكان والجلسات");
+            "ملخص الإدارة والإيرادات وحالة التشغيل والتنبيهات");
     }
 
     private void Devices_Click(
