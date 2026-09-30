@@ -45,6 +45,25 @@
         <SolidColorBrush x:Key="RedSoft" Color="#2D2022"/>
 
         <!-- ============================================================= -->
+        <!-- CONTENT-ONLY TAB CONTROL                                       -->
+        <!-- ============================================================= -->
+
+        <Style x:Key="ContentOnlyTabControl" TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <ContentPresenter
+                            ContentSource="SelectedContent"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============================================================= -->
         <!-- GLOBAL TEXT                                                    -->
         <!-- ============================================================= -->
 
@@ -746,34 +765,15 @@
                 </StackPanel>
             </Grid>
 
-            <!-- TABS -->
-
-            <Border Grid.Row="1"
-                    Visibility="Collapsed">
-
-                <TabControl x:Name="MainTabs"
-                            SelectedIndex="0">
-
-                    <TabItem Header="الرئيسية"/>
-                    <TabItem Header="الأجهزة والجلسات"/>
-                    <TabItem Header="المدفوعات"/>
-                    <TabItem Header="العملاء"/>
-                    <TabItem Header="المبيعات والمخزون"/>
-                    <TabItem Header="الشيفتات"/>
-                    <TabItem Header="التقارير"/>
-                    <TabItem Header="الإدارة"/>
-
-                </TabControl>
-            </Border>
+            <!-- CONTENT NAVIGATION IS CONTROLLED BY THE SIDEBAR -->
 
             <!-- CONTENT -->
 
             <Grid Grid.Row="2">
 
                 <TabControl x:Name="ContentTabs"
-                            SelectedIndex="{Binding ElementName=MainTabs, Path=SelectedIndex}"
-                            Background="Transparent"
-                            BorderThickness="0">
+                            SelectedIndex="0"
+                            Style="{StaticResource ContentOnlyTabControl}">
 
                     <!-- ================================================= -->
                     <!-- DASHBOARD                                           -->
