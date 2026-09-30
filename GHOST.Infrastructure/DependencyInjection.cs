@@ -38,6 +38,7 @@ public static class DependencyInjection
         services.AddScoped<IDay4Service, Day4Service>();
         services.AddScoped<IDay5Service, Day5Service>();
         services.AddScoped<IReportingService, ReportingService>();
+        services.AddScoped<IAdminDashboardService, AdminDashboardService>();
         services.AddScoped<IBackupService, SqliteBackupService>();
         return services;
     }
