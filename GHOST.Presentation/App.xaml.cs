@@ -1,4 +1,5 @@
 ﻿using GHOST.Application.Authentication;
+using GHOST.Application.Day5;
 using GHOST.Infrastructure;
 using GHOST.Infrastructure.Persistence;
 using GHOST.Presentation.ViewModels;
