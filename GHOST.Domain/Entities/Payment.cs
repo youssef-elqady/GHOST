@@ -11,4 +11,6 @@ public sealed class Payment
     public DateTimeOffset PaymentDate { get; set; } = DateTimeOffset.UtcNow;
     public Guid CashierId { get; set; }
     public User Cashier { get; set; } = null!;
+    public Guid ShiftId { get; set; }
+    public Shift Shift { get; set; } = null!;
 }

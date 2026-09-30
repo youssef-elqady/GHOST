@@ -13,11 +13,13 @@ public interface IClock { DateTimeOffset UtcNow { get; } }
 public interface ISessionRateProvider { decimal ResolveRatePerHour(decimal deviceHourlyRate); }
 public sealed record StartSessionRequest(Guid DeviceId, Guid? CustomerId = null);
 public sealed record CashPaymentRequest(Guid SessionId, decimal AmountReceived);
+public sealed record SessionPaymentSummary(Guid SessionId, decimal AmountDue, bool IsPaid);
 public interface ISessionService
 {
-    Task<Guid> StartAsync(Guid actorId, StartSessionRequest request, CancellationToken cancellationToken = default);
-    Task PauseAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default);
-    Task ResumeAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default);
-    Task EndAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default);
-    Task<Guid> TakeCashPaymentAsync(Guid actorId, CashPaymentRequest request, CancellationToken cancellationToken = default);
+    Task<Guid> StartAsync(StartSessionRequest request, CancellationToken cancellationToken = default);
+    Task PauseAsync(Guid sessionId, CancellationToken cancellationToken = default);
+    Task ResumeAsync(Guid sessionId, CancellationToken cancellationToken = default);
+    Task EndAsync(Guid sessionId, CancellationToken cancellationToken = default);
+    Task<Guid> TakeCashPaymentAsync(CashPaymentRequest request, CancellationToken cancellationToken = default);
+    Task<SessionPaymentSummary> GetPaymentSummaryAsync(Guid sessionId, CancellationToken cancellationToken = default);
 }

@@ -1,0 +1,200 @@
+<Window x:Class="GHOST.Presentation.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GHOST — تسجيل الدخول"
+        Width="520"
+        Height="650"
+        MinWidth="520"
+        MinHeight="650"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True"
+        FlowDirection="RightToLeft"
+        Background="{StaticResource GhostBg}">
+
+    <Grid>
+
+        <!-- ========================================================= -->
+        <!-- BACKGROUND                                                  -->
+        <!-- ========================================================= -->
+
+        <Grid.Background>
+
+            <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="1,1">
+
+                <GradientStop Color="#0D0F14"
+                              Offset="0"/>
+
+                <GradientStop Color="#14121F"
+                              Offset="0.55"/>
+
+                <GradientStop Color="#0D0F14"
+                              Offset="1"/>
+
+            </LinearGradientBrush>
+
+        </Grid.Background>
+
+
+        <!-- ========================================================= -->
+        <!-- MAIN CONTENT                                                -->
+        <!-- ========================================================= -->
+
+        <Grid Width="400"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center">
+
+            <Grid.RowDefinitions>
+
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="28"/>
+
+                <RowDefinition Height="Auto"/>
+
+            </Grid.RowDefinitions>
+
+
+            <!-- ===================================================== -->
+            <!-- BRAND                                                   -->
+            <!-- ===================================================== -->
+
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Center">
+
+                <Border Width="76"
+                        Height="76"
+                        CornerRadius="22"
+                        Background="{StaticResource GhostAccent}"
+                        HorizontalAlignment="Center">
+
+                    <Grid>
+
+                        <Path
+                            Data="M13,14 L26,7 L39,14 L39,35 L26,43 L13,35 Z M20,21 L20,31 L32,31 L32,26 L26,26 L26,21 Z"
+                            Fill="White"
+                            Stretch="Uniform"
+                            Margin="13"/>
+
+                    </Grid>
+
+                </Border>
+
+
+                <TextBlock Text="GHOST"
+                           FontSize="34"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"
+                           Margin="0,16,0,0"/>
+
+
+                <TextBlock Text="GAMING LOUNGE MANAGEMENT"
+                           FontSize="11"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource GhostMuted}"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,0"/>
+
+            </StackPanel>
+
+
+            <!-- ===================================================== -->
+            <!-- LOGIN CARD                                              -->
+            <!-- ===================================================== -->
+
+            <Border Grid.Row="2"
+                    Background="{StaticResource GhostSurface}"
+                    BorderBrush="{StaticResource GhostBorder}"
+                    BorderThickness="1"
+                    CornerRadius="16"
+                    Padding="28">
+
+                <StackPanel>
+
+                    <TextBlock Text="تسجيل الدخول"
+                               FontSize="25"
+                               FontWeight="SemiBold"/>
+
+
+                    <TextBlock Text="أدخل بيانات حسابك للوصول إلى نظام GHOST"
+                               Foreground="{StaticResource GhostMuted}"
+                               Margin="0,7,0,28"
+                               FontSize="13"/>
+
+
+                    <TextBlock Text="اسم المستخدم"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,8"/>
+
+
+                    <TextBox x:Name="username"
+                             Height="46"
+                             ToolTip="أدخل اسم المستخدم"/>
+
+
+                    <TextBlock Text="كلمة المرور"
+                               FontWeight="SemiBold"
+                               Margin="0,20,0,8"/>
+
+
+                    <PasswordBox x:Name="password"
+                                 Height="46"
+                                 ToolTip="أدخل كلمة المرور"/>
+
+
+                    <!-- ERROR -->
+
+                    <Border x:Name="errorContainer"
+                            Background="#25E46D78"
+                            BorderBrush="{StaticResource GhostDanger}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,18,0,0"
+                            Visibility="Collapsed">
+
+                        <TextBlock x:Name="error"
+                                   Foreground="{StaticResource GhostDanger}"
+                                   TextWrapping="Wrap"
+                                   FontSize="13"/>
+
+                    </Border>
+
+
+                    <!-- LOGIN -->
+
+                    <Button x:Name="loginButton"
+                            Content="تسجيل الدخول"
+                            Style="{StaticResource PrimaryButton}"
+                            Height="48"
+                            Margin="0,22,0,0"
+                            Click="SignIn_Click"/>
+
+
+                    <!-- STATUS -->
+
+                    <TextBlock x:Name="statusText"
+                               Foreground="{StaticResource GhostMuted}"
+                               FontSize="12"
+                               HorizontalAlignment="Center"
+                               Margin="0,16,0,0"/>
+
+
+                    <!-- VERSION -->
+
+                    <TextBlock Text="GHOST • Gaming Lounge Management"
+                               Foreground="{StaticResource GhostMuted}"
+                               FontSize="11"
+                               HorizontalAlignment="Center"
+                               Margin="0,25,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+
+</Window>

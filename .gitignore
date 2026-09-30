@@ -3,3 +3,13 @@ obj/
 .dotnet/
 .nuget/
 .tools/
+
+batch*.txt
+
+batch*.txt
+
+batch*.txt
+
+.vs/
+bin/
+obj/

@@ -24,6 +24,9 @@ public static class DependencyInjection
         services.AddScoped<DatabaseInitializer>();
         services.AddScoped<IAdminSetupService, AdminSetupService>();
         services.AddSingleton<IPasswordHasher, Pbkdf2PasswordHasher>();
+        services.AddSingleton<CurrentUserContext>();
+        services.AddSingleton<ICurrentUserContext>(provider => provider.GetRequiredService<CurrentUserContext>());
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IDeviceDashboardService, DeviceDashboardService>();
         services.AddScoped<IDeviceAdministrationService, DeviceAdministrationService>();
         services.AddScoped<CreateDeviceRequestValidator>();
@@ -35,7 +38,7 @@ public static class DependencyInjection
         services.AddScoped<IDay4Service, Day4Service>();
         services.AddScoped<IDay5Service, Day5Service>();
         services.AddScoped<IReportingService, ReportingService>();
-        services.AddSingleton<IBackupService, SqliteBackupService>();
+        services.AddScoped<IBackupService, SqliteBackupService>();
         return services;
     }
 }

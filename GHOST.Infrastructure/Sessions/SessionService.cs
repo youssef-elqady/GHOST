@@ -1,4 +1,5 @@
 using GHOST.Application.Sessions;
+using GHOST.Application.Authentication;
 using GHOST.Domain.Entities;
 using GHOST.Domain.Enums;
 using GHOST.Infrastructure.Persistence;
@@ -6,10 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GHOST.Infrastructure.Sessions;
 
-public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessionRateProvider rateProvider, IBillingCalculator billingCalculator) : ISessionService
+public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessionRateProvider rateProvider, IBillingCalculator billingCalculator, ICurrentUserContext currentUser) : ISessionService
 {
-    public async Task<Guid> StartAsync(Guid actorId, StartSessionRequest request, CancellationToken cancellationToken = default)
+    public async Task<Guid> StartAsync(StartSessionRequest request, CancellationToken cancellationToken = default)
     {
+        var actorId = currentUser.RequireAuthenticated().Id;
         await EnsureOperatorAsync(actorId, cancellationToken);
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var device = await dbContext.Devices.SingleOrDefaultAsync(x => x.Id == request.DeviceId, cancellationToken) ?? throw new KeyNotFoundException("Device not found.");
@@ -25,8 +27,9 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         return session.Id;
     }
 
-    public async Task PauseAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default)
+    public async Task PauseAsync(Guid sessionId, CancellationToken cancellationToken = default)
     {
+        var actorId = currentUser.RequireAuthenticated().Id;
         await EnsureOperatorAsync(actorId, cancellationToken);
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var session = await LoadActiveSessionAsync(sessionId, cancellationToken);
@@ -38,8 +41,9 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken);
     }
 
-    public async Task ResumeAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default)
+    public async Task ResumeAsync(Guid sessionId, CancellationToken cancellationToken = default)
     {
+        var actorId = currentUser.RequireAuthenticated().Id;
         await EnsureOperatorAsync(actorId, cancellationToken);
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var session = await LoadActiveSessionAsync(sessionId, cancellationToken);
@@ -52,8 +56,9 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken);
     }
 
-    public async Task EndAsync(Guid actorId, Guid sessionId, CancellationToken cancellationToken = default)
+    public async Task EndAsync(Guid sessionId, CancellationToken cancellationToken = default)
     {
+        var actorId = currentUser.RequireAuthenticated().Id;
         await EnsureOperatorAsync(actorId, cancellationToken);
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         var session = await LoadActiveSessionAsync(sessionId, cancellationToken);
@@ -76,8 +81,9 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken);
     }
 
-    public async Task<Guid> TakeCashPaymentAsync(Guid actorId, CashPaymentRequest request, CancellationToken cancellationToken = default)
+    public async Task<Guid> TakeCashPaymentAsync(CashPaymentRequest request, CancellationToken cancellationToken = default)
     {
+        var actorId = currentUser.RequireAuthenticated().Id;
         await EnsureOperatorAsync(actorId, cancellationToken);
         if (request.AmountReceived < 0) throw new ArgumentOutOfRangeException(nameof(request.AmountReceived));
         await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
@@ -85,8 +91,18 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         if (session.Status != SessionStatus.Completed || session.TotalAmount is null) throw new InvalidOperationException("Only completed sessions can be paid.");
         if (await dbContext.Payments.AnyAsync(x => x.SessionId == request.SessionId, cancellationToken)) throw new InvalidOperationException("A final payment already exists for this session.");
         if (request.AmountReceived < session.TotalAmount.Value) throw new InvalidOperationException("Insufficient cash received.");
-        var payment = new Payment { SessionId = session.Id, AmountDue = session.TotalAmount.Value, AmountReceived = request.AmountReceived, Change = request.AmountReceived - session.TotalAmount.Value, PaymentDate = clock.UtcNow, CashierId = actorId };
-        dbContext.Payments.Add(payment); await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken); return payment.Id;
+        var shift = await dbContext.Shifts.SingleOrDefaultAsync(x => x.IsOpen, cancellationToken) ?? throw new InvalidOperationException("An open shift is required before accepting session payments.");
+        var payment = new Payment { SessionId = session.Id, AmountDue = session.TotalAmount.Value, AmountReceived = request.AmountReceived, Change = request.AmountReceived - session.TotalAmount.Value, PaymentDate = clock.UtcNow, CashierId = actorId, ShiftId = shift.Id };
+        dbContext.Payments.Add(payment);
+        dbContext.CashTransactions.Add(new CashTransaction { ShiftId = shift.Id, Amount = payment.AmountDue, Type = CashTransactionType.Sale, Reference = payment.Id.ToString(), Reason = "Session payment", UserId = actorId, Timestamp = payment.PaymentDate });
+        await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken); return payment.Id;
+    }
+    public async Task<SessionPaymentSummary> GetPaymentSummaryAsync(Guid sessionId, CancellationToken cancellationToken = default)
+    {
+        currentUser.RequireAuthenticated();
+        var session = await dbContext.Sessions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == sessionId, cancellationToken) ?? throw new KeyNotFoundException("Session not found.");
+        if (session.Status != SessionStatus.Completed || session.TotalAmount is null) throw new InvalidOperationException("Only completed sessions can be paid.");
+        return new SessionPaymentSummary(session.Id, session.TotalAmount.Value, await dbContext.Payments.AnyAsync(x => x.SessionId == sessionId, cancellationToken));
     }
 
     private async Task<Session> LoadActiveSessionAsync(Guid id, CancellationToken cancellationToken) =>

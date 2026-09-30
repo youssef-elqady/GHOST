@@ -1,10 +1,203 @@
+using System.ComponentModel;
 using System.Windows;
+using GHOST.Application.Authentication;
 using GHOST.Presentation.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GHOST.Presentation;
 
 public partial class MainWindow : Window
 {
-    public MainWindow(MainViewModel viewModel) { InitializeComponent(); DataContext = viewModel; }
-    private async void Window_Loaded(object sender, RoutedEventArgs e) => await ((MainViewModel)DataContext).RefreshCommand.ExecuteAsync(null);
+    private readonly IServiceScopeFactory scopeFactory;
+    private readonly ICurrentUserContext currentUser;
+
+    private MainViewModel ViewModel =>
+        (MainViewModel)DataContext;
+
+    public MainWindow(
+        MainViewModel viewModel,
+        IServiceScopeFactory scopeFactory,
+        ICurrentUserContext currentUser)
+    {
+        this.scopeFactory = scopeFactory;
+        this.currentUser = currentUser;
+
+        currentUser.RequireAuthenticated();
+
+        InitializeComponent();
+
+        DataContext = viewModel;
+    }
+
+    private async void Window_Loaded(
+        object sender,
+        RoutedEventArgs e)
+    {
+        try
+        {
+            await ViewModel.RefreshCommand
+                .ExecuteAsync(null);
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(
+                exception.Message,
+                "GHOST",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private void Dashboard_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            0,
+            "الرئيسية",
+            "نظرة مباشرة على حالة المكان والجلسات");
+    }
+
+    private void Devices_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            1,
+            "الأجهزة والجلسات",
+            "إدارة ومتابعة أجهزة اللعب والجلسات الحالية");
+    }
+
+    private void Payments_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            2,
+            "المدفوعات",
+            "تحصيل الحسابات واستلام النقدية");
+    }
+
+    private void Customers_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            3,
+            "العملاء",
+            "ملفات العملاء والزيارات والإنفاق والولاء");
+    }
+
+    private void Inventory_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            4,
+            "المبيعات والمخزون",
+            "المنتجات والمخزون والطلبات");
+    }
+
+    private void Shifts_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            5,
+            "الشيفتات والخزينة",
+            "إدارة الشيفتات وحركة النقدية");
+    }
+
+    private void Reports_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            6,
+            "التقارير",
+            "تحليل أداء المكان والإيرادات والتشغيل");
+    }
+
+    private void Administration_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        NavigateTo(
+            7,
+            "الإدارة",
+            "إعدادات النظام والأجهزة والصلاحيات");
+    }
+
+    private void NavigateTo(
+        int index,
+        string title,
+        string subtitle)
+    {
+        if (index < 0 ||
+            index >= MainTabs.Items.Count)
+        {
+            return;
+        }
+
+        MainTabs.SelectedIndex = index;
+
+        PageTitle.Text = title;
+        PageSubtitle.Text = subtitle;
+    }
+
+    private async void Logout_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        try
+        {
+            using var scope =
+                scopeFactory.CreateScope();
+
+            var authentication =
+                scope.ServiceProvider
+                    .GetRequiredService<IAuthenticationService>();
+
+            authentication.SignOut();
+
+            Hide();
+
+            var loginWindow =
+                new LoginWindow(authentication);
+
+            var loginResult =
+                loginWindow.ShowDialog();
+
+            if (loginResult == true)
+            {
+                currentUser.RequireAuthenticated();
+
+                Show();
+
+                await ViewModel.RefreshCommand
+                    .ExecuteAsync(null);
+
+                return;
+            }
+
+            Close();
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(
+                exception.Message,
+                "GHOST",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            Show();
+        }
+    }
+
+    private void Window_Closing(
+        object? sender,
+        CancelEventArgs e)
+    {
+        ViewModel.Dispose();
+    }
 }
