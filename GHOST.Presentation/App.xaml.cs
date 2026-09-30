@@ -1,5 +1,6 @@
 ﻿using GHOST.Application.Authentication;
 using GHOST.Application.Day5;
+using GHOST.Application.Devices;
 using GHOST.Infrastructure;
 using GHOST.Infrastructure.Persistence;
 using GHOST.Presentation.ViewModels;
@@ -147,7 +148,8 @@ public partial class App : System.Windows.Application
         mainViewModel,
         services.GetRequiredService<IServiceScopeFactory>(),
         currentUserContext,
-        services.GetRequiredService<IDay5Service>());
+        services.GetRequiredService<IDay5Service>(),
+            services.GetRequiredService<IDeviceDashboardService>());
 
             MainWindow = mainWindow;
 
