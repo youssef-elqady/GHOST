@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
 using GHOST.Application.Authentication;
+using GHOST.Application.Day5;
 using GHOST.Presentation.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ public partial class MainWindow : Window
 {
     private readonly IServiceScopeFactory scopeFactory;
     private readonly ICurrentUserContext currentUser;
+    private readonly IDay5Service day5Service;
 
     private MainViewModel ViewModel =>
         (MainViewModel)DataContext;
@@ -17,16 +19,19 @@ public partial class MainWindow : Window
     public MainWindow(
         MainViewModel viewModel,
         IServiceScopeFactory scopeFactory,
-        ICurrentUserContext currentUser)
+        ICurrentUserContext currentUser,
+        IDay5Service day5Service)
     {
         this.scopeFactory = scopeFactory;
         this.currentUser = currentUser;
+        this.day5Service = day5Service;
 
         currentUser.RequireAuthenticated();
 
         InitializeComponent();
 
         DataContext = viewModel;
+        InventoryHost.Content = new InventoryView(day5Service, currentUser);
     }
 
     private async void Window_Loaded(
