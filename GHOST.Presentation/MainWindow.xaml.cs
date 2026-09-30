@@ -35,6 +35,8 @@ public partial class MainWindow : Window
     {
         try
         {
+            SetActiveNavigation(0);
+
             await ViewModel.RefreshCommand
                 .ExecuteAsync(null);
         }
@@ -139,10 +141,62 @@ public partial class MainWindow : Window
             return;
         }
 
+        SetActiveNavigation(index);
+
         ContentTabs.SelectedIndex = index;
 
         PageTitle.Text = title;
         PageSubtitle.Text = subtitle;
+    }
+
+    private void SetActiveNavigation(int index)
+    {
+        var buttons = new[]
+        {
+            NavDashboard,
+            NavDevices,
+            NavPayments,
+            NavCustomers,
+            NavInventory,
+            NavShifts,
+            NavReports,
+            NavAdministration
+        };
+
+        foreach (var button in buttons)
+            button.Tag = null;
+
+        if (index >= 0 && index < buttons.Length)
+            buttons[index].Tag = "Active";
+    }
+
+    private void WindowMinimize_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
+
+    private void WindowMaximize_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (WindowState == WindowState.Maximized)
+        {
+            WindowState = WindowState.Normal;
+            MaximizeButton.Content = "□";
+            return;
+        }
+
+        WindowState = WindowState.Maximized;
+        MaximizeButton.Content = "❐";
+    }
+
+    private void WindowClose_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        Close();
     }
 
     private async void Logout_Click(
