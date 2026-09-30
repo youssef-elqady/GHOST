@@ -1,9 +1,101 @@
 using GHOST.Domain.Enums;
 namespace GHOST.Domain.Entities;
-public sealed class ProductCategory { public Guid Id { get; set; } = Guid.NewGuid(); public required string Name { get; set; } public bool IsActive { get; set; } = true; public ICollection<Product> Products { get; set; } = new List<Product>(); }
-public sealed class Product { public Guid Id { get; set; } = Guid.NewGuid(); public required string Name { get; set; } public Guid CategoryId { get; set; } public ProductCategory Category { get; set; } = null!; public decimal SellingPrice { get; set; } public decimal CostPrice { get; set; } public int StockQuantity { get; set; } public int MinimumStockLevel { get; set; } public bool IsActive { get; set; } = true; }
-public sealed class InventoryTransaction { public Guid Id { get; set; } = Guid.NewGuid(); public Guid ProductId { get; set; } public Product Product { get; set; } = null!; public InventoryTransactionType Type { get; set; } public int Quantity { get; set; } public int BeforeQuantity { get; set; } public int AfterQuantity { get; set; } public required string Reason { get; set; } public Guid CreatedById { get; set; } public User CreatedBy { get; set; } = null!; public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow; }
-public sealed class Order { public Guid Id { get; set; } = Guid.NewGuid(); public Guid? CustomerId { get; set; } public Customer? Customer { get; set; } public Guid? SessionId { get; set; } public Session? Session { get; set; } public decimal TotalAmount { get; set; } public decimal DiscountAmount { get; set; } public decimal FinalAmount { get; set; } public decimal AmountReceived { get; set; } public decimal Change { get; set; } public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow; public Guid CreatedById { get; set; } public User CreatedBy { get; set; } = null!; public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>(); }
-public sealed class OrderItem { public Guid Id { get; set; } = Guid.NewGuid(); public Guid OrderId { get; set; } public Order Order { get; set; } = null!; public Guid ProductId { get; set; } public Product Product { get; set; } = null!; public int Quantity { get; set; } public decimal UnitPrice { get; set; } public decimal Discount { get; set; } public decimal Total { get; set; } }
-public sealed class Shift { public Guid Id { get; set; } = Guid.NewGuid(); public Guid OpenedById { get; set; } public User OpenedBy { get; set; } = null!; public DateTimeOffset OpenedAt { get; set; } = DateTimeOffset.UtcNow; public decimal OpeningCash { get; set; } public bool IsOpen { get; set; } = true; public Guid? ClosedById { get; set; } public User? ClosedBy { get; set; } public DateTimeOffset? ClosedAt { get; set; } public decimal? ExpectedCash { get; set; } public decimal? ActualCash { get; set; } public decimal? Difference { get; set; } public string? DifferenceReason { get; set; } }
-public sealed class CashTransaction { public Guid Id { get; set; } = Guid.NewGuid(); public Guid ShiftId { get; set; } public Shift Shift { get; set; } = null!; public decimal Amount { get; set; } public CashTransactionType Type { get; set; } public string? Reference { get; set; } public required string Reason { get; set; } public Guid UserId { get; set; } public User User { get; set; } = null!; public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow; }
+
+public sealed class ProductCategory
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public required string Name { get; set; }
+    public bool IsActive { get; set; } = true;
+    public ICollection<Product> Products { get; set; } = new List<Product>();
+}
+
+public sealed class Product
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public required string Name { get; set; }
+    public string? Barcode { get; set; }
+    public Guid CategoryId { get; set; }
+    public ProductCategory Category { get; set; } = null!;
+    public decimal SellingPrice { get; set; }
+    public decimal CostPrice { get; set; }
+    public int StockQuantity { get; set; }
+    public int MinimumStockLevel { get; set; }
+    public bool IsActive { get; set; } = true;
+}
+
+public sealed class InventoryTransaction
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+    public InventoryTransactionType Type { get; set; }
+    public int Quantity { get; set; }
+    public int BeforeQuantity { get; set; }
+    public int AfterQuantity { get; set; }
+    public required string Reason { get; set; }
+    public Guid CreatedById { get; set; }
+    public User CreatedBy { get; set; } = null!;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+}
+
+public sealed class Order
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid? CustomerId { get; set; }
+    public Customer? Customer { get; set; }
+    public Guid? SessionId { get; set; }
+    public Session? Session { get; set; }
+    public decimal TotalAmount { get; set; }
+    public decimal DiscountAmount { get; set; }
+    public decimal FinalAmount { get; set; }
+    public decimal AmountReceived { get; set; }
+    public decimal Change { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public Guid CreatedById { get; set; }
+    public User CreatedBy { get; set; } = null!;
+    public ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+}
+
+public sealed class OrderItem
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid OrderId { get; set; }
+    public Order Order { get; set; } = null!;
+    public Guid ProductId { get; set; }
+    public Product Product { get; set; } = null!;
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal Discount { get; set; }
+    public decimal Total { get; set; }
+}
+
+public sealed class Shift
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid OpenedById { get; set; }
+    public User OpenedBy { get; set; } = null!;
+    public DateTimeOffset OpenedAt { get; set; } = DateTimeOffset.UtcNow;
+    public decimal OpeningCash { get; set; }
+    public bool IsOpen { get; set; } = true;
+    public Guid? ClosedById { get; set; }
+    public User? ClosedBy { get; set; }
+    public DateTimeOffset? ClosedAt { get; set; }
+    public decimal? ExpectedCash { get; set; }
+    public decimal? ActualCash { get; set; }
+    public decimal? Difference { get; set; }
+    public string? DifferenceReason { get; set; }
+}
+
+public sealed class CashTransaction
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid ShiftId { get; set; }
+    public Shift Shift { get; set; } = null!;
+    public decimal Amount { get; set; }
+    public CashTransactionType Type { get; set; }
+    public string? Reference { get; set; }
+    public required string Reason { get; set; }
+    public Guid UserId { get; set; }
+    public User User { get; set; } = null!;
+    public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+}
