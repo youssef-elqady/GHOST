@@ -134,12 +134,12 @@ public partial class MainWindow : Window
         string subtitle)
     {
         if (index < 0 ||
-            index >= MainTabs.Items.Count)
+            index >= ContentTabs.Items.Count)
         {
             return;
         }
 
-        MainTabs.SelectedIndex = index;
+        ContentTabs.SelectedIndex = index;
 
         PageTitle.Text = title;
         PageSubtitle.Text = subtitle;
