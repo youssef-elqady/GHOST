@@ -1,1 +1,85 @@
-<UserControl x:Class="GHOST.Presentation.InventoryView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"><Grid/></UserControl>
+<UserControl x:Class="GHOST.Presentation.InventoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             Background="Transparent"
+             Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+
+        <Grid Margin="0,0,0,14">
+            <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="المنتجات والمخزون" FontSize="27" FontWeight="SemiBold" Foreground="#F2F4F7"/>
+                <TextBlock Text="أضف المنتجات العربية وعدّل الأسعار والباركود وتحكم في المخزون." Foreground="#8E98A5" FontSize="11" Margin="0,5,0,0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="تحديث" Width="90" Height="36" Click="Refresh_Click"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,14">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+
+            <Border Background="#11151A" BorderBrush="#252B33" BorderThickness="1" CornerRadius="14" Padding="15" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="إضافة / تعديل منتج" FontSize="16" FontWeight="SemiBold"/>
+                    <Grid Margin="0,12,0,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                        <TextBox x:Name="NameBox" Grid.Row="0" Margin="0,0,6,7" Height="36" ToolTip="اسم المنتج"/>
+                        <TextBox x:Name="BarcodeBox" Grid.Row="0" Grid.Column="1" Margin="6,0,0,7" Height="36" ToolTip="الباركود"/>
+                        <ComboBox x:Name="CategoryBox" Grid.Row="1" Margin="0,0,6,7" Height="36" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                        <TextBox x:Name="SellingPriceBox" Grid.Row="1" Grid.Column="1" Margin="6,0,0,7" Height="36" ToolTip="سعر البيع"/>
+                        <TextBox x:Name="CostPriceBox" Grid.Row="2" Margin="0,0,6,7" Height="36" ToolTip="سعر التكلفة"/>
+                        <TextBox x:Name="MinimumStockBox" Grid.Row="2" Grid.Column="1" Margin="6,0,0,7" Height="36" ToolTip="الحد الأدنى للمخزون"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button x:Name="SaveButton" Content="حفظ المنتج" Height="36" Padding="16,0" Click="SaveProduct_Click" Margin="0,0,6,0"/>
+                            <Button Content="مسح" Height="36" Padding="16,0" Click="ClearForm_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Background="#11151A" BorderBrush="#252B33" BorderThickness="1" CornerRadius="14" Padding="15" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="التصنيفات" FontSize="16" FontWeight="SemiBold"/>
+                    <TextBox x:Name="CategoryNameBox" Height="36" Margin="0,12,0,7" ToolTip="اسم التصنيف"/>
+                    <Button Content="إضافة تصنيف" Height="36" Click="AddCategory_Click"/>
+                    <ComboBox x:Name="CategoryManageBox" Height="36" Margin="0,8,0,7" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                    <Button Content="تعطيل التصنيف" Height="36" Click="DeactivateCategory_Click"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Background="#11151A" BorderBrush="#252B33" BorderThickness="1" CornerRadius="14" Padding="15">
+                <StackPanel>
+                    <TextBlock Text="حركة المخزون" FontSize="16" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="StockProductBox" Height="36" Margin="0,12,0,7" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+                    <ComboBox x:Name="StockTypeBox" Height="36" Margin="0,0,0,7">
+                        <ComboBoxItem Tag="Purchase">شراء / إضافة</ComboBoxItem>
+                        <ComboBoxItem Tag="Return">مرتجع</ComboBoxItem>
+                        <ComboBoxItem Tag="Adjustment">تسوية نقص</ComboBoxItem>
+                        <ComboBoxItem Tag="Waste">هالك</ComboBoxItem>
+                    </ComboBox>
+                    <TextBox x:Name="StockQuantityBox" Height="36" Margin="0,0,0,7" ToolTip="الكمية"/>
+                    <TextBox x:Name="StockReasonBox" Height="36" Margin="0,0,0,7" ToolTip="سبب الحركة"/>
+                    <Button Content="تسجيل الحركة" Height="36" Click="ChangeStock_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Border Grid.Row="2" Background="#11151A" BorderBrush="#252B33" BorderThickness="1" CornerRadius="14" Padding="10">
+            <DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" HeadersVisibility="Column"
+                      SelectionChanged="ProductsGrid_SelectionChanged" Background="#11151A" Foreground="#F2F4F7">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="المنتج" Binding="{Binding Name}" Width="2*"/>
+                    <DataGridTextColumn Header="التصنيف" Binding="{Binding CategoryName}" Width="1.2*"/>
+                    <DataGridTextColumn Header="الباركود" Binding="{Binding Barcode}" Width="1.3*"/>
+                    <DataGridTextColumn Header="سعر البيع" Binding="{Binding SellingPrice, StringFormat={}{0:N2}}" Width="1*"/>
+                    <DataGridTextColumn Header="التكلفة" Binding="{Binding CostPrice, StringFormat={}{0:N2}}" Width="1*"/>
+                    <DataGridTextColumn Header="المخزون" Binding="{Binding StockQuantity}" Width=".8*"/>
+                    <DataGridTextColumn Header="الحد الأدنى" Binding="{Binding MinimumStockLevel}" Width=".9*"/>
+                    <DataGridCheckBoxColumn Header="نشط" Binding="{Binding IsActive}" Width=".7*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
