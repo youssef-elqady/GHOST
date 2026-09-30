@@ -99,14 +99,9 @@ public sealed class AdminDashboardService(
         if (cashDifferenceToday != 0)
             alerts.Add($"يوجد فرق نقدية اليوم بقيمة {cashDifferenceToday:N2} ج.م.");
 
-        var topDevices = report.ByDevice
-            .Select(line => new UtilizationLine(
-                line.Name,
-                TimeSpan.Zero,
-                report.SessionCount == 0
-                    ? 0m
-                    : Math.Min(100m, decimal.Round(
-                        line.Count / (decimal)Math.Max(1, report.SessionCount) * 100m, 1))))
+        var dashboard = await reporting.GetDashboardAsync(new DateRange(from, to), ct);
+
+        var topDevices = dashboard.Utilization
             .OrderByDescending(x => x.Percent)
             .Take(5)
             .ToList();
