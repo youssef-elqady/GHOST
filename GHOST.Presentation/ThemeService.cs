@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
+using WpfApplication = System.Windows.Application;
 
 namespace GHOST.Presentation;
 
@@ -12,7 +13,7 @@ public static class ThemeService
     public static void Apply(bool dark)
     {
         IsDark = dark;
-        var resources = Application.Current.Resources;
+        var resources = WpfApplication.Current.Resources;
 
         Set(resources, "AppBg", dark ? "#0B0D10" : "#F4F6F8");
         Set(resources, "SidebarBg", dark ? "#0E1014" : "#FFFFFF");
