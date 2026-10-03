@@ -1,43 +1,1570 @@
 <UserControl x:Class="GHOST.Presentation.AdminDashboardView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             FlowDirection="RightToLeft"
-             Background="Transparent"
-             Loaded="UserControl_Loaded">
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource KpiPanel}" Margin="0,0,9,0"><StackPanel><TextBlock Text="إيرادات اليوم" Foreground="{StaticResource Muted}" FontSize="10"/><TextBlock Text="{Binding RevenueText}" Foreground="{StaticResource White}" FontSize="25" FontWeight="Bold" Margin="0,7,0,0"/><TextBlock Text="الجلسات + المبيعات" Foreground="{StaticResource Dim}" FontSize="9" Margin="0,4,0,0"/></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource KpiPanel}" Margin="0,0,9,0"><StackPanel><TextBlock Text="مبيعات المنتجات" Foreground="{StaticResource Muted}" FontSize="10"/><TextBlock Text="{Binding ProductSalesText}" Foreground="{StaticResource White}" FontSize="25" FontWeight="Bold" Margin="0,7,0,0"/><TextBlock Text="{Binding OrdersToday, StringFormat={} {0} فاتورة}" Foreground="{StaticResource Dim}" FontSize="9" Margin="0,4,0,0"/></StackPanel></Border>
-                <Border Grid.Column="2" Style="{StaticResource KpiPanel}" Margin="0,0,9,0"><StackPanel><TextBlock Text="الجلسات اليوم" Foreground="{StaticResource Muted}" FontSize="10"/><TextBlock Text="{Binding SessionsToday}" Foreground="{StaticResource White}" FontSize="25" FontWeight="Bold" Margin="0,7,0,0"/><TextBlock Text="{Binding CustomersToday, StringFormat={} {0} عميل مرتبط}" Foreground="{StaticResource Dim}" FontSize="9" Margin="0,4,0,0"/></StackPanel></Border>
-                <Border Grid.Column="3" Style="{StaticResource KpiPanel}"><StackPanel><TextBlock Text="الضغط التشغيلي" Foreground="{StaticResource Muted}" FontSize="10"/><TextBlock Text="{Binding ActiveSessions}" Foreground="{StaticResource White}" FontSize="25" FontWeight="Bold" Margin="0,7,0,0"/><TextBlock Text="{Binding RunningSessions, StringFormat={} {0} جلسة تعمل الآن}" Foreground="{StaticResource Dim}" FontSize="9" Margin="0,4,0,0"/></StackPanel></Border>
-            </Grid>
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1.2*"/><ColumnDefinition Width="0.8*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource Panel}" Margin="0,0,9,0"><StackPanel>
-                    <Grid Margin="0,0,0,14"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="OWNER OVERVIEW" Style="{StaticResource Eyebrow}"/><TextBlock Text="حالة المكان الآن" FontSize="19" FontWeight="SemiBold" Foreground="{StaticResource White}"/></StackPanel><Button Grid.Column="1" Content="تحديث" Style="{StaticResource PremiumSecondaryButton}" Command="{Binding RefreshCommand}"/></Grid>
-                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                        <StackPanel><TextBlock Text="تعمل" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding RunningSessions}" Foreground="{StaticResource Green}" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/></StackPanel>
-                        <StackPanel Grid.Column="1"><TextBlock Text="متوقفة" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding PausedSessions}" Foreground="{StaticResource Amber}" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/></StackPanel>
-                        <StackPanel Grid.Column="2"><TextBlock Text="متاحة" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding AvailableDevices}" Foreground="{StaticResource Blue}" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/></StackPanel>
-                        <StackPanel Grid.Column="3"><TextBlock Text="صيانة" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding MaintenanceDevices}" Foreground="{StaticResource Red}" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/></StackPanel>
-                        <StackPanel Grid.Column="4"><TextBlock Text="غير متصل" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding OfflineDevices}" Foreground="{StaticResource Red}" FontSize="22" FontWeight="Bold" Margin="0,4,0,0"/></StackPanel>
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          FlowDirection="RightToLeft"
+          Background="Transparent"
+          Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+
+        <!-- ========================================================= -->
+        <!-- COLORS -->
+        <!-- ========================================================= -->
+
+
+
+        <SolidColorBrush x:Key="AmberBrush" Color="#EAB65A"/>
+        
+        <SolidColorBrush x:Key="Page"
+                     Color="#0D0F12"/>
+
+        <SolidColorBrush x:Key="Surface"
+                     Color="#15181C"/>
+
+        <SolidColorBrush x:Key="Surface2"
+                     Color="#1A1E23"/>
+
+        <SolidColorBrush x:Key="Surface3"
+                     Color="#20252B"/>
+
+        <SolidColorBrush x:Key="Line"
+                     Color="#2B3037"/>
+
+        <SolidColorBrush x:Key="LineStrong"
+                     Color="#383E47"/>
+
+        <SolidColorBrush x:Key="White"
+                     Color="#F5F7FA"/>
+
+        <SolidColorBrush x:Key="Text"
+                     Color="#D9DEE5"/>
+
+        <SolidColorBrush x:Key="Muted"
+                     Color="#969EAA"/>
+
+        <SolidColorBrush x:Key="Dim"
+                     Color="#626A75"/>
+
+        <SolidColorBrush x:Key="Gold"
+                     Color="#D8B36A"/>
+
+        <SolidColorBrush x:Key="GoldSoft"
+                     Color="#30291B"/>
+
+        <SolidColorBrush x:Key="Green"
+                     Color="#55D88A"/>
+
+        <SolidColorBrush x:Key="GreenSoft"
+                     Color="#163326"/>
+
+        <SolidColorBrush x:Key="Blue"
+                     Color="#6BA7FF"/>
+
+        <SolidColorBrush x:Key="BlueSoft"
+                     Color="#172B43"/>
+
+        <SolidColorBrush x:Key="Red"
+                     Color="#FF7078"/>
+
+        <SolidColorBrush x:Key="RedSoft"
+                     Color="#351F23"/>
+
+        <!-- ========================================================= -->
+        <!-- SCROLLBAR -->
+        <!-- ========================================================= -->
+
+        <Style TargetType="ScrollBar">
+
+            <Setter Property="Width"
+                Value="7"/>
+
+            <Setter Property="Background"
+                Value="Transparent"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ScrollBar">
+
+                        <Grid>
+
+                            <Track
+                            Name="PART_Track"
+                            IsDirectionReversed="True">
+
+                                <Track.Thumb>
+
+                                    <Thumb
+                                    Background="{StaticResource LineStrong}"
+                                    BorderThickness="0"/>
+
+                                </Track.Thumb>
+
+                            </Track>
+
+                        </Grid>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- CARD -->
+        <!-- ========================================================= -->
+
+        <Style x:Key="Card"
+           TargetType="Border">
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface}"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource Line}"/>
+
+            <Setter Property="BorderThickness"
+                Value="1"/>
+
+            <Setter Property="CornerRadius"
+                Value="14"/>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- BUTTON -->
+        <!-- ========================================================= -->
+
+        <Style x:Key="SecondaryButton"
+           TargetType="Button">
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface2}"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource LineStrong}"/>
+
+            <Setter Property="BorderThickness"
+                Value="1"/>
+
+            <Setter Property="Padding"
+                Value="15,9"/>
+
+            <Setter Property="FontSize"
+                Value="12"/>
+
+            <Setter Property="Cursor"
+                Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="9"
+                        Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                 Value="True">
+
+                                <Setter Property="Background"
+                                    Value="{StaticResource Surface3}"/>
+
+                                <Setter Property="BorderBrush"
+                                    Value="{StaticResource Gold}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <Style x:Key="PrimaryButton"
+           TargetType="Button"
+           BasedOn="{StaticResource SecondaryButton}">
+
+            <Setter Property="Background"
+                Value="{StaticResource Gold}"/>
+
+            <Setter Property="Foreground"
+                Value="#141414"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource Gold}"/>
+
+            <Setter Property="FontWeight"
+                Value="SemiBold"/>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- COMBOBOX -->
+        <!-- ========================================================= -->
+
+        <Style x:Key="DarkComboBox"
+           TargetType="ComboBox">
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface2}"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource LineStrong}"/>
+
+            <Setter Property="BorderThickness"
+                Value="1"/>
+
+            <Setter Property="Height"
+                Value="42"/>
+
+            <Setter Property="Padding"
+                Value="12,0"/>
+
+            <Setter Property="FontSize"
+                Value="12"/>
+
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface2}"/>
+
+            <Setter Property="Padding"
+                Value="12,10"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                Value="Right"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBoxItem">
+
+                        <Border
+                        Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                 Value="True">
+
+                                <Setter Property="Background"
+                                    Value="{StaticResource Surface3}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsSelected"
+                                 Value="True">
+
+                                <Setter Property="Background"
+                                    Value="{StaticResource GoldSoft}"/>
+
+                                <Setter Property="Foreground"
+                                    Value="{StaticResource Gold}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- CHECKBOX -->
+        <!-- ========================================================= -->
+
+        <Style TargetType="CheckBox">
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="FontSize"
+                Value="12"/>
+
+            <Setter Property="Margin"
+                Value="0,7"/>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- DATE PICKER -->
+        <!-- ========================================================= -->
+
+        <Style TargetType="DatePicker">
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface2}"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource LineStrong}"/>
+
+            <Setter Property="BorderThickness"
+                Value="1"/>
+
+            <Setter Property="Height"
+                Value="42"/>
+
+        </Style>
+
+        <!-- ========================================================= -->
+        <!-- EXPANDER -->
+        <!-- ========================================================= -->
+
+        <Style x:Key="SectionExpander"
+           TargetType="Expander">
+
+            <Setter Property="Background"
+                Value="{StaticResource Surface}"/>
+
+            <Setter Property="Foreground"
+                Value="{StaticResource Text}"/>
+
+            <Setter Property="BorderBrush"
+                Value="{StaticResource Line}"/>
+
+            <Setter Property="BorderThickness"
+                Value="1"/>
+
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- ============================================================= -->
+    <!-- ROOT -->
+    <!-- ============================================================= -->
+
+    <Grid Background="{StaticResource Page}">
+
+        <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled">
+
+            <StackPanel Margin="28">
+
+                <!-- ================================================= -->
+                <!-- HEADER -->
+                <!-- ================================================= -->
+
+                <Grid Margin="0,0,0,24">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+
+                        <TextBlock
+                        Text="لوحة الإدارة"
+                        Foreground="{StaticResource White}"
+                        FontSize="29"
+                        FontWeight="SemiBold"/>
+
+                        <TextBlock
+                        Text="نظرة مركزة على أداء GHOST المالي والإداري"
+                        Foreground="{StaticResource Muted}"
+                        FontSize="13"
+                        Margin="0,6,0,0"/>
+
+                        <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,12,0,0">
+
+                            <Border
+                            Background="{StaticResource GreenSoft}"
+                            CornerRadius="7"
+                            Padding="10,5">
+
+                                <TextBlock
+                                Text="● النظام يعمل"
+                                Foreground="{StaticResource Green}"
+                                FontSize="11"
+                                FontWeight="SemiBold"/>
+
+                            </Border>
+
+                            <TextBlock
+                            Text="{Binding LastUpdatedText}"
+                            Foreground="{StaticResource Dim}"
+                            FontSize="10"
+                            VerticalAlignment="Center"
+                            Margin="10,0,0,0"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Top">
+
+                        <Border
+                        Background="{StaticResource Surface2}"
+                        BorderBrush="{StaticResource Line}"
+                        BorderThickness="1"
+                        CornerRadius="9"
+                        Padding="13,8"
+                        Margin="0,0,9,0">
+
+                            <StackPanel
+                            Orientation="Horizontal">
+
+                                <TextBlock
+                                Text="الفترة:"
+                                Foreground="{StaticResource Dim}"
+                                FontSize="11"
+                                VerticalAlignment="Center"/>
+
+                                <TextBlock
+                                Text="{Binding SelectedPeriodText}"
+                                Foreground="{StaticResource Gold}"
+                                FontSize="11"
+                                FontWeight="SemiBold"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <Button
+                        Content="☰  الفلاتر"
+                        Style="{StaticResource SecondaryButton}"
+                        Click="OpenFilters_Click"
+                        Margin="0,0,8,0"/>
+
+                        <Button
+                        Content="↻  تحديث"
+                        Style="{StaticResource PrimaryButton}"
+                        Click="Refresh_Click"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- ================================================= -->
+                <!-- ERROR -->
+                <!-- ================================================= -->
+
+                <Border
+                Background="{StaticResource RedSoft}"
+                BorderBrush="#5A2B31"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="13"
+                Margin="0,0,0,18">
+
+                    <Border.Style>
+
+                        <Style TargetType="Border">
+
+                            <Setter Property="Visibility"
+                                Value="Collapsed"/>
+
+                            <Style.Triggers>
+
+                                <DataTrigger
+                                Binding="{Binding ErrorMessage}"
+                                Value="">
+
+                                    <Setter Property="Visibility"
+                                        Value="Collapsed"/>
+
+                                </DataTrigger>
+
+                            </Style.Triggers>
+
+                        </Style>
+
+                    </Border.Style>
+
+                    <TextBlock
+                    Text="{Binding ErrorMessage}"
+                    Foreground="{StaticResource Red}"
+                    FontSize="11"
+                    TextWrapping="Wrap"/>
+
+                </Border>
+
+                <!-- ================================================= -->
+                <!-- KPI -->
+                <!-- ================================================= -->
+
+                <Grid Margin="0,0,0,20">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Revenue -->
+
+                    <Border
+                    Grid.Column="0"
+                    Style="{StaticResource Card}"
+                    Padding="20"
+                    Margin="0,0,7,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الإيرادات"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"/>
+
+                            <TextBlock
+                            Text="{Binding RevenueText}"
+                            Foreground="{StaticResource White}"
+                            FontSize="25"
+                            FontWeight="SemiBold"
+                            Margin="0,8,0,2"/>
+
+                            <TextBlock
+                            Text="{Binding RevenueTrendText}"
+                            Foreground="{StaticResource Green}"
+                            FontSize="10"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Products -->
+
+                    <Border
+                    Grid.Column="1"
+                    Style="{StaticResource Card}"
+                    Padding="20"
+                    Margin="7,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="مبيعات المنتجات"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"/>
+
+                            <TextBlock
+                            Text="{Binding ProductSalesText}"
+                            Foreground="{StaticResource White}"
+                            FontSize="25"
+                            FontWeight="SemiBold"
+                            Margin="0,8,0,2"/>
+
+                            <TextBlock
+                            Text="{Binding ProductTrendText}"
+                            Foreground="{StaticResource Blue}"
+                            FontSize="10"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Sessions -->
+
+                    <Border
+                    Grid.Column="2"
+                    Style="{StaticResource Card}"
+                    Padding="20"
+                    Margin="7,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الجلسات"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"/>
+
+                            <TextBlock
+                            Text="{Binding SessionsText}"
+                            Foreground="{StaticResource White}"
+                            FontSize="25"
+                            FontWeight="SemiBold"
+                            Margin="0,8,0,2"/>
+
+                            <TextBlock
+                            Text="{Binding SessionsTrendText}"
+                            Foreground="{StaticResource Gold}"
+                            FontSize="10"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Customers -->
+
+                    <Border
+                    Grid.Column="3"
+                    Style="{StaticResource Card}"
+                    Padding="20"
+                    Margin="7,0,0,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="العملاء"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"/>
+
+                            <TextBlock
+                            Text="{Binding CustomersText}"
+                            Foreground="{StaticResource White}"
+                            FontSize="25"
+                            FontWeight="SemiBold"
+                            Margin="0,8,0,2"/>
+
+                            <TextBlock
+                            Text="عملاء مرتبطون بالجلسات"
+                            Foreground="{StaticResource Dim}"
+                            FontSize="10"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </Grid>
+
+                <!-- ================================================= -->
+                <!-- BUSINESS CORE -->
+                <!-- ================================================= -->
+
+                <Grid Margin="0,0,0,20">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.65*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Financial -->
+
+                    <Border
+                    Grid.Column="0"
+                    Style="{StaticResource Card}"
+                    Padding="22"
+                    Margin="0,0,8,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الأداء المالي"
+                            Foreground="{StaticResource White}"
+                            FontSize="18"
+                            FontWeight="SemiBold"/>
+
+                            <TextBlock
+                            Text="صورة مختصرة للفترة المحددة"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"
+                            Margin="0,5,0,20"/>
+
+                            <!-- Total -->
+
+                            <Border
+                            Background="{StaticResource Surface2}"
+                            CornerRadius="11"
+                            Padding="18"
+                            Margin="0,0,0,18">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="إجمالي الحركة"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="11"/>
+
+                                    <TextBlock
+                                    Text="{Binding TotalSalesText}"
+                                    Foreground="{StaticResource White}"
+                                    FontSize="31"
+                                    FontWeight="SemiBold"
+                                    Margin="0,5,0,0"/>
+
+                                    <TextBlock
+                                    Text="الإيرادات + مبيعات المنتجات"
+                                    Foreground="{StaticResource Dim}"
+                                    FontSize="10"
+                                    Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <!-- Financial split -->
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="إيرادات الجلسات"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"/>
+
+                                    <TextBlock
+                                    Text="{Binding RevenueText}"
+                                    Foreground="{StaticResource Green}"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    Margin="0,4,0,0"/>
+
+                                </StackPanel>
+
+                                <StackPanel
+                                Grid.Column="1">
+
+                                    <TextBlock
+                                    Text="مبيعات المنتجات"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"/>
+
+                                    <TextBlock
+                                    Text="{Binding ProductSalesText}"
+                                    Foreground="{StaticResource Blue}"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    Margin="0,4,0,0"/>
+
+                                </StackPanel>
+
+                            </Grid>
+
+                            <Border
+                            Background="{StaticResource Surface3}"
+                            CornerRadius="9"
+                            Padding="12"
+                            Margin="0,20,0,0">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="مقارنة الفترة السابقة"
+                                    Foreground="{StaticResource Text}"
+                                    FontSize="11"
+                                    FontWeight="SemiBold"/>
+
+                                    <TextBlock
+                                    Text="{Binding RevenueTrendText}"
+                                    Foreground="{StaticResource Gold}"
+                                    FontSize="10"
+                                    Margin="0,5,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- Notifications -->
+
+                    <Border
+                    Grid.Column="1"
+                    Style="{StaticResource Card}"
+                    Padding="22"
+                    Margin="8,0,0,0">
+
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid>
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="مركز التنبيهات"
+                                    Foreground="{StaticResource White}"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"/>
+
+                                    <TextBlock
+                                    Text="ما يحتاج انتباه الإدارة"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="11"
+                                    Margin="0,5,0,0"/>
+
+                                </StackPanel>
+
+                                <Border
+                                HorizontalAlignment="Left"
+                                Background="{StaticResource RedSoft}"
+                                CornerRadius="12"
+                                Padding="9,4">
+
+                                    <TextBlock
+                                    Text="{Binding AlertCount}"
+                                    Foreground="{StaticResource Red}"
+                                    FontSize="10"
+                                    FontWeight="SemiBold"/>
+
+                                </Border>
+
+                            </Grid>
+
+                            <ScrollViewer
+                            Grid.Row="1"
+                            MaxHeight="220"
+                            VerticalScrollBarVisibility="Auto"
+                            Margin="0,18,0,0">
+
+                                <ItemsControl
+                                ItemsSource="{Binding Alerts}">
+
+                                    <ItemsControl.ItemTemplate>
+
+                                        <DataTemplate>
+
+                                            <Border
+                                            Background="{StaticResource Surface2}"
+                                            BorderBrush="{StaticResource Line}"
+                                            BorderThickness="1"
+                                            CornerRadius="9"
+                                            Padding="12"
+                                            Margin="0,0,0,8">
+
+                                                <StackPanel>
+
+                                                    <StackPanel
+                                                    Orientation="Horizontal">
+
+                                                        <Border
+                                                        Width="7"
+                                                        Height="7"
+                                                        Background="{StaticResource AmberBrush}"
+                                                        CornerRadius="4"
+                                                        Margin="0,0,8,0"
+                                                        VerticalAlignment="Center"/>
+
+                                                        <TextBlock
+                                                        Text="يتطلب متابعة"
+                                                        Foreground="{StaticResource AmberBrush}"
+                                                        FontSize="9"
+                                                        FontWeight="SemiBold"/>
+
+                                                    </StackPanel>
+
+                                                    <TextBlock
+                                                    Text="{Binding}"
+                                                    Foreground="{StaticResource Text}"
+                                                    FontSize="11"
+                                                    TextWrapping="Wrap"
+                                                    Margin="0,7,0,0"/>
+
+                                                </StackPanel>
+
+                                            </Border>
+
+                                        </DataTemplate>
+
+                                    </ItemsControl.ItemTemplate>
+
+                                </ItemsControl>
+
+                            </ScrollViewer>
+
+                        </Grid>
+
+                    </Border>
+
+                </Grid>
+
+                <!-- ================================================= -->
+                <!-- LIVE BUSINESS STATUS -->
+                <!-- ================================================= -->
+
+                <Border
+                Style="{StaticResource Card}"
+                Padding="22"
+                Margin="0,0,0,20">
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الحالة الحالية"
+                            Foreground="{StaticResource White}"
+                            FontSize="18"
+                            FontWeight="SemiBold"/>
+
+                            <TextBlock
+                            Text="مؤشرات حية مختصرة فقط — إدارة التشغيل موجودة في مساحة الموظفين"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"
+                            Margin="0,5,0,0"/>
+
+                        </StackPanel>
+
+                        <Grid
+                        Grid.Row="1"
+                        Margin="0,20,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border
+                            Background="{StaticResource GreenSoft}"
+                            CornerRadius="10"
+                            Padding="15"
+                            Margin="0,0,7,0">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="جلسات نشطة الآن"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"/>
+
+                                    <TextBlock
+                                    Text="{Binding ActiveSessionsText}"
+                                    Foreground="{StaticResource Green}"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Margin="0,4,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border
+                            Grid.Column="1"
+                            Background="{StaticResource GoldSoft}"
+                            CornerRadius="10"
+                            Padding="15"
+                            Margin="7,0">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="جلسات متوقفة مؤقتًا"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"/>
+
+                                    <TextBlock
+                                    Text="{Binding PausedSessions}"
+                                    Foreground="{StaticResource Gold}"
+                                    FontSize="20"
+                                    FontWeight="SemiBold"
+                                    Margin="0,4,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border
+                            Grid.Column="2"
+                            Background="{StaticResource Surface2}"
+                            CornerRadius="10"
+                            Padding="15"
+                            Margin="7,0,0,0">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="حالة الوردية"
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"/>
+
+                                    <TextBlock
+                                    Text="{Binding ShiftStatusText}"
+                                    Foreground="{StaticResource White}"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Margin="0,5,0,0"/>
+
+                                    <TextBlock
+                                    Text="{Binding ShiftStatusDetail}"
+                                    Foreground="{StaticResource Dim}"
+                                    FontSize="9"
+                                    Margin="0,3,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </Grid>
+
                     </Grid>
-                    <Border Background="{StaticResource Surface2}" BorderBrush="{StaticResource LineSoft}" BorderThickness="1" CornerRadius="11" Padding="13" Margin="0,18,0,0"><StackPanel><TextBlock Text="{Binding ShiftStatusText}" Foreground="{StaticResource White}" FontSize="12" FontWeight="SemiBold"/><TextBlock Text="{Binding ShiftStatusDetail}" Foreground="{StaticResource Muted}" FontSize="9" Margin="0,5,0,0"/><TextBlock Text="{Binding LastUpdatedText}" Foreground="{StaticResource Dim}" FontSize="8" Margin="0,8,0,0"/></StackPanel></Border>
-                </StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource Panel}"><StackPanel>
-                    <TextBlock Text="التنبيهات" Foreground="{StaticResource White}" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="ما يستحق انتباه الإدارة" Foreground="{StaticResource Muted}" FontSize="9" Margin="0,4,0,10"/>
-                    <ItemsControl ItemsSource="{Binding Alerts}"><ItemsControl.ItemTemplate><DataTemplate><Border Background="{StaticResource AmberSoft}" CornerRadius="8" Padding="9" Margin="0,0,0,7"><TextBlock Text="{Binding}" Foreground="{StaticResource Amber}" FontSize="9" TextWrapping="Wrap"/></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
-                    <TextBlock Text="لا توجد تنبيهات تشغيلية حاليًا" Foreground="{StaticResource Green}" FontSize="9" Margin="0,5,0,0"><TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Visibility" Value="Collapsed"/><Style.Triggers><DataTrigger Binding="{Binding Alerts.Count}" Value="0"><Setter Property="Visibility" Value="Visible"/></DataTrigger></Style.Triggers></Style></TextBlock.Style></TextBlock>
-                </StackPanel></Border>
-            </Grid>
-            <Grid Margin="0,0,0,12">
-                <Grid.ColumnDefinitions><ColumnDefinition Width="1.1*"/><ColumnDefinition Width="0.9*"/></Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource Panel}" Margin="0,0,9,0"><StackPanel><TextBlock Text="حجم العمل" Foreground="{StaticResource White}" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="الأجهزة الأكثر استخدامًا اليوم" Foreground="{StaticResource Muted}" FontSize="9" Margin="0,4,0,12"/><ItemsControl ItemsSource="{Binding TopDevices}"><ItemsControl.ItemTemplate><DataTemplate><Grid Margin="0,0,0,9"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock Text="{Binding Device}" Foreground="{StaticResource Text}" FontSize="10"/><TextBlock Grid.Column="1" Text="{Binding PercentText}" Foreground="{StaticResource Gold}" FontSize="10" FontWeight="SemiBold"/></Grid></DataTemplate></ItemsControl.ItemTemplate></ItemsControl></StackPanel></Border>
-                <Border Grid.Column="1" Style="{StaticResource Panel}"><StackPanel><TextBlock Text="المخزون والنقدية" Foreground="{StaticResource White}" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="مؤشرات سريعة للإدارة" Foreground="{StaticResource Muted}" FontSize="9" Margin="0,4,0,12"/><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="منخفض المخزون" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding LowStockProducts}" Foreground="{StaticResource Amber}" FontSize="24" FontWeight="Bold" Margin="0,5,0,0"/></StackPanel><StackPanel Grid.Column="1"><TextBlock Text="فرق النقدية" Foreground="{StaticResource Muted}" FontSize="9"/><TextBlock Text="{Binding CashDifferenceText}" Foreground="{StaticResource White}" FontSize="18" FontWeight="Bold" Margin="0,7,0,0"/></StackPanel></Grid></StackPanel></Border>
-            </Grid>
-            <Border Style="{StaticResource Panel}"><StackPanel><Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="ACTIVITY" Style="{StaticResource Eyebrow}"/><TextBlock Text="آخر التغييرات" Foreground="{StaticResource White}" FontSize="19" FontWeight="SemiBold"/></StackPanel><TextBlock Grid.Column="1" Text="آخر 10 عمليات" Foreground="{StaticResource Dim}" FontSize="9" VerticalAlignment="Center"/></Grid><ItemsControl ItemsSource="{Binding RecentActivity}"><ItemsControl.ItemTemplate><DataTemplate><Border BorderBrush="{StaticResource LineSoft}" BorderThickness="0,0,0,1" Padding="0,9"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><Border Background="{StaticResource Surface2}" CornerRadius="8" Padding="9,5"><TextBlock Text="{Binding Action}" Foreground="{StaticResource Text}" FontSize="9"/></Border><StackPanel Grid.Column="1" Margin="10,0,0,0"><TextBlock Text="{Binding Details}" Foreground="{StaticResource Text}" FontSize="9" TextTrimming="CharacterEllipsis"/><TextBlock Text="{Binding Actor}" Foreground="{StaticResource Dim}" FontSize="8" Margin="0,3,0,0"/></StackPanel><TextBlock Grid.Column="2" Text="{Binding Time}" Foreground="{StaticResource Muted}" FontSize="9" VerticalAlignment="Center"/></Grid></Border></DataTemplate></ItemsControl.ItemTemplate></ItemsControl><TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource Red}" FontSize="9" TextWrapping="Wrap" Margin="0,8,0,0"/></StackPanel></Border>
-        </StackPanel>
-    </ScrollViewer>
+
+                </Border>
+
+                <!-- ================================================= -->
+                <!-- MANAGEMENT DETAILS -->
+                <!-- ================================================= -->
+
+                <Expander
+                Style="{StaticResource SectionExpander}"
+                IsExpanded="False"
+                Margin="0,0,0,10">
+
+                    <Expander.Header>
+
+                        <Grid
+                        Width="Auto"
+                        Margin="14,10">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                Text="الخزينة والمخزون"
+                                Foreground="{StaticResource White}"
+                                FontSize="14"
+                                FontWeight="SemiBold"/>
+
+                                <TextBlock
+                                Text="تفاصيل إدارية لا تحتاج أن تظل ظاهرة دائمًا"
+                                Foreground="{StaticResource Muted}"
+                                FontSize="10"
+                                Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Expander.Header>
+
+                    <Border
+                    Background="{StaticResource Surface}"
+                    Padding="20">
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+
+                                <TextBlock
+                                Text="فرق النقدية"
+                                Foreground="{StaticResource Muted}"
+                                FontSize="10"/>
+
+                                <TextBlock
+                                Text="{Binding CashDifferenceText}"
+                                Foreground="{StaticResource White}"
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"/>
+
+                            </StackPanel>
+
+                            <StackPanel
+                            Grid.Column="1">
+
+                                <TextBlock
+                                Text="المخزون"
+                                Foreground="{StaticResource Muted}"
+                                FontSize="10"/>
+
+                                <TextBlock
+                                Text="{Binding LowStockText}"
+                                Foreground="{StaticResource AmberBrush}"
+                                FontSize="20"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"/>
+
+                                <TextBlock
+                                Text="منتجات تحتاج مراجعة"
+                                Foreground="{StaticResource Dim}"
+                                FontSize="9"/>
+
+                            </StackPanel>
+
+                            <StackPanel
+                            Grid.Column="2">
+
+                                <TextBlock
+                                Text="فتح الوردية"
+                                Foreground="{StaticResource Muted}"
+                                FontSize="10"/>
+
+                                <TextBlock
+                                Text="{Binding ShiftOpenedBy}"
+                                Foreground="{StaticResource White}"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                Margin="0,5,0,0"/>
+
+                                <TextBlock
+                                Text="{Binding ShiftOpenedAt}"
+                                Foreground="{StaticResource Dim}"
+                                FontSize="9"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Border>
+
+                </Expander>
+
+                <!-- ================================================= -->
+                <!-- ACTIVITY -->
+                <!-- ================================================= -->
+
+                <Expander
+                Style="{StaticResource SectionExpander}"
+                IsExpanded="False">
+
+                    <Expander.Header>
+
+                        <Grid
+                        Margin="14,10">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                Text="آخر العمليات"
+                                Foreground="{StaticResource White}"
+                                FontSize="14"
+                                FontWeight="SemiBold"/>
+
+                                <TextBlock
+                                Text="سجل مختصر لما تم داخل النظام"
+                                Foreground="{StaticResource Muted}"
+                                FontSize="10"
+                                Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
+                        </Grid>
+
+                    </Expander.Header>
+
+                    <Border
+                    Background="{StaticResource Surface}"
+                    Padding="20">
+
+                        <ItemsControl
+                        ItemsSource="{Binding RecentActivity}">
+
+                            <ItemsControl.ItemTemplate>
+
+                                <DataTemplate>
+
+                                    <Border
+                                    BorderBrush="{StaticResource Line}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="0,12">
+
+                                        <Grid>
+
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition Width="130"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock
+                                            Grid.Column="0"
+                                            Text="{Binding Time}"
+                                            Foreground="{StaticResource Dim}"
+                                            FontSize="10"/>
+
+                                            <TextBlock
+                                            Grid.Column="1"
+                                            Text="{Binding Action}"
+                                            Foreground="{StaticResource Text}"
+                                            FontSize="10"/>
+
+                                            <TextBlock
+                                            Grid.Column="2"
+                                            Text="{Binding Actor}"
+                                            Foreground="{StaticResource Muted}"
+                                            FontSize="10"/>
+
+                                            <TextBlock
+                                            Grid.Column="3"
+                                            Text="{Binding Details}"
+                                            Foreground="{StaticResource Dim}"
+                                            FontSize="10"
+                                            TextWrapping="Wrap"/>
+
+                                        </Grid>
+
+                                    </Border>
+
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+
+                    </Border>
+
+                </Expander>
+
+                <TextBlock
+                Text="GHOST • Admin Workspace"
+                Foreground="{StaticResource Dim}"
+                FontSize="9"
+                HorizontalAlignment="Center"
+                Margin="0,20,0,5"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+        <!-- ========================================================= -->
+        <!-- FILTER DRAWER -->
+        <!-- ========================================================= -->
+
+        <Grid
+        x:Name="FilterOverlay"
+        Visibility="Collapsed"
+        Background="#AA000000"
+        Panel.ZIndex="100">
+
+            <!-- backdrop -->
+
+            <Button
+            Background="Transparent"
+            BorderThickness="0"
+            Click="CloseFilters_Click"/>
+
+            <!-- drawer -->
+
+            <Border
+            Width="390"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            Background="{StaticResource Surface}"
+            BorderBrush="{StaticResource LineStrong}"
+            BorderThickness="1,0,0,0">
+
+                <Grid Margin="25">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- header -->
+
+                    <Grid>
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الفلاتر"
+                            Foreground="{StaticResource White}"
+                            FontSize="22"
+                            FontWeight="SemiBold"/>
+
+                            <TextBlock
+                            Text="تحكم في نطاق البيانات المعروضة"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"
+                            Margin="0,5,0,0"/>
+
+                        </StackPanel>
+
+                        <Button
+                        Content="✕"
+                        Style="{StaticResource SecondaryButton}"
+                        Padding="9,6"
+                        HorizontalAlignment="Left"
+                        Click="CloseFilters_Click"/>
+
+                    </Grid>
+
+                    <!-- period -->
+
+                    <StackPanel
+                    Grid.Row="1"
+                    Margin="0,28,0,0">
+
+                        <TextBlock
+                        Text="الفترة الزمنية"
+                        Foreground="{StaticResource Muted}"
+                        FontSize="11"
+                        Margin="0,0,0,7"/>
+
+                        <ComboBox
+                        x:Name="PeriodComboBox"
+                        Style="{StaticResource DarkComboBox}"
+                        SelectedIndex="0">
+
+                            <ComboBoxItem
+                            Content="اليوم"/>
+
+                            <ComboBoxItem
+                            Content="أمس"/>
+
+                            <ComboBoxItem
+                            Content="هذا الأسبوع"/>
+
+                            <ComboBoxItem
+                            Content="هذا الشهر"/>
+
+                            <ComboBoxItem
+                            Content="الشهر السابق"/>
+
+                            <ComboBoxItem
+                            Content="فترة مخصصة"/>
+
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <!-- custom range -->
+
+                    <Border
+                    Grid.Row="2"
+                    Background="{StaticResource Surface2}"
+                    BorderBrush="{StaticResource Line}"
+                    BorderThickness="1"
+                    CornerRadius="11"
+                    Padding="15"
+                    Margin="0,18,0,0">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="الفترة المخصصة"
+                            Foreground="{StaticResource Text}"
+                            FontSize="12"
+                            FontWeight="SemiBold"/>
+
+                            <TextBlock
+                            Text="يتم استخدامها عند اختيار «فترة مخصصة»."
+                            Foreground="{StaticResource Dim}"
+                            FontSize="10"
+                            Margin="0,4,0,13"/>
+
+                            <TextBlock
+                            Text="من"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="10"/>
+
+                            <DatePicker
+                            x:Name="FromDatePicker"
+                            Margin="0,6,0,12"/>
+
+                            <TextBlock
+                            Text="إلى"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="10"/>
+
+                            <DatePicker
+                            x:Name="ToDatePicker"
+                            Margin="0,6,0,0"/>
+
+                        </StackPanel>
+
+                    </Border>
+
+                    <!-- explanation -->
+
+                    <ScrollViewer
+                    Grid.Row="3"
+                    VerticalScrollBarVisibility="Auto"
+                    Margin="0,20,0,20">
+
+                        <StackPanel>
+
+                            <TextBlock
+                            Text="كيف يعمل الفلتر؟"
+                            Foreground="{StaticResource Muted}"
+                            FontSize="11"
+                            Margin="0,0,0,8"/>
+
+                            <Border
+                            Background="{StaticResource Surface2}"
+                            BorderBrush="{StaticResource Line}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="14">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="الفترة السابقة"
+                                    Foreground="{StaticResource Gold}"
+                                    FontSize="11"
+                                    FontWeight="SemiBold"/>
+
+                                    <TextBlock
+                                    Text="الأرقام المالية والجلسات تتم مقارنتها تلقائيًا بالفترة السابقة بنفس المدة."
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"
+                                    TextWrapping="Wrap"
+                                    Margin="0,6,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                            <Border
+                            Background="{StaticResource Surface2}"
+                            BorderBrush="{StaticResource Line}"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="14"
+                            Margin="0,9,0,0">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                    Text="الحالة الحالية"
+                                    Foreground="{StaticResource Green}"
+                                    FontSize="11"
+                                    FontWeight="SemiBold"/>
+
+                                    <TextBlock
+                                    Text="عدد الجلسات النشطة وحالة الوردية والمخزون الحالي تظل مؤشرات حية ولا تتغير باختيار الفترة."
+                                    Foreground="{StaticResource Muted}"
+                                    FontSize="10"
+                                    TextWrapping="Wrap"
+                                    Margin="0,6,0,0"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </StackPanel>
+
+                    </ScrollViewer>
+
+                    <!-- buttons -->
+
+                    <Grid
+                    Grid.Row="4">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button
+                        Content="إعادة ضبط"
+                        Style="{StaticResource SecondaryButton}"
+                        Click="ResetFilters_Click"/>
+
+                        <Button
+                        Grid.Column="2"
+                        Content="تطبيق"
+                        Style="{StaticResource PrimaryButton}"
+                        Click="ApplyFilters_Click"/>
+
+                    </Grid>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
+        <!-- ========================================================= -->
+        <!-- LOADING -->
+        <!-- ========================================================= -->
+
+        <Border
+        VerticalAlignment="Top"
+        Height="3"
+        Background="{StaticResource Gold}"
+        Visibility="Collapsed">
+
+            <Border.Style>
+
+                <Style TargetType="Border">
+
+                    <Setter Property="Visibility"
+                        Value="Collapsed"/>
+
+                    <Style.Triggers>
+
+                        <DataTrigger
+                        Binding="{Binding IsLoading}"
+                        Value="True">
+
+                            <Setter Property="Visibility"
+                                Value="Visible"/>
+
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
+                </Style>
+
+            </Border.Style>
+
+        </Border>
+
+    </Grid>
+
 </UserControl>
