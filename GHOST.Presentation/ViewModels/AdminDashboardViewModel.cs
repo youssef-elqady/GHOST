@@ -164,7 +164,7 @@ private DashboardPeriod _period =
         Alerts.Count;
 
     public decimal TotalSales =>
-        Revenue + ProductSales;
+        Revenue;
 
     public string TotalSalesText =>
         $"{TotalSales:N2} ج.م";
