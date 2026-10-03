@@ -54,4 +54,17 @@
     <SolidColorBrush x:Key="GhostActiveNav" Color="#242019"/>
     <SolidColorBrush x:Key="GhostSidebarUser" Color="#15191F"/>
     <SolidColorBrush x:Key="GhostOverlay" Color="#AA000000"/>
+    <!-- Backward-compatible application token aliases -->
+    <SolidColorBrush x:Key="GhostBg" Color="{StaticResource GhostBgColor}"/>
+    <SolidColorBrush x:Key="GhostSurface" Color="{StaticResource GhostSurfaceColor}"/>
+    <SolidColorBrush x:Key="GhostRaised" Color="{StaticResource GhostSurface3Color}"/>
+    <SolidColorBrush x:Key="GhostHover" Color="{StaticResource GhostSurface2Color}"/>
+    <SolidColorBrush x:Key="GhostBorder" Color="{StaticResource GhostLineColor}"/>
+    <SolidColorBrush x:Key="GhostAccent" Color="{StaticResource GhostAccentColor}"/>
+    <SolidColorBrush x:Key="GhostText" Color="{StaticResource GhostTextColor}"/>
+    <SolidColorBrush x:Key="GhostMuted" Color="{StaticResource GhostMutedColor}"/>
+    <SolidColorBrush x:Key="GhostSuccess" Color="{StaticResource GhostSuccessColor}"/>
+    <SolidColorBrush x:Key="GhostWarning" Color="{StaticResource GhostWarningColor}"/>
+    <SolidColorBrush x:Key="GhostDanger" Color="{StaticResource GhostDangerColor}"/>
+
 </ResourceDictionary>
