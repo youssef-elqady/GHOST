@@ -40,6 +40,17 @@ public static class ThemeService
         Set(resources, "GhostControlPressed", dark ? "#20252D" : "#DCE1E8");
         Set(resources, "GhostActiveNav", dark ? "#242019" : "#F1EBDD");
         Set(resources, "GhostSidebarUser", dark ? "#15191F" : "#F5F6F8");
+        Set(resources, "GhostBg", dark ? "#0B0D10" : "#F4F6F8");
+        Set(resources, "GhostSurface", dark ? "#13161B" : "#FFFFFF");
+        Set(resources, "GhostRaised", dark ? "#1C2128" : "#E8EBEF");
+        Set(resources, "GhostHover", dark ? "#171B21" : "#F0F2F5");
+        Set(resources, "GhostBorder", dark ? "#252B33" : "#D8DDE4");
+        Set(resources, "GhostAccent", dark ? "#B9A36D" : "#8D7135");
+        Set(resources, "GhostText", dark ? "#DDE2E8" : "#2B3038");
+        Set(resources, "GhostMuted", dark ? "#7D8795" : "#687180");
+        Set(resources, "GhostSuccess", dark ? "#65B88F" : "#39805F");
+        Set(resources, "GhostWarning", dark ? "#D2A45C" : "#9A6B20");
+        Set(resources, "GhostDanger", dark ? "#D47A7A" : "#A94E4E");
     }
 
     private static void Set(ResourceDictionary resources, string key, string hex)
