@@ -9,40 +9,14 @@
         MinHeight="720"
         WindowStartupLocation="CenterScreen"
         FlowDirection="RightToLeft"
-        Background="#0B0D10"
-        Foreground="#F2F4F7"
+        Background="{StaticResource AppBg}"
+        Foreground="{StaticResource White}"
         ResizeMode="CanResize"
         WindowState="Maximized"
         ShowInTaskbar="True"
         Loaded="Window_Loaded">
 
     <Window.Resources>
-
-        <!-- ============================================================= -->
-        <!-- COLOR SYSTEM                                                   -->
-        <!-- ============================================================= -->
-
-        <SolidColorBrush x:Key="AppBg" Color="#0B0D10"/>
-        <SolidColorBrush x:Key="SidebarBg" Color="#0E1014"/>
-        <SolidColorBrush x:Key="Surface" Color="#13161B"/>
-        <SolidColorBrush x:Key="Surface2" Color="#171B21"/>
-        <SolidColorBrush x:Key="Surface3" Color="#1C2128"/>
-        <SolidColorBrush x:Key="Line" Color="#252B33"/>
-        <SolidColorBrush x:Key="LineSoft" Color="#1D2229"/>
-        <SolidColorBrush x:Key="White" Color="#F4F6F8"/>
-        <SolidColorBrush x:Key="Text" Color="#DDE2E8"/>
-        <SolidColorBrush x:Key="Muted" Color="#7D8795"/>
-        <SolidColorBrush x:Key="Dim" Color="#596270"/>
-        <SolidColorBrush x:Key="Gold" Color="#B9A36D"/>
-        <SolidColorBrush x:Key="GoldSoft" Color="#29251D"/>
-        <SolidColorBrush x:Key="Green" Color="#65B88F"/>
-        <SolidColorBrush x:Key="GreenSoft" Color="#182A23"/>
-        <SolidColorBrush x:Key="Amber" Color="#D2A45C"/>
-        <SolidColorBrush x:Key="AmberSoft" Color="#2C261C"/>
-        <SolidColorBrush x:Key="Blue" Color="#789BC8"/>
-        <SolidColorBrush x:Key="BlueSoft" Color="#1D2838"/>
-        <SolidColorBrush x:Key="Red" Color="#D47A7A"/>
-        <SolidColorBrush x:Key="RedSoft" Color="#2D2022"/>
 
         <!-- ============================================================= -->
         <!-- CONTENT-ONLY TAB CONTROL                                       -->
@@ -112,14 +86,14 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#181C22"/>
+                                <Setter TargetName="Root" Property="Background" Value="{StaticResource GhostControlHover}"/>
                                 <Setter Property="Foreground" Value="{StaticResource White}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#20252D"/>
+                                <Setter TargetName="Root" Property="Background" Value="{StaticResource GhostControlPressed}"/>
                             </Trigger>
                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Tag}" Value="Active">
-                                <Setter TargetName="Root" Property="Background" Value="#242019"/>
+                                <Setter TargetName="Root" Property="Background" Value="{StaticResource GhostActiveNav}"/>
                                 <Setter Property="Foreground" Value="{StaticResource Gold}"/>
                             </DataTrigger>
                             <Trigger Property="IsEnabled" Value="False">
@@ -152,8 +126,8 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Root" Property="Background" Value="#22272F"/>
-                                <Setter TargetName="Root" Property="BorderBrush" Value="#39414D"/>
+                                <Setter TargetName="Root" Property="Background" Value="{StaticResource GhostControlHover}"/>
+                                <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Line}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="Root" Property="Opacity" Value="0.72"/>
@@ -669,7 +643,7 @@
                 <!-- USER -->
 
                 <Border Grid.Row="2"
-                        Background="#15191F"
+                        Background="{StaticResource GhostSidebarUser}"
                         BorderBrush="#252B33"
                         BorderThickness="1"
                         CornerRadius="14"
@@ -797,6 +771,22 @@
                                        Margin="8,0,0,0"/>
                         </StackPanel>
                     </Border>
+
+                    <Button Style="{StaticResource PremiumSecondaryButton}"
+                            Click="ThemeToggle_Click"
+                            Margin="0,0,8,0"
+                            ToolTip="تبديل المظهر">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="M12,3 A9,9 0 1 0 12,21 A9,9 0 0 0 12,3 M12,7 L12,12 L16,14"
+                                  Stroke="{StaticResource Text}"
+                                  StrokeThickness="1.5"
+                                  Fill="Transparent"
+                                  Width="15"
+                                  Height="15"
+                                  Margin="0,0,8,0"/>
+                            <TextBlock x:Name="ThemeToggleText" Text="الوضع الفاتح"/>
+                        </StackPanel>
+                    </Button>
 
                     <Button Style="{StaticResource PremiumSecondaryButton}"
                             Command="{Binding RefreshCommand}">
