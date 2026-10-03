@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using GHOST.Application.Authentication;
 using GHOST.Application.Day5;
 using GHOST.Application.Devices;
@@ -42,6 +43,14 @@ public partial class MainWindow : Window
         };
 
         InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
+    }
+
+    private void ThemeToggle_Click(object sender, RoutedEventArgs e)
+    {
+        ThemeService.Toggle();
+        ThemeToggleText.Text = ThemeService.IsDark
+            ? "الوضع الفاتح"
+            : "الوضع الداكن";
     }
 
     private async void Window_Loaded(
