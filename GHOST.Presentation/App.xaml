@@ -6,68 +6,9 @@
 
     <Application.Resources>
 
-        <!-- ========================= -->
-        <!-- GHOST COLOR SYSTEM        -->
-        <!-- ========================= -->
-
-        <Color x:Key="GhostBgColor">#0D0F14</Color>
-        <Color x:Key="GhostSurfaceColor">#151922</Color>
-        <Color x:Key="GhostSurfaceRaisedColor">#1D222D</Color>
-        <Color x:Key="GhostSurfaceHoverColor">#252B37</Color>
-
-        <Color x:Key="GhostBorderColor">#303746</Color>
-
-        <Color x:Key="GhostAccentColor">#8B7CFF</Color>
-        <Color x:Key="GhostAccentHoverColor">#9C90FF</Color>
-
-        <Color x:Key="GhostTextColor">#F5F7FB</Color>
-        <Color x:Key="GhostMutedColor">#98A1B2</Color>
-
-        <Color x:Key="GhostSuccessColor">#3CCB8A</Color>
-        <Color x:Key="GhostWarningColor">#E7B04B</Color>
-        <Color x:Key="GhostDangerColor">#E46D78</Color>
-
-
-        <!-- ========================= -->
-        <!-- BRUSHES                    -->
-        <!-- ========================= -->
-
-        <SolidColorBrush x:Key="GhostBg"
-                         Color="{StaticResource GhostBgColor}" />
-
-        <SolidColorBrush x:Key="GhostSurface"
-                         Color="{StaticResource GhostSurfaceColor}" />
-
-        <SolidColorBrush x:Key="GhostRaised"
-                         Color="{StaticResource GhostSurfaceRaisedColor}" />
-
-        <SolidColorBrush x:Key="GhostHover"
-                         Color="{StaticResource GhostSurfaceHoverColor}" />
-
-        <SolidColorBrush x:Key="GhostBorder"
-                         Color="{StaticResource GhostBorderColor}" />
-
-        <SolidColorBrush x:Key="GhostAccent"
-                         Color="{StaticResource GhostAccentColor}" />
-
-        <SolidColorBrush x:Key="GhostAccentHover"
-                         Color="{StaticResource GhostAccentHoverColor}" />
-
-        <SolidColorBrush x:Key="GhostText"
-                         Color="{StaticResource GhostTextColor}" />
-
-        <SolidColorBrush x:Key="GhostMuted"
-                         Color="{StaticResource GhostMutedColor}" />
-
-        <SolidColorBrush x:Key="GhostSuccess"
-                         Color="{StaticResource GhostSuccessColor}" />
-
-        <SolidColorBrush x:Key="GhostWarning"
-                         Color="{StaticResource GhostWarningColor}" />
-
-        <SolidColorBrush x:Key="GhostDanger"
-                         Color="{StaticResource GhostDangerColor}" />
-
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Themes/GhostTheme.xaml"/>
+        </ResourceDictionary.MergedDictionaries>
 
         <!-- ========================= -->
         <!-- DEFAULT WINDOW             -->
