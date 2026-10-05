@@ -73,11 +73,28 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         }
         var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
         var bill = billingCalculator.Calculate(session.StartedAt, now, pausedSeconds, session.RatePerHour, BillingPolicy.Default);
-        session.EndedAt = now; session.TotalPausedSeconds = pausedSeconds; session.TotalAmount = bill.Amount; session.Status = SessionStatus.Completed; session.IsActive = false; session.EndedById = actorId; session.UpdatedAt = now; session.Device.Status = DeviceStatus.Available;
+
+        var productsAmount = await dbContext.Orders
+            .Where(x => x.SessionId == session.Id)
+            .Select(x => (decimal?)x.FinalAmount)
+            .SumAsync(cancellationToken) ?? 0m;
+
+        session.EndedAt = now;
+        session.TotalPausedSeconds = pausedSeconds;
+        session.TotalAmount = bill.Amount;
+        session.Status = SessionStatus.Completed;
+        session.IsActive = false;
+        session.EndedById = actorId;
+        session.UpdatedAt = now;
+        session.Device.Status = DeviceStatus.Available;
+
         if (session.CustomerId is not null)
         {
             var customer = await dbContext.Customers.SingleAsync(x => x.Id == session.CustomerId, cancellationToken);
-            customer.LastVisitAt = now; customer.TotalVisits++; customer.TotalSpent += bill.Amount; customer.TotalMinutes += (int)bill.BillableDuration.TotalMinutes;
+            customer.LastVisitAt = now;
+            customer.TotalVisits++;
+            customer.TotalSpent += bill.Amount + productsAmount;
+            customer.TotalMinutes += (int)bill.BillableDuration.TotalMinutes;
         }
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken);
     }
@@ -91,9 +108,19 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         var session = await dbContext.Sessions.SingleOrDefaultAsync(x => x.Id == request.SessionId, cancellationToken) ?? throw new KeyNotFoundException("Session not found.");
         if (session.Status != SessionStatus.Completed || session.TotalAmount is null) throw new InvalidOperationException("Only completed sessions can be paid.");
         if (await dbContext.Payments.AnyAsync(x => x.SessionId == request.SessionId, cancellationToken)) throw new InvalidOperationException("A final payment already exists for this session.");
-        if (request.AmountReceived < session.TotalAmount.Value) throw new InvalidOperationException("Insufficient cash received.");
+
+        var productsAmount = await dbContext.Orders
+            .Where(x => x.SessionId == request.SessionId)
+            .Select(x => (decimal?)x.FinalAmount)
+            .SumAsync(cancellationToken) ?? 0m;
+
+        var amountDue = session.TotalAmount.Value + productsAmount;
+
+        if (request.AmountReceived < amountDue)
+            throw new InvalidOperationException("Insufficient cash received.");
+
         var shift = await dbContext.Shifts.SingleOrDefaultAsync(x => x.IsOpen, cancellationToken) ?? throw new InvalidOperationException("An open shift is required before accepting session payments.");
-        var payment = new Payment { SessionId = session.Id, AmountDue = session.TotalAmount.Value, AmountReceived = request.AmountReceived, Change = request.AmountReceived - session.TotalAmount.Value, PaymentDate = clock.UtcNow, CashierId = actorId, ShiftId = shift.Id };
+        var payment = new Payment { SessionId = session.Id, AmountDue = amountDue, AmountReceived = request.AmountReceived, Change = request.AmountReceived - amountDue, PaymentDate = clock.UtcNow, CashierId = actorId, ShiftId = shift.Id };
         dbContext.Payments.Add(payment);
         dbContext.CashTransactions.Add(new CashTransaction { ShiftId = shift.Id, Amount = payment.AmountDue, Type = CashTransactionType.Sale, Reference = payment.Id.ToString(), Reason = "Session payment", UserId = actorId, Timestamp = payment.PaymentDate });
         await dbContext.SaveChangesAsync(cancellationToken); await transaction.CommitAsync(cancellationToken); return payment.Id;
@@ -103,7 +130,18 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         currentUser.RequireAuthenticated();
         var session = await dbContext.Sessions.AsNoTracking().SingleOrDefaultAsync(x => x.Id == sessionId, cancellationToken) ?? throw new KeyNotFoundException("Session not found.");
         if (session.Status != SessionStatus.Completed || session.TotalAmount is null) throw new InvalidOperationException("Only completed sessions can be paid.");
-        return new SessionPaymentSummary(session.Id, session.TotalAmount.Value, await dbContext.Payments.AnyAsync(x => x.SessionId == sessionId, cancellationToken));
+
+        var productsAmount = await dbContext.Orders
+            .Where(x => x.SessionId == sessionId)
+            .Select(x => (decimal?)x.FinalAmount)
+            .SumAsync(cancellationToken) ?? 0m;
+
+        return new SessionPaymentSummary(
+            session.Id,
+            session.TotalAmount.Value,
+            productsAmount,
+            session.TotalAmount.Value + productsAmount,
+            await dbContext.Payments.AnyAsync(x => x.SessionId == sessionId, cancellationToken));
     }
 
     private async Task<Session> LoadActiveSessionAsync(Guid id, CancellationToken cancellationToken) =>
