@@ -36,7 +36,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
         });
         modelBuilder.Entity<Session>(entity =>
         {
-            entity.HasKey(x => x.Id); entity.Property(x => x.RatePerHour).HasPrecision(18, 2); entity.Property(x => x.TotalAmount).HasPrecision(18, 2);
+            entity.HasKey(x => x.Id); entity.Property(x => x.Mode).HasConversion<int>(); entity.Property(x => x.RatePerHour).HasPrecision(18, 2); entity.Property(x => x.TotalAmount).HasPrecision(18, 2);
             entity.HasOne(x => x.Device).WithMany(x => x.Sessions).HasForeignKey(x => x.DeviceId).OnDelete(DeleteBehavior.Restrict);
             entity.HasOne(x => x.Customer).WithMany(x => x.Sessions).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.SetNull);
             entity.HasOne(x => x.StartedBy).WithMany().HasForeignKey(x => x.StartedById).OnDelete(DeleteBehavior.SetNull);
