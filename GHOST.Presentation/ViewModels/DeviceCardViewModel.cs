@@ -9,6 +9,7 @@ public sealed class DeviceCardViewModel : ObservableObject
 {
     private readonly TimeSpan? _runtimeSnapshot;
     private readonly DateTimeOffset _snapshotAtUtc;
+    private readonly decimal _currentRatePerHour;
 
     private string _runtime;
 
@@ -28,6 +29,7 @@ public sealed class DeviceCardViewModel : ObservableObject
 
         SingleRate = summary.SingleRate;
         MultiRate = summary.MultiRate;
+        _currentRatePerHour = summary.CurrentPrice is null ? 0m : summary.CurrentPrice.Value;
         HasAirConditioning = summary.HasAirConditioning;
 
         CurrentPrice = summary.CurrentPrice is null
@@ -52,7 +54,7 @@ public sealed class DeviceCardViewModel : ObservableObject
             ? "—"
             : FormatRuntime(summary.Runtime.Value);
 
-        CurrentAmount = summary.CurrentAmount is null
+        _currentAmount = summary.CurrentAmount is null
             ? "—"
             : $"{summary.CurrentAmount:N2} ج.م";
     }
@@ -130,7 +132,13 @@ public sealed class DeviceCardViewModel : ObservableObject
         private set => SetProperty(ref _runtime, value);
     }
 
-    public string CurrentAmount { get; }
+    public string CurrentAmount
+    {
+        get => _currentAmount;
+        private set => SetProperty(ref _currentAmount, value);
+    }
+
+    private string _currentAmount;
 
     public bool IsAvailable =>
         Status == DeviceStatus.Available;
@@ -194,6 +202,21 @@ public sealed class DeviceCardViewModel : ObservableObject
         }
 
         Runtime = FormatRuntime(runtime);
+        UpdateLiveAmount(runtime);
+    }
+
+    private void UpdateLiveAmount(TimeSpan runtime)
+    {
+        if (_currentRatePerHour <= 0)
+        {
+            CurrentAmount = "0.00 ج.م";
+            return;
+        }
+
+        var billableMinutes = Math.Ceiling(runtime.TotalMinutes);
+        var amount = _currentRatePerHour * ((decimal)billableMinutes / 60m);
+        amount = decimal.Round(amount, 2, MidpointRounding.AwayFromZero);
+        CurrentAmount = $"{amount:N2} ج.م";
     }
 
     private static string FormatRuntime(TimeSpan runtime)
