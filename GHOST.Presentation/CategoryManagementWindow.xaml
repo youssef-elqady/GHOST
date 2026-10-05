@@ -1,0 +1,187 @@
+<Window x:Class="GHOST.Presentation.CategoryManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="GHOST"
+        Width="720"
+        Height="620"
+        MinWidth="620"
+        MinHeight="520"
+        WindowStartupLocation="CenterOwner"
+        FlowDirection="RightToLeft"
+        Background="{DynamicResource GhostBg}"
+        Foreground="{DynamicResource GhostText}"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Loaded="Window_Loaded">
+
+    <Border Background="{DynamicResource GhostSurface}"
+            BorderBrush="{DynamicResource GhostBorder}"
+            BorderThickness="1"
+            CornerRadius="16"
+            Padding="26">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="إدارة التصنيفات"
+                               Style="{StaticResource GhostPageTitle}"
+                               FontSize="23"/>
+                    <TextBlock Text="أنشئ تصنيفات المنتجات أو عطّل تصنيفًا بدون حذف تاريخه."
+                               Style="{StaticResource GhostSecondaryText}"/>
+                </StackPanel>
+
+                <Border Width="42"
+                        Height="42"
+                        CornerRadius="12"
+                        Background="{DynamicResource GhostAccentSoft}"
+                        HorizontalAlignment="Left">
+                    <materialDesign:PackIcon Kind="ShapeOutline"
+                                             Width="22"
+                                             Height="22"
+                                             Foreground="{DynamicResource GhostAccent}"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="1"
+                    Style="{StaticResource GhostCard}"
+                    Padding="14"
+                    Margin="0,0,0,14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock Text="اسم التصنيف"
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,0,0,6"/>
+                        <TextBox x:Name="NameBox"
+                                 Style="{StaticResource GhostTextBox}"
+                                 KeyDown="NameBox_KeyDown"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="2"
+                            Content="إضافة تصنيف"
+                            Style="{StaticResource GhostPrimaryButton}"
+                            VerticalAlignment="Bottom"
+                            Click="Add_Click"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Style="{StaticResource GhostCard}"
+                    Padding="8">
+                <DataGrid x:Name="CategoriesGrid"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          RowHeight="50"
+                          Background="Transparent"
+                          Foreground="{DynamicResource GhostText}"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="{DynamicResource LineSoft}"
+                          SelectionChanged="CategoriesGrid_SelectionChanged">
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="10,0"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{DynamicResource GhostSurface2}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource GhostMuted}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GhostHover}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="التصنيف"
+                                            Binding="{Binding Name}"
+                                            Width="2.5*"/>
+
+                        <DataGridTemplateColumn Header="الحالة" Width="1.2*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="نشط"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource GhostSuccess}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                                        <Setter Property="Text" Value="غير نشط"/>
+                                                        <Setter Property="Foreground" Value="{DynamicResource GhostDanger}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <Grid Grid.Row="3" Margin="0,14,0,0">
+                <TextBlock Text="التصنيف الذي يحتوي على منتجات نشطة لا يمكن تعطيله قبل تعطيل هذه المنتجات."
+                           Style="{StaticResource GhostCaption}"
+                           VerticalAlignment="Center"
+                           TextWrapping="Wrap"/>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <Button Content="تفعيل التصنيف"
+                            x:Name="EnableButton"
+                            Style="{StaticResource GhostSecondaryButton}"
+                            Click="Enable_Click"
+                            IsEnabled="False"
+                            Margin="0,0,8,0"/>
+                    <Button Content="تعطيل التصنيف"
+                            x:Name="DisableButton"
+                            Style="{StaticResource GhostDangerButton}"
+                            Click="Disable_Click"
+                            IsEnabled="False"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
