@@ -339,8 +339,8 @@
                             </ItemsControl>
                         </ScrollViewer>
                     </Grid>
-                </Border>
-        </Grid>
+                </Grid>
+            </Border>
 
         <!-- NOTICE -->
         <Border Grid.Row="3"
