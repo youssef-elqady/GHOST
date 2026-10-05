@@ -54,6 +54,15 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public string CurrentUserName =>
         _currentUser.Current?.Username ?? string.Empty;
 
+    public bool IsAdmin =>
+        _currentUser.IsInRole("Admin");
+
+    public bool IsStaff =>
+        _currentUser.IsInRole("Cashier");
+
+    public bool IsManager =>
+        _currentUser.IsInRole("Manager");
+
     public bool CanManageDevices =>
         _currentUser.IsInRole("Admin") || _currentUser.IsInRole("Manager");
 
