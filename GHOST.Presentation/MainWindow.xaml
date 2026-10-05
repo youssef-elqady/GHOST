@@ -324,6 +324,11 @@
                                 <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Gold}"/>
                                 <Setter TargetName="Root" Property="Background" Value="#2A2315"/>
                                 <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+                            <DataTrigger Binding="{Binding SelectedSessionModeText}" Value="مالتي">
+                                <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Blue}"/>
+                                <Setter TargetName="Root" Property="Background" Value="{StaticResource BlueSoft}"/>
+                                <Setter Property="Foreground" Value="{StaticResource Blue}"/>
+                            </DataTrigger>
                             </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -943,11 +948,13 @@
                                                                     Margin="0,8,0,0">
                                                             <Button Content="فردي"
                                                                     Style="{StaticResource SessionModeButton}"
-                                                                    Command="{Binding SelectSingleCommand}"/>
+                                                                    Command="{Binding SelectSingleCommand}"
+                                                                    IsEnabled="{Binding CanStartSession}"/>
 
                                                             <Button Content="مالتي"
                                                                     Style="{StaticResource SessionModeButton}"
-                                                                    Command="{Binding SelectMultiCommand}"/>
+                                                                    Command="{Binding SelectMultiCommand}"
+                                                                    IsEnabled="{Binding CanStartSession}"/>
                                                         </StackPanel>
 
                                                         <TextBlock Text="{Binding SingleRateText, StringFormat={}فردي  •  {0}}"
@@ -959,6 +966,11 @@
                                                                    Foreground="{StaticResource Dim}"
                                                                    FontSize="8"
                                                                    Margin="0,3,0,0"/>
+
+                                                        <TextBlock Text="{Binding ActiveSessionModeText, StringFormat={}نوع الجلسة  •  {0}}"
+                                                                   Foreground="{StaticResource Muted}"
+                                                                   FontSize="8"
+                                                                   Margin="0,6,0,0"/>
 
                                                         <Border Background="#0F1216"
                                                                 BorderBrush="{StaticResource LineSoft}"
