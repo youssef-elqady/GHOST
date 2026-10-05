@@ -32,6 +32,17 @@
             <Setter Property="RowHeight" Value="58"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Padding" Value="10,0"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 
@@ -69,6 +80,12 @@
                 <Button Content="حركة مخزون"
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="OpenMovement_Click"
+                        Margin="0,0,8,0"/>
+                <Button x:Name="ManageCategoriesButton"
+                        Content="التصنيفات"
+                        Style="{StaticResource GhostSecondaryButton}"
+                        Click="ManageCategories_Click"
+                        Visibility="Collapsed"
                         Margin="0,0,8,0"/>
                 <Button Click="AddProduct_Click"
                         Style="{StaticResource GhostPrimaryButton}">
