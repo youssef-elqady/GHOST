@@ -299,4 +299,24 @@ public sealed class Day5ServiceTests : IAsyncLifetime
         Assert.False(
             closed.IsOpen);
     }
+    [Fact]
+    public async Task Inventory_history_returns_latest_movements_with_product_and_actor()
+    {
+        var p = await P();
+
+        await s.ChangeStockAsync(
+            manager,
+            new(p.Id, InventoryTransactionType.Waste, 2, "damaged"));
+
+        var history = await s.GetInventoryHistoryAsync(
+            new(ProductId: p.Id, Page: 1, PageSize: 50));
+
+        Assert.Equal(2, history.Count);
+        Assert.Equal(InventoryTransactionType.Waste, history[0].Type);
+        Assert.Equal(-2, history[0].Quantity);
+        Assert.Equal(8, history[0].AfterQuantity);
+        Assert.Equal("Cola", history[0].ProductName);
+        Assert.False(string.IsNullOrWhiteSpace(history[0].CreatedByName));
+    }
+
 }
