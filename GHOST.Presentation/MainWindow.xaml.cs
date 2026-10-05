@@ -43,6 +43,7 @@ public partial class MainWindow : Window
         };
 
         InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
+        ShiftHost.Content = new ShiftView(day5Service, currentUser);
     }
 
     private void OpenPlayOrders_Click(
@@ -81,7 +82,13 @@ public partial class MainWindow : Window
     {
         try
         {
-            SetActiveNavigation(0);
+            var startIndex = ViewModel.IsManagement ? 0 : 1;
+            NavigateTo(
+                startIndex,
+                ViewModel.IsManagement ? "الرئيسية" : "الأجهزة واللعب",
+                ViewModel.IsManagement
+                    ? "ملخص الإدارة والإيرادات والتنبيهات"
+                    : "تشغيل ومتابعة أجهزة اللعب واللعب الحالي");
 
             await ViewModel.RefreshCommand
                 .ExecuteAsync(null);
