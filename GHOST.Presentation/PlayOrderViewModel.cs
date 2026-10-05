@@ -36,6 +36,7 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
     }
 
     public ObservableCollection<ProductSummary> Products { get; } = [];
+    public ObservableCollection<PlayOrderItemSummary> OrderItems { get; } = [];
 
     [ObservableProperty]
     private ObservableCollection<ProductSummary> visibleProducts = [];
@@ -98,9 +99,15 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
                 Products.Add(product);
 
             Categories.Clear();
+            Categories.Add(new CategorySummary(
+                Guid.Empty,
+                "كل التصنيفات",
+                true));
+
             foreach (var category in await day5Service.GetCategoriesAsync(false))
                 Categories.Add(category);
 
+            SelectedCategoryId = Guid.Empty;
             RefreshVisibleProducts();
             liveTimer.Start();
         }
@@ -156,7 +163,7 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
     {
         VisibleProducts.Clear();
 
-        var source = SelectedCategoryId is null
+        var source = SelectedCategoryId is null || SelectedCategoryId == Guid.Empty
             ? Products
             : Products.Where(x => x.CategoryId == SelectedCategoryId.Value);
 
@@ -191,6 +198,10 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
         PlayAmount = summary.PlayAmount;
         ProductsAmount = summary.ProductsAmount;
         TotalAmount = summary.TotalAmount;
+
+        OrderItems.Clear();
+        foreach (var item in summary.Items)
+            OrderItems.Add(item);
 
         UpdateRuntimeAndAmount();
 
