@@ -23,6 +23,14 @@ public sealed class DatabaseInitializer(AppDbContext dbContext)
 
     private static readonly string[] Roles = ["Admin", "Manager", "Cashier"];
 
+    private static readonly string[] ProductCategories =
+    [
+        "مشروبات",
+        "سناكس",
+        "مياه",
+        "إضافات"
+    ];
+
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         await dbContext.Database.MigrateAsync(cancellationToken);
@@ -41,6 +49,17 @@ public sealed class DatabaseInitializer(AppDbContext dbContext)
 
         var existing = await dbContext.Roles.Select(x => x.Name).ToListAsync(cancellationToken);
         dbContext.Roles.AddRange(Roles.Where(x => !existing.Contains(x)).Select(x => new Role { Name = x }));
+
+        if (!await dbContext.ProductCategories.AnyAsync(cancellationToken))
+        {
+            dbContext.ProductCategories.AddRange(
+                ProductCategories.Select(x => new ProductCategory
+                {
+                    Name = x,
+                    IsActive = true
+                }));
+        }
+
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
