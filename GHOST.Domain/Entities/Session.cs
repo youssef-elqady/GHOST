@@ -11,6 +11,7 @@ public sealed class Session
     public Customer? Customer { get; set; }
     public DateTimeOffset StartedAt { get; set; }
     public DateTimeOffset? EndedAt { get; set; }
+    public SessionMode Mode { get; set; } = SessionMode.Single;
     public decimal RatePerHour { get; set; }
     public int TotalPausedSeconds { get; set; }
     public decimal? TotalAmount { get; set; }
