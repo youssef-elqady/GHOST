@@ -71,6 +71,20 @@ public sealed partial class DeviceCardViewModel : ObservableObject
     [ObservableProperty]
     private SessionMode selectedSessionMode = SessionMode.Single;
 
+    // ============================================================
+    // SESSION MODE DISPLAY
+    // ============================================================
+
+    public bool HasActiveSessionMode =>
+        ActiveSessionId.HasValue &&
+        ActiveSessionMode.HasValue;
+
+    public bool IsActiveSingle =>
+        ActiveSessionMode == SessionMode.Single;
+
+    public bool IsActiveMulti =>
+        ActiveSessionMode == SessionMode.Multi;
+
     public string ActiveSessionModeText =>
         ActiveSessionMode switch
         {
@@ -79,27 +93,59 @@ public sealed partial class DeviceCardViewModel : ObservableObject
             _ => "—"
         };
 
+    public string ActiveSessionRateText =>
+        ActiveSessionMode switch
+        {
+            SessionMode.Single => $"{SingleRate:N2} ج.م / ساعة",
+            SessionMode.Multi => $"{MultiRate:N2} ج.م / ساعة",
+            _ => "—"
+        };
+
     public string SelectedSessionModeText =>
         SelectedSessionMode == SessionMode.Single
             ? "فردي"
             : "مالتي";
 
+    public bool IsSingleSelected =>
+        SelectedSessionMode == SessionMode.Single;
+
+    public bool IsMultiSelected =>
+        SelectedSessionMode == SessionMode.Multi;
+
+    public bool ShowSessionModeSelector =>
+        CanStartSession;
+
+    public bool ShowActiveSessionMode =>
+        HasActiveSessionMode;
+
     [RelayCommand]
     private void SelectSingle()
     {
+        if (!CanStartSession)
+            return;
+
         SelectedSessionMode = SessionMode.Single;
     }
 
     [RelayCommand]
     private void SelectMulti()
     {
+        if (!CanStartSession)
+            return;
+
         SelectedSessionMode = SessionMode.Multi;
     }
 
     partial void OnSelectedSessionModeChanged(SessionMode value)
     {
         OnPropertyChanged(nameof(SelectedSessionModeText));
+        OnPropertyChanged(nameof(IsSingleSelected));
+        OnPropertyChanged(nameof(IsMultiSelected));
     }
+
+    // ============================================================
+    // BASIC DEVICE DATA
+    // ============================================================
 
     public string Name { get; }
 
@@ -136,6 +182,10 @@ public sealed partial class DeviceCardViewModel : ObservableObject
     public string CurrentPrice { get; }
 
     public string ActiveSession { get; }
+
+    // ============================================================
+    // LIVE SESSION
+    // ============================================================
 
     public string Runtime
     {
@@ -186,6 +236,10 @@ public sealed partial class DeviceCardViewModel : ObservableObject
          Status == DeviceStatus.Paused) &&
         HasActiveSession;
 
+    // ============================================================
+    // LIVE UPDATE
+    // ============================================================
+
     public void UpdateLiveState()
     {
         if (!HasActiveSession || _runtimeSnapshot is null)
@@ -221,10 +275,6 @@ public sealed partial class DeviceCardViewModel : ObservableObject
             CurrentAmount = "0.00 ج.م";
             return;
         }
-
-        // Billing is calculated per minute.
-        // Pause time is already excluded from Runtime.
-        // The current minute is rounded up.
 
         var billableMinutes = Math.Ceiling(runtime.TotalMinutes);
 

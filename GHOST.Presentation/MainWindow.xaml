@@ -359,83 +359,160 @@
         </Style>
 
         <!-- ============================================================= -->
-        <!-- SESSION MODE BUTTON                                            -->
+        <!-- SESSION MODE BUTTON - BASE                                    -->
         <!-- ============================================================= -->
 
-        <Style x:Key="SessionModeButton" TargetType="Button">
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="MinWidth" Value="78"/>
-            <Setter Property="Padding" Value="10,0"/>
-            <Setter Property="Margin" Value="0,0,6,0"/>
-            <Setter Property="Background" Value="#15191F"/>
-            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource LineSoft}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="FontSize" Value="9"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Cursor" Value="Hand"/>
+        <Style x:Key="SessionModeButton"
+       TargetType="Button">
+
+            <Setter Property="Height"
+            Value="32"/>
+
+            <Setter Property="MinWidth"
+            Value="78"/>
+
+            <Setter Property="Padding"
+            Value="10,0"/>
+
+            <Setter Property="Margin"
+            Value="0,0,6,0"/>
+
+            <Setter Property="Background"
+            Value="#15191F"/>
+
+            <Setter Property="Foreground"
+            Value="{StaticResource Muted}"/>
+
+            <Setter Property="BorderBrush"
+            Value="{StaticResource LineSoft}"/>
+
+            <Setter Property="BorderThickness"
+            Value="1"/>
+
+            <Setter Property="FontSize"
+            Value="9"/>
+
+            <Setter Property="FontWeight"
+            Value="SemiBold"/>
+
+            <Setter Property="Cursor"
+            Value="Hand"/>
 
             <Setter Property="Template">
+
                 <Setter.Value>
+
                     <ControlTemplate TargetType="Button">
 
                         <Border x:Name="Root"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}">
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8"
+                        Padding="{TemplateBinding Padding}">
 
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                            <ContentPresenter
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
 
                         </Border>
 
                         <ControlTemplate.Triggers>
 
-                            <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger Property="IsMouseOver"
+                             Value="True">
+
                                 <Setter TargetName="Root"
-                                        Property="Background"
-                                        Value="#22272F"/>
+                                Property="Background"
+                                Value="#22272F"/>
+
                             </Trigger>
 
-                            <Trigger Property="IsPressed" Value="True">
+                            <Trigger Property="IsPressed"
+                             Value="True">
+
                                 <Setter TargetName="Root"
-                                        Property="Opacity"
-                                        Value="0.75"/>
+                                Property="Opacity"
+                                Value="0.75"/>
+
                             </Trigger>
 
-                            <DataTrigger Binding="{Binding SelectedSessionModeText}"
-                                         Value="فردي">
-                                <Setter TargetName="Root"
-                                        Property="BorderBrush"
-                                        Value="{StaticResource Gold}"/>
-                                <Setter TargetName="Root"
-                                        Property="Background"
-                                        Value="#2A2315"/>
-                                <Setter Property="Foreground"
-                                        Value="{StaticResource Gold}"/>
-                            </DataTrigger>
+                            <Trigger Property="IsEnabled"
+                             Value="False">
 
-                            <DataTrigger Binding="{Binding SelectedSessionModeText}"
-                                         Value="مالتي">
                                 <Setter TargetName="Root"
-                                        Property="BorderBrush"
-                                        Value="{StaticResource Blue}"/>
-                                <Setter TargetName="Root"
-                                        Property="Background"
-                                        Value="{StaticResource BlueSoft}"/>
-                                <Setter Property="Foreground"
-                                        Value="{StaticResource Blue}"/>
-                            </DataTrigger>
+                                Property="Opacity"
+                                Value="0.45"/>
+
+                            </Trigger>
 
                         </ControlTemplate.Triggers>
 
                     </ControlTemplate>
+
                 </Setter.Value>
+
             </Setter>
+
         </Style>
 
+
+        <!-- ============================================================= -->
+        <!-- SINGLE BUTTON                                                  -->
+        <!-- ============================================================= -->
+
+        <Style x:Key="SessionModeSingleButton"
+       TargetType="Button"
+       BasedOn="{StaticResource SessionModeButton}">
+
+            <Style.Triggers>
+
+                <DataTrigger Binding="{Binding IsSingleSelected}"
+                     Value="True">
+
+                    <Setter Property="Background"
+                    Value="#2A2315"/>
+
+                    <Setter Property="Foreground"
+                    Value="{StaticResource Gold}"/>
+
+                    <Setter Property="BorderBrush"
+                    Value="{StaticResource Gold}"/>
+
+                </DataTrigger>
+
+            </Style.Triggers>
+
+        </Style>
+
+
+        <!-- ============================================================= -->
+        <!-- MULTI BUTTON                                                   -->
+        <!-- ============================================================= -->
+
+        <Style x:Key="SessionModeMultiButton"
+       TargetType="Button"
+       BasedOn="{StaticResource SessionModeButton}">
+
+            <Style.Triggers>
+
+                <DataTrigger Binding="{Binding IsMultiSelected}"
+                     Value="True">
+
+                    <Setter Property="Background"
+                    Value="{StaticResource BlueSoft}"/>
+
+                    <Setter Property="Foreground"
+                    Value="{StaticResource Blue}"/>
+
+                    <Setter Property="BorderBrush"
+                    Value="{StaticResource Blue}"/>
+
+                </DataTrigger>
+
+            </Style.Triggers>
+
+        </Style>
         <!-- ============================================================= -->
         <!-- PANELS                                                         -->
         <!-- ============================================================= -->
@@ -1210,38 +1287,171 @@
                                                             Foreground="{StaticResource Text}"
                                                             FontSize="10"/>
 
-                                                        <StackPanel Orientation="Horizontal"
-                                                                    Margin="0,8,0,0">
+                                                        <!-- ============================================================= -->
+                                                        <!-- SESSION MODE SELECTOR                                        -->
+                                                        <!-- ============================================================= -->
 
-                                                            <Button Content="فردي"
-                                                                    Style="{StaticResource SessionModeButton}"
-                                                                    Command="{Binding SelectSingleCommand}"
-                                                                    IsEnabled="{Binding CanStartSession}"/>
+                                                        <StackPanel Margin="0,8,0,0">
 
-                                                            <Button Content="مالتي"
-                                                                    Style="{StaticResource SessionModeButton}"
-                                                                    Command="{Binding SelectMultiCommand}"
-                                                                    IsEnabled="{Binding CanStartSession}"/>
+                                                            <StackPanel.Style>
+                                                                <Style TargetType="StackPanel">
+
+                                                                    <Setter Property="Visibility"
+                    Value="Visible"/>
+
+                                                                    <Style.Triggers>
+
+                                                                        <DataTrigger Binding="{Binding ShowSessionModeSelector}"
+                             Value="False">
+
+                                                                            <Setter Property="Visibility"
+                            Value="Collapsed"/>
+
+                                                                        </DataTrigger>
+
+                                                                    </Style.Triggers>
+
+                                                                </Style>
+                                                            </StackPanel.Style>
+
+                                                            <TextBlock Text="نوع الجلسة"
+               Foreground="{StaticResource Dim}"
+               FontSize="8"
+               Margin="0,0,0,6"/>
+
+                                                            <StackPanel Orientation="Horizontal">
+
+                                                                <Button Content="فردي"
+                Style="{StaticResource SessionModeSingleButton}"
+                Command="{Binding SelectSingleCommand}"
+                IsEnabled="{Binding CanStartSession}"/>
+
+                                                                <Button Content="مالتي"
+                Style="{StaticResource SessionModeMultiButton}"
+                Command="{Binding SelectMultiCommand}"
+                IsEnabled="{Binding CanStartSession}"/>
+
+                                                            </StackPanel>
 
                                                         </StackPanel>
 
                                                         <TextBlock
-                                                            Text="{Binding SingleRateText, StringFormat={}فردي  •  {0}}"
-                                                            Foreground="{StaticResource Dim}"
-                                                            FontSize="8"
-                                                            Margin="0,6,0,0"/>
+    Text="{Binding SingleRateText, StringFormat={}فردي  •  {0}}"
+    Foreground="{StaticResource Dim}"
+    FontSize="8"
+    Margin="0,6,0,0"/>
 
                                                         <TextBlock
-                                                            Text="{Binding MultiRateText, StringFormat={}مالتي  •  {0}}"
-                                                            Foreground="{StaticResource Dim}"
-                                                            FontSize="8"
-                                                            Margin="0,3,0,0"/>
+    Text="{Binding MultiRateText, StringFormat={}مالتي  •  {0}}"
+    Foreground="{StaticResource Dim}"
+    FontSize="8"
+    Margin="0,3,0,0"/>
 
-                                                        <TextBlock
-                                                            Text="{Binding ActiveSessionModeText, StringFormat={}نوع الجلسة  •  {0}}"
-                                                            Foreground="{StaticResource Muted}"
-                                                            FontSize="8"
-                                                            Margin="0,6,0,0"/>
+
+                                                        <!-- ============================================================= -->
+                                                        <!-- ACTIVE SESSION MODE                                           -->
+                                                        <!-- ============================================================= -->
+
+                                                        <Border Margin="0,10,0,0"
+        Padding="9,7"
+        CornerRadius="9"
+        BorderThickness="1">
+
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+
+                                                                    <Setter Property="Visibility"
+                    Value="Collapsed"/>
+
+                                                                    <Setter Property="Background"
+                    Value="#15191F"/>
+
+                                                                    <Setter Property="BorderBrush"
+                    Value="{StaticResource LineSoft}"/>
+
+                                                                    <Style.Triggers>
+
+                                                                        <DataTrigger Binding="{Binding IsActiveSingle}"
+                             Value="True">
+
+                                                                            <Setter Property="Visibility"
+                            Value="Visible"/>
+
+                                                                            <Setter Property="Background"
+                            Value="#2A2315"/>
+
+                                                                            <Setter Property="BorderBrush"
+                            Value="{StaticResource Gold}"/>
+
+                                                                        </DataTrigger>
+
+                                                                        <DataTrigger Binding="{Binding IsActiveMulti}"
+                             Value="True">
+
+                                                                            <Setter Property="Visibility"
+                            Value="Visible"/>
+
+                                                                            <Setter Property="Background"
+                            Value="{StaticResource BlueSoft}"/>
+
+                                                                            <Setter Property="BorderBrush"
+                            Value="{StaticResource Blue}"/>
+
+                                                                        </DataTrigger>
+
+                                                                    </Style.Triggers>
+
+                                                                </Style>
+                                                            </Border.Style>
+
+                                                            <StackPanel Orientation="Horizontal">
+
+                                                                <Ellipse Width="7"
+                 Height="7"
+                 VerticalAlignment="Center"
+                 Margin="0,0,7,0">
+
+                                                                    <Ellipse.Style>
+                                                                        <Style TargetType="Ellipse">
+
+                                                                            <Setter Property="Fill"
+                            Value="{StaticResource Gold}"/>
+
+                                                                            <Style.Triggers>
+
+                                                                                <DataTrigger Binding="{Binding IsActiveMulti}"
+                                     Value="True">
+
+                                                                                    <Setter Property="Fill"
+                                    Value="{StaticResource Blue}"/>
+
+                                                                                </DataTrigger>
+
+                                                                            </Style.Triggers>
+
+                                                                        </Style>
+                                                                    </Ellipse.Style>
+
+                                                                </Ellipse>
+
+                                                                <TextBlock
+            Text="{Binding ActiveSessionModeText, StringFormat={}الجلسة الحالية  •  {0}}"
+            Foreground="{StaticResource White}"
+            FontSize="9"
+            FontWeight="SemiBold"/>
+
+                                                                <TextBlock Text="  •  "
+                   Foreground="{StaticResource Dim}"
+                   FontSize="9"/>
+
+                                                                <TextBlock
+            Text="{Binding ActiveSessionRateText}"
+            Foreground="{StaticResource Muted}"
+            FontSize="8"/>
+
+                                                            </StackPanel>
+
+                                                        </Border>
 
                                                         <Border Background="#0F1216"
                                                                 BorderBrush="{StaticResource LineSoft}"
