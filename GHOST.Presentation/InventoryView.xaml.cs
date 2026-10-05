@@ -30,7 +30,6 @@ public partial class InventoryView : UserControl
         InitializeComponent();
 
         ProductsGrid.ItemsSource = products;
-        CategoryBox.ItemsSource = categories;
     }
 
     private async void UserControl_Loaded(object sender, RoutedEventArgs e)
