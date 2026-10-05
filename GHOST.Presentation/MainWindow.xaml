@@ -1314,7 +1314,7 @@
                                                                 </Style>
                                                             </StackPanel.Style>
 
-                                                            <TextBlock Text="نوع الجلسة"
+                                                            <TextBlock Text="نوع اللعب"
                Foreground="{StaticResource Dim}"
                FontSize="8"
                Margin="0,0,0,6"/>
@@ -1471,7 +1471,7 @@
                                                                 <StackPanel Grid.Column="0"
                                                                             HorizontalAlignment="Right">
 
-                                                                    <TextBlock Text="مدة الجلسة"
+                                                                    <TextBlock Text="مدة اللعب"
                                                                                Foreground="{StaticResource Dim}"
                                                                                FontSize="8"/>
 
