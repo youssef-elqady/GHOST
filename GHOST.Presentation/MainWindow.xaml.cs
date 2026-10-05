@@ -112,8 +112,8 @@ public partial class MainWindow : Window
     {
         NavigateTo(
             1,
-            "الأجهزة والجلسات",
-            "إدارة ومتابعة أجهزة اللعب والجلسات الحالية");
+            "الأجهزة واللعب",
+            "إدارة ومتابعة أجهزة اللعب واللعب الحالي");
     }
 
     private void Payments_Click(
