@@ -19,7 +19,8 @@ public sealed class SessionService(AppDbContext dbContext, IClock clock, ISessio
         if (await dbContext.Sessions.AnyAsync(x => x.DeviceId == request.DeviceId && (x.Status == SessionStatus.Running || x.Status == SessionStatus.Paused), cancellationToken)) throw new InvalidOperationException("The device already has an active session.");
         if (request.CustomerId is not null && !await dbContext.Customers.AnyAsync(x => x.Id == request.CustomerId, cancellationToken)) throw new KeyNotFoundException("Customer not found.");
         var now = clock.UtcNow;
-        var session = new Session { DeviceId = device.Id, CustomerId = request.CustomerId, StartedAt = now, RatePerHour = rateProvider.ResolveRatePerHour(device.HourlyRate), Status = SessionStatus.Running, IsActive = true, StartedById = actorId, CreatedAt = now, UpdatedAt = now };
+        var session = new Session { DeviceId = device.Id, CustomerId = request.CustomerId, StartedAt = now, Mode = request.Mode,
+            RatePerHour = rateProvider.ResolveRatePerHour(device.HourlyRate, device.MultiHourlyRate, request.Mode), Status = SessionStatus.Running, IsActive = true, StartedById = actorId, CreatedAt = now, UpdatedAt = now };
         device.Status = DeviceStatus.Running;
         dbContext.Sessions.Add(session);
         await dbContext.SaveChangesAsync(cancellationToken);
