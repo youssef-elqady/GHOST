@@ -105,9 +105,8 @@ public partial class StockMovementWindow : Window
             ? after.ToString("N0")
             : "غير صالح";
 
-        AfterStockText.Foreground = after >= 0
-            ? FindResource("GhostText")
-            : FindResource("Red");
+        AfterStockText.Foreground = (System.Windows.Media.Brush)FindResource(
+            after >= 0 ? "GhostText" : "Red");
     }
 
     private bool TryGetQuantity(out int quantity) =>
