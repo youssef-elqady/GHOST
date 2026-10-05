@@ -9,6 +9,98 @@ namespace GHOST.Infrastructure.Day5;
 
 public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculator billingCalculator) : IDay5Service
 {
+    public async Task<ProductCatalogResult> GetProductCatalogAsync(
+        ProductCatalogFilterRequest request,
+        CancellationToken ct = default)
+    {
+        var page = request.Page < 1 ? 1 : request.Page;
+        var pageSize = request.PageSize switch
+        {
+            < 10 => 10,
+            > 100 => 100,
+            _ => request.PageSize
+        };
+
+        var query = db.Products
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (request.CategoryId is Guid categoryId)
+            query = query.Where(x => x.CategoryId == categoryId);
+
+        if (!string.IsNullOrWhiteSpace(request.SearchText))
+        {
+            var search = request.SearchText.Trim();
+            query = query.Where(x =>
+                x.Name.Contains(search) ||
+                (x.Barcode != null && x.Barcode.Contains(search)));
+        }
+
+        query = request.Status switch
+        {
+            ProductCatalogStatus.Active => query.Where(x => x.IsActive),
+            ProductCatalogStatus.Inactive => query.Where(x => !x.IsActive),
+            ProductCatalogStatus.LowStock => query.Where(x =>
+                x.IsActive && x.StockQuantity <= x.MinimumStockLevel),
+            _ => query
+        };
+
+        var totalCount = await query.CountAsync(ct);
+
+        var activeCount = await db.Products
+            .AsNoTracking()
+            .CountAsync(x => x.IsActive, ct);
+
+        var lowStockCount = await db.Products
+            .AsNoTracking()
+            .CountAsync(x =>
+                x.IsActive &&
+                x.StockQuantity <= x.MinimumStockLevel,
+                ct);
+
+        var stockValue = await query
+            .GroupBy(_ => 1)
+            .Select(g => new
+            {
+                Retail = g.Sum(x => x.StockQuantity * x.SellingPrice),
+                Cost = g.Sum(x => x.StockQuantity * x.CostPrice)
+            })
+            .SingleOrDefaultAsync(ct);
+
+        var items = await query
+            .OrderBy(x => x.Name)
+            .ThenBy(x => x.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new ProductSummary(
+                x.Id,
+                x.Name,
+                x.Barcode,
+                x.CategoryId,
+                x.Category.Name,
+                x.SellingPrice,
+                x.CostPrice,
+                x.StockQuantity,
+                x.MinimumStockLevel,
+                x.IsActive))
+            .ToListAsync(ct);
+
+        var totalPages = totalCount == 0
+            ? 1
+            : (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        return new ProductCatalogResult(
+            items,
+            totalCount,
+            activeCount,
+            lowStockCount,
+            stockValue?.Retail ?? 0m,
+            stockValue?.Cost ?? 0m,
+            page,
+            pageSize,
+            totalPages);
+    }
+
     public async Task<IReadOnlyList<ProductSummary>> GetProductsAsync(
         bool includeInactive = true,
         CancellationToken ct = default)
