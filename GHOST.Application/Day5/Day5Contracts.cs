@@ -69,6 +69,25 @@ public sealed record InventoryRequest(
     int Quantity,
     string Reason);
 
+public sealed record InventoryHistoryFilter(
+    Guid? ProductId = null,
+    InventoryTransactionType? Type = null,
+    int Page = 1,
+    int PageSize = 50);
+
+public sealed record InventoryHistoryItem(
+    Guid Id,
+    Guid ProductId,
+    string ProductName,
+    InventoryTransactionType Type,
+    int Quantity,
+    int BeforeQuantity,
+    int AfterQuantity,
+    string Reason,
+    Guid CreatedById,
+    string CreatedByName,
+    DateTimeOffset CreatedAt);
+
 public sealed record PosItem(
     Guid ProductId,
     int Quantity,
@@ -174,6 +193,10 @@ public interface IDay5Service
         CancellationToken ct = default);
 
     Task<IReadOnlyList<Product>> GetLowStockAsync(
+        CancellationToken ct = default);
+
+    Task<IReadOnlyList<InventoryHistoryItem>> GetInventoryHistoryAsync(
+        InventoryHistoryFilter filter,
         CancellationToken ct = default);
 
     Task<Order> CompleteOrderAsync(
