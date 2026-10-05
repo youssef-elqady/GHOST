@@ -73,6 +73,7 @@ public sealed record PlayOrderSummary(
     string DeviceName,
     string? RoomName,
     SessionMode Mode,
+    SessionStatus Status,
     DateTimeOffset StartedAt,
     DateTimeOffset? EndedAt,
     int TotalPausedSeconds,
