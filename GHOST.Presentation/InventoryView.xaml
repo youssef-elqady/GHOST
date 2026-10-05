@@ -62,6 +62,14 @@
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="Refresh_Click"
                         Margin="0,0,8,0"/>
+                <Button Content="سجل المخزون"
+                        Style="{StaticResource GhostSecondaryButton}"
+                        Click="OpenHistory_Click"
+                        Margin="0,0,8,0"/>
+                <Button Content="حركة مخزون"
+                        Style="{StaticResource GhostSecondaryButton}"
+                        Click="OpenMovement_Click"
+                        Margin="0,0,8,0"/>
                 <Button Click="AddProduct_Click"
                         Style="{StaticResource GhostPrimaryButton}">
                     <StackPanel Orientation="Horizontal">
