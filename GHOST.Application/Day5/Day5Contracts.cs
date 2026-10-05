@@ -55,6 +55,33 @@ public sealed record CompleteOrderRequest(
     Guid? SessionId = null,
     decimal OrderDiscount = 0m);
 
+
+public sealed record AddProductToPlayRequest(
+    Guid SessionId,
+    Guid ProductId,
+    int Quantity);
+
+public sealed record PlayOrderItemSummary(
+    Guid ProductId,
+    string ProductName,
+    int Quantity,
+    decimal UnitPrice,
+    decimal Total);
+
+public sealed record PlayOrderSummary(
+    Guid SessionId,
+    string DeviceName,
+    string? RoomName,
+    SessionMode Mode,
+    DateTimeOffset StartedAt,
+    DateTimeOffset? EndedAt,
+    int TotalPausedSeconds,
+    decimal RatePerHour,
+    decimal PlayAmount,
+    decimal ProductsAmount,
+    decimal TotalAmount,
+    IReadOnlyList<PlayOrderItemSummary> Items);
+
 public sealed record CloseShiftRequest(
     decimal ActualCash,
     string? DifferenceReason);
@@ -111,6 +138,15 @@ public interface IDay5Service
     Task<Order> CompleteOrderAsync(
         Guid actor,
         CompleteOrderRequest request,
+        CancellationToken ct = default);
+
+    Task<PlayOrderSummary> GetPlayDetailsAsync(
+        Guid sessionId,
+        CancellationToken ct = default);
+
+    Task<PlayOrderSummary> AddProductToPlayAsync(
+        Guid actor,
+        AddProductToPlayRequest request,
         CancellationToken ct = default);
 
     Task<Shift> OpenShiftAsync(
