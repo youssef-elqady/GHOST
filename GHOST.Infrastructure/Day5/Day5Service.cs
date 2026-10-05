@@ -398,6 +398,50 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
             .ToListAsync(ct);
     }
 
+    public async Task<IReadOnlyList<InventoryHistoryItem>> GetInventoryHistoryAsync(
+        InventoryHistoryFilter filter,
+        CancellationToken ct = default)
+    {
+        var page = filter.Page < 1 ? 1 : filter.Page;
+        var pageSize = filter.PageSize switch
+        {
+            < 10 => 10,
+            > 100 => 100,
+            _ => filter.PageSize
+        };
+
+        var query = db.InventoryTransactions
+            .AsNoTracking()
+            .Include(x => x.Product)
+            .Include(x => x.CreatedBy)
+            .AsQueryable();
+
+        if (filter.ProductId is Guid productId)
+            query = query.Where(x => x.ProductId == productId);
+
+        if (filter.Type is InventoryTransactionType type)
+            query = query.Where(x => x.Type == type);
+
+        return await query
+            .OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new InventoryHistoryItem(
+                x.Id,
+                x.ProductId,
+                x.Product.Name,
+                x.Type,
+                x.Quantity,
+                x.BeforeQuantity,
+                x.AfterQuantity,
+                x.Reason,
+                x.CreatedById,
+                x.CreatedBy.Username,
+                x.CreatedAt))
+            .ToListAsync(ct);
+    }
+
     public async Task<PlayOrderSummary> GetPlayDetailsAsync(
         Guid sessionId,
         CancellationToken ct = default)
