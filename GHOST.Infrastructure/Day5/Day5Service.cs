@@ -698,6 +698,7 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
             session.Device.Name,
             session.Device.Room?.Name,
             session.Mode,
+            session.Status,
             session.StartedAt,
             session.EndedAt,
             session.Pauses.Sum(x => x.DurationSeconds ?? 0),
