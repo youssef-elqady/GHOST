@@ -76,6 +76,8 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
 
     public Guid SessionId { get; private set; }
 
+    public bool HasProducts => Products.Count > 0;
+
     public string PlayAmountText => $"{PlayAmount:N2} ج.م";
     public string ProductsAmountText => $"{ProductsAmount:N2} ج.م";
     public string TotalAmountText => $"{TotalAmount:N2} ج.م";
@@ -97,6 +99,8 @@ public sealed partial class PlayOrderViewModel : ObservableObject, IDisposable
             Products.Clear();
             foreach (var product in products)
                 Products.Add(product);
+
+            OnPropertyChanged(nameof(HasProducts));
 
             Categories.Clear();
             Categories.Add(new CategorySummary(
