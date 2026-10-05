@@ -289,6 +289,48 @@
         <!-- PANELS                                                         -->
         <!-- ============================================================= -->
 
+        <Style x:Key="SessionModeButton" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="MinWidth" Value="78"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="Background" Value="#15191F"/>
+            <Setter Property="Foreground" Value="{StaticResource Muted}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource LineSoft}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Root"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Root" Property="Background" Value="#22272F"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.75"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding SelectedSessionModeText}" Value="فردي">
+                                <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource Gold}"/>
+                                <Setter TargetName="Root" Property="Background" Value="#2A2315"/>
+                                <Setter Property="Foreground" Value="{StaticResource Gold}"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="Panel" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource Surface}"/>
             <Setter Property="BorderBrush" Value="{StaticResource LineSoft}"/>
@@ -897,15 +939,26 @@
                                                                    Foreground="{StaticResource Text}"
                                                                    FontSize="10"/>
 
-                                                        <TextBlock Text="{Binding SingleRateText, StringFormat={}Single  •  {0}}"
-                                                                   Foreground="{StaticResource Muted}"
-                                                                   FontSize="9"
-                                                                   Margin="0,7,0,0"/>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Margin="0,8,0,0">
+                                                            <Button Content="فردي"
+                                                                    Style="{StaticResource SessionModeButton}"
+                                                                    Command="{Binding SelectSingleCommand}"/>
 
-                                                        <TextBlock Text="{Binding MultiRateText, StringFormat={}Multi  •  {0}}"
-                                                                   Foreground="{StaticResource Muted}"
-                                                                   FontSize="9"
-                                                                   Margin="0,5,0,0"/>
+                                                            <Button Content="مالتي"
+                                                                    Style="{StaticResource SessionModeButton}"
+                                                                    Command="{Binding SelectMultiCommand}"/>
+                                                        </StackPanel>
+
+                                                        <TextBlock Text="{Binding SingleRateText, StringFormat={}فردي  •  {0}}"
+                                                                   Foreground="{StaticResource Dim}"
+                                                                   FontSize="8"
+                                                                   Margin="0,6,0,0"/>
+
+                                                        <TextBlock Text="{Binding MultiRateText, StringFormat={}مالتي  •  {0}}"
+                                                                   Foreground="{StaticResource Dim}"
+                                                                   FontSize="8"
+                                                                   Margin="0,3,0,0"/>
 
                                                         <Border Background="#0F1216"
                                                                 BorderBrush="{StaticResource LineSoft}"
@@ -915,15 +968,41 @@
                                                                 Margin="0,12,0,0">
 
                                                             <Grid>
-                                                                <TextBlock Text="{Binding Runtime}"
-                                                                           Foreground="{StaticResource Gold}"
-                                                                           FontSize="14"
-                                                                           FontWeight="Bold"/>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
 
-                                                                <TextBlock Text="{Binding CurrentAmount}"
-                                                                           HorizontalAlignment="Left"
-                                                                           Foreground="{StaticResource White}"
-                                                                           FontSize="10"/>
+                                                                <StackPanel Grid.Column="0"
+                                                                            HorizontalAlignment="Right">
+                                                                    <TextBlock Text="مدة الجلسة"
+                                                                               Foreground="{StaticResource Dim}"
+                                                                               FontSize="8"/>
+                                                                    <TextBlock Text="{Binding Runtime}"
+                                                                               Foreground="{StaticResource Gold}"
+                                                                               FontSize="14"
+                                                                               FontWeight="Bold"
+                                                                               Margin="0,3,0,0"/>
+                                                                </StackPanel>
+
+                                                                <Border Grid.Column="1"
+                                                                        Width="1"
+                                                                        Height="28"
+                                                                        Background="{StaticResource LineSoft}"
+                                                                        Margin="14,0"/>
+
+                                                                <StackPanel Grid.Column="2"
+                                                                            HorizontalAlignment="Left">
+                                                                    <TextBlock Text="الحساب الحالي"
+                                                                               Foreground="{StaticResource Dim}"
+                                                                               FontSize="8"/>
+                                                                    <TextBlock Text="{Binding CurrentAmount}"
+                                                                               Foreground="{StaticResource White}"
+                                                                               FontSize="12"
+                                                                               FontWeight="SemiBold"
+                                                                               Margin="0,3,0,0"/>
+                                                                </StackPanel>
                                                             </Grid>
                                                         </Border>
 
