@@ -447,16 +447,16 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
             .Select(x => new InventoryHistoryItem(
                 x.Id,
                 x.ProductId,
-                x.Product.Name,
+                x.ProductName,
                 x.Type,
                 x.Quantity,
                 x.BeforeQuantity,
                 x.AfterQuantity,
                 x.Reason,
                 x.CreatedById,
-                x.CreatedBy.Username,
+                x.CreatedByName,
                 x.CreatedAt))
-            .ToListAsync(ct);
+            .ToList();
     }
 
     public async Task<PlayOrderSummary> GetPlayDetailsAsync(
