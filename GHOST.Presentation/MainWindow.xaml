@@ -915,15 +915,43 @@
                                                                 Margin="0,12,0,0">
 
                                                             <Grid>
-                                                                <TextBlock Text="{Binding Runtime}"
-                                                                           Foreground="{StaticResource Gold}"
-                                                                           FontSize="14"
-                                                                           FontWeight="Bold"/>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
 
-                                                                <TextBlock Text="{Binding CurrentAmount}"
-                                                                           HorizontalAlignment="Left"
-                                                                           Foreground="{StaticResource White}"
-                                                                           FontSize="10"/>
+                                                                <StackPanel Grid.Column="0"
+                HorizontalAlignment="Right">
+                                                                    <TextBlock Text="مدة الجلسة"
+                   Foreground="{StaticResource Dim}"
+                   FontSize="8"/>
+
+                                                                    <TextBlock Text="{Binding Runtime}"
+                   Foreground="{StaticResource Gold}"
+                   FontSize="14"
+                   FontWeight="Bold"
+                   Margin="0,3,0,0"/>
+                                                                </StackPanel>
+
+                                                                <Border Grid.Column="1"
+                                                                          Width="1"
+                                                                          Height="28"
+                                                                          Background="{StaticResource LineSoft}"
+                                                                                      Margin="14,0"/>
+
+                                                                <StackPanel Grid.Column="2"
+                                                                     HorizontalAlignment="Left">
+                                                                      <TextBlock Text="الحساب الحالي"
+                                                                      Foreground="{StaticResource Dim}"
+                                                                      FontSize="8"/>
+
+                                                                       <TextBlock Text="{Binding CurrentAmount}"
+                                                                      Foreground="{StaticResource White}"
+                                                                      FontSize="12"
+                                                                      FontWeight="SemiBold"
+                                                                     Margin="0,3,0,0"/>
+                                                                </StackPanel>
                                                             </Grid>
                                                         </Border>
 

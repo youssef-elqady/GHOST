@@ -8,8 +8,10 @@ public sealed class DeviceCardViewModel : ObservableObject
 {
     private readonly TimeSpan? _runtimeSnapshot;
     private readonly DateTimeOffset _snapshotAtUtc;
+    private readonly decimal _currentRatePerHour;
 
     private string _runtime;
+    private string _currentAmount;
 
     public DeviceCardViewModel(DeviceSummary summary)
     {
@@ -27,6 +29,8 @@ public sealed class DeviceCardViewModel : ObservableObject
         SingleRate = summary.SingleRate;
         MultiRate = summary.MultiRate;
         HasAirConditioning = summary.HasAirConditioning;
+
+        _currentRatePerHour = summary.CurrentPrice ?? 0m;
 
         CurrentPrice = summary.CurrentPrice is null
             ? "لا توجد جلسة"
@@ -50,7 +54,7 @@ public sealed class DeviceCardViewModel : ObservableObject
             ? "—"
             : FormatRuntime(summary.Runtime.Value);
 
-        CurrentAmount = summary.CurrentAmount is null
+        _currentAmount = summary.CurrentAmount is null
             ? "—"
             : $"{summary.CurrentAmount:N2} ج.م";
     }
@@ -101,7 +105,11 @@ public sealed class DeviceCardViewModel : ObservableObject
         private set => SetProperty(ref _runtime, value);
     }
 
-    public string CurrentAmount { get; }
+    public string CurrentAmount
+    {
+        get => _currentAmount;
+        private set => SetProperty(ref _currentAmount, value);
+    }
 
     public bool IsAvailable =>
         Status == DeviceStatus.Available;
@@ -140,16 +148,15 @@ public sealed class DeviceCardViewModel : ObservableObject
          Status == DeviceStatus.Paused) &&
         HasActiveSession;
 
-    /// <summary>
-    /// Updates only the presentation timer.
-    /// The database is NOT queried every second.
-    /// </summary>
     public void UpdateLiveState()
     {
         if (!HasActiveSession || _runtimeSnapshot is null)
         {
             if (Runtime != "—")
                 Runtime = "—";
+
+            if (CurrentAmount != "—")
+                CurrentAmount = "—";
 
             return;
         }
@@ -165,6 +172,41 @@ public sealed class DeviceCardViewModel : ObservableObject
         }
 
         Runtime = FormatRuntime(runtime);
+
+        UpdateLiveAmount(runtime);
+    }
+
+    private void UpdateLiveAmount(TimeSpan runtime)
+    {
+        if (_currentRatePerHour <= 0)
+        {
+            CurrentAmount = "0.00 ج.م";
+            return;
+        }
+
+        /*
+         * BillingPolicy.Default:
+         * - Per minute
+         * - No minimum billable duration
+         * - Pause time is already excluded from Runtime
+         *
+         * Round UP to the next full minute,
+         * exactly like the BillingCalculator.
+         */
+
+        var billableMinutes =
+            Math.Ceiling(runtime.TotalMinutes);
+
+        var amount =
+            _currentRatePerHour *
+            ((decimal)billableMinutes / 60m);
+
+        amount = decimal.Round(
+            amount,
+            2,
+            MidpointRounding.AwayFromZero);
+
+        CurrentAmount = $"{amount:N2} ج.م";
     }
 
     private static string FormatRuntime(TimeSpan runtime)
