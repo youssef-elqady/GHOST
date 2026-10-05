@@ -81,19 +81,19 @@ public sealed class SessionServiceTests : IAsyncLifetime
     }
     [Fact] public async Task Ending_running_session_persists_amount_end_actor_and_available_device()
     {
-        var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(150)); await service.EndAsync(id);
+        var device = await DeviceAsync(); device.HourlyRate = 100m; await db.SaveChangesAsync(); var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(150)); await service.EndAsync(id);
         var session = await db.Sessions.SingleAsync(x => x.Id == id);
         Assert.Equal(SessionStatus.Completed, session.Status); Assert.Equal(250m, session.TotalAmount); Assert.Equal(cashierId, session.EndedById); Assert.Equal(DeviceStatus.Available, (await DeviceAsync()).Status);
     }
     [Fact] public async Task Ending_paused_session_closes_pause_and_deducts_it()
     {
-        var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(60)); await service.PauseAsync(id); clock.Advance(TimeSpan.FromMinutes(30)); await service.EndAsync(id);
+        var device = await DeviceAsync(); device.HourlyRate = 100m; await db.SaveChangesAsync(); var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(60)); await service.PauseAsync(id); clock.Advance(TimeSpan.FromMinutes(30)); await service.EndAsync(id);
         var session = await db.Sessions.Include(x => x.Pauses).SingleAsync(x => x.Id == id);
         Assert.Equal(1800, session.TotalPausedSeconds); Assert.Equal(100m, session.TotalAmount); Assert.NotNull(session.Pauses.Single().EndedAt);
     }
     [Fact] public async Task Payments_enforce_completion_amount_and_single_final_payment()
     {
-        var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(60)); await Assert.ThrowsAsync<InvalidOperationException>(() => service.TakeCashPaymentAsync(new CashPaymentRequest(id, 100m)));
+        var device = await DeviceAsync(); device.HourlyRate = 100m; await db.SaveChangesAsync(); var id = await StartAsync(); clock.Advance(TimeSpan.FromMinutes(60)); await Assert.ThrowsAsync<InvalidOperationException>(() => service.TakeCashPaymentAsync(new CashPaymentRequest(id, 100m)));
         await service.EndAsync(id); await Assert.ThrowsAsync<InvalidOperationException>(() => service.TakeCashPaymentAsync(new CashPaymentRequest(id, 99m))); await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.TakeCashPaymentAsync(new CashPaymentRequest(id, -1m)));
         var shift = new Shift { OpenedById = cashierId, OpeningCash = 0m }; db.Shifts.Add(shift); await db.SaveChangesAsync();
         var paymentId = await service.TakeCashPaymentAsync(new CashPaymentRequest(id, 120m)); var payment = await db.Payments.SingleAsync(x => x.Id == paymentId);
