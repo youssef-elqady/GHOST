@@ -32,6 +32,7 @@
                TargetType="Button"
                BasedOn="{StaticResource ActionButton}">
             <Setter Property="Height" Value="72"/>
+            <Setter Property="Width" Value="150"/>
             <Setter Property="Margin" Value="0,0,10,10"/>
             <Setter Property="Background" Value="#12161B"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -283,9 +284,27 @@
                               Foreground="#E6E6E6"
                               BorderBrush="#2B313A"/>
 
-                    <ScrollViewer Grid.Row="2"
-                                  VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding VisibleProducts}">
+                    <Grid Grid.Row="2">
+                        <TextBlock Text="لا توجد منتجات متاحة حاليًا"
+                                   Foreground="#8E98A5"
+                                   FontSize="12"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasProducts}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding VisibleProducts}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel/>
@@ -317,10 +336,10 @@
                                     </Button>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </Border>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
         </Grid>
 
         <!-- NOTICE -->
