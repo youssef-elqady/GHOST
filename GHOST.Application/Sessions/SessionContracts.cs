@@ -16,7 +16,7 @@ public interface ISessionRateProvider
 }
 public sealed record StartSessionRequest(Guid DeviceId, Guid? CustomerId = null, SessionMode Mode = SessionMode.Single);
 public sealed record CashPaymentRequest(Guid SessionId, decimal AmountReceived);
-public sealed record SessionPaymentSummary(Guid SessionId, decimal AmountDue, bool IsPaid);
+public sealed record SessionPaymentSummary(Guid SessionId, decimal PlayAmount, decimal ProductsAmount, decimal AmountDue, bool IsPaid);
 public interface ISessionService
 {
     Task<Guid> StartAsync(StartSessionRequest request, CancellationToken cancellationToken = default);
