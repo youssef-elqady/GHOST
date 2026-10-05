@@ -550,6 +550,25 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
         return order;
     }
 
+    public async Task<ShiftSummary?> GetOpenShiftAsync(
+        CancellationToken ct = default)
+    {
+        return await db.Shifts
+            .AsNoTracking()
+            .Where(x => x.IsOpen)
+            .OrderByDescending(x => x.OpenedAt)
+            .Select(x => new ShiftSummary(
+                x.Id,
+                x.OpeningCash,
+                x.ExpectedCash,
+                x.IsOpen,
+                x.OpenedAt,
+                x.ClosedAt,
+                x.ActualCash,
+                x.Difference))
+            .FirstOrDefaultAsync(ct);
+    }
+
     public async Task<Shift> OpenShiftAsync(
         Guid actor,
         decimal cash,
