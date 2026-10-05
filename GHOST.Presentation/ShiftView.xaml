@@ -1,0 +1,168 @@
+<UserControl x:Class="GHOST.Presentation.ShiftView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             Background="Transparent">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="0.8*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                Background="#11151A"
+                BorderBrush="#252B33"
+                BorderThickness="1"
+                CornerRadius="16"
+                Padding="22"
+                Margin="0,0,12,0">
+            <StackPanel>
+                <TextBlock Text="CASH CONTROL"
+                           Foreground="#7F8996"
+                           FontSize="9"
+                           FontWeight="SemiBold"/>
+                <TextBlock Text="الشيفت والخزينة"
+                           Foreground="#F2F4F7"
+                           FontSize="28"
+                           FontWeight="SemiBold"
+                           Margin="0,5,0,0"/>
+                <TextBlock Text="الشيفت مسؤولية الـ Staff/Cashier. الأدمن لا يفتح ولا يدير شيفت التشغيل."
+                           Foreground="#8E98A5"
+                           FontSize="11"
+                           TextWrapping="Wrap"
+                           Margin="0,6,0,20"/>
+
+                <Border Background="#0B0E12"
+                        BorderBrush="#252B33"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="حالة الشيفت"
+                                       Foreground="#8E98A5"
+                                       FontSize="10"/>
+                            <TextBlock x:Name="StatusText"
+                                       Text="جاري التحميل..."
+                                       Foreground="#F2F4F7"
+                                       FontSize="21"
+                                       FontWeight="SemiBold"
+                                       Margin="0,5,0,0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1"
+                                    HorizontalAlignment="Left">
+                            <TextBlock Text="الرصيد الافتتاحي"
+                                       Foreground="#8E98A5"
+                                       FontSize="10"/>
+                            <TextBlock x:Name="OpeningText"
+                                       Text="0.00 ج.م"
+                                       Foreground="#D7B56D"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <StackPanel Margin="0,16,0,0">
+                    <TextBlock Text="الرصيد الافتتاحي عند فتح شيفت جديد"
+                               Foreground="#8E98A5"
+                               FontSize="10"/>
+                    <TextBox x:Name="OpeningCashBox"
+                             Height="44"
+                             Margin="0,7,0,10"
+                             Padding="12,0"
+                             VerticalContentAlignment="Center"
+                             FontSize="15"/>
+                    <Button Content="فتح الشيفت"
+                            Height="44"
+                            Background="#D7B56D"
+                            Foreground="#111318"
+                            FontWeight="SemiBold"
+                            Click="OpenShift_Click"/>
+                </StackPanel>
+
+                <Border x:Name="ErrorBorder"
+                        Background="#26181A"
+                        BorderBrush="#5A3538"
+                        BorderThickness="1"
+                        CornerRadius="9"
+                        Padding="10"
+                        Margin="0,14,0,0"
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="ErrorText"
+                               Foreground="#E78A90"
+                               TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1"
+                Background="#11151A"
+                BorderBrush="#252B33"
+                BorderThickness="1"
+                CornerRadius="16"
+                Padding="22">
+            <StackPanel>
+                <TextBlock Text="إغلاق الشيفت"
+                           Foreground="#F2F4F7"
+                           FontSize="20"
+                           FontWeight="SemiBold"/>
+                <TextBlock Text="أدخل النقدية الفعلية عند نهاية الشيفت."
+                           Foreground="#8E98A5"
+                           FontSize="11"
+                           Margin="0,5,0,18"/>
+
+                <TextBlock Text="النقدية المتوقعة"
+                           Foreground="#8E98A5"
+                           FontSize="10"/>
+                <TextBlock x:Name="ExpectedText"
+                           Text="—"
+                           Foreground="#F2F4F7"
+                           FontSize="25"
+                           FontWeight="SemiBold"
+                           Margin="0,5,0,15"/>
+
+                <TextBlock Text="النقدية الفعلية"
+                           Foreground="#8E98A5"
+                           FontSize="10"/>
+                <TextBox x:Name="ActualCashBox"
+                         Height="44"
+                         Margin="0,7,0,10"
+                         Padding="12,0"
+                         VerticalContentAlignment="Center"
+                         FontSize="15"/>
+
+                <TextBlock Text="سبب الفرق (مطلوب إذا وُجد فرق)"
+                           Foreground="#8E98A5"
+                           FontSize="10"/>
+                <TextBox x:Name="DifferenceReasonBox"
+                         Height="70"
+                         Margin="0,7,0,14"
+                         Padding="10"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"/>
+
+                <Button Content="إغلاق الشيفت"
+                        Height="44"
+                        Background="#242019"
+                        Foreground="#D7B56D"
+                        BorderBrush="#5C4928"
+                        BorderThickness="1"
+                        FontWeight="SemiBold"
+                        Click="CloseShift_Click"/>
+
+                <TextBlock x:Name="CloseNoticeText"
+                           Foreground="#8E98A5"
+                           FontSize="10"
+                           TextWrapping="Wrap"
+                           Margin="0,12,0,0"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
