@@ -1,30 +1,30 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- GHOST centralized visual tokens. Brushes are intentionally shared and
-         mutated by ThemeService so existing StaticResource bindings update live. -->
+    <!-- GHOST visual system: restrained slate surfaces + muted blue accent. -->
 
-    <Color x:Key="GhostBgColor">#0B0D10</Color>
-    <Color x:Key="GhostSurfaceColor">#13161B</Color>
-    <Color x:Key="GhostSurface2Color">#171B21</Color>
-    <Color x:Key="GhostSurface3Color">#1C2128</Color>
-    <Color x:Key="GhostSidebarColor">#0E1014</Color>
-    <Color x:Key="GhostLineColor">#252B33</Color>
-    <Color x:Key="GhostLineSoftColor">#1D2229</Color>
-    <Color x:Key="GhostTextColor">#DDE2E8</Color>
-    <Color x:Key="GhostWhiteColor">#F4F6F8</Color>
-    <Color x:Key="GhostMutedColor">#7D8795</Color>
-    <Color x:Key="GhostDimColor">#596270</Color>
-    <Color x:Key="GhostAccentColor">#B9A36D</Color>
-    <Color x:Key="GhostAccentSoftColor">#29251D</Color>
-    <Color x:Key="GhostSuccessColor">#65B88F</Color>
-    <Color x:Key="GhostSuccessSoftColor">#182A23</Color>
-    <Color x:Key="GhostWarningColor">#D2A45C</Color>
-    <Color x:Key="GhostWarningSoftColor">#2C261C</Color>
-    <Color x:Key="GhostInfoColor">#789BC8</Color>
-    <Color x:Key="GhostInfoSoftColor">#1D2838</Color>
-    <Color x:Key="GhostDangerColor">#D47A7A</Color>
-    <Color x:Key="GhostDangerSoftColor">#2D2022</Color>
+    <Color x:Key="GhostBgColor">#0A0D12</Color>
+    <Color x:Key="GhostSurfaceColor">#10151C</Color>
+    <Color x:Key="GhostSurface2Color">#151B23</Color>
+    <Color x:Key="GhostSurface3Color">#1B222C</Color>
+    <Color x:Key="GhostSidebarColor">#0C1016</Color>
+    <Color x:Key="GhostLineColor">#26303B</Color>
+    <Color x:Key="GhostLineSoftColor">#1B232D</Color>
+    <Color x:Key="GhostTextColor">#E2E7ED</Color>
+    <Color x:Key="GhostWhiteColor">#F7F9FB</Color>
+    <Color x:Key="GhostMutedColor">#8A96A5</Color>
+    <Color x:Key="GhostDimColor">#626D7B</Color>
+
+    <Color x:Key="GhostAccentColor">#5E7FA8</Color>
+    <Color x:Key="GhostAccentSoftColor">#1A2635</Color>
+    <Color x:Key="GhostSuccessColor">#55A884</Color>
+    <Color x:Key="GhostSuccessSoftColor">#152A22</Color>
+    <Color x:Key="GhostWarningColor">#C49A58</Color>
+    <Color x:Key="GhostWarningSoftColor">#2A241A</Color>
+    <Color x:Key="GhostInfoColor">#6E9BD0</Color>
+    <Color x:Key="GhostInfoSoftColor">#182638</Color>
+    <Color x:Key="GhostDangerColor">#C96F73</Color>
+    <Color x:Key="GhostDangerSoftColor">#2B1D21</Color>
 
     <SolidColorBrush x:Key="AppBg" Color="{StaticResource GhostBgColor}"/>
     <SolidColorBrush x:Key="SidebarBg" Color="{StaticResource GhostSidebarColor}"/>
@@ -48,13 +48,14 @@
     <SolidColorBrush x:Key="Red" Color="{StaticResource GhostDangerColor}"/>
     <SolidColorBrush x:Key="RedSoft" Color="{StaticResource GhostDangerSoftColor}"/>
 
-    <SolidColorBrush x:Key="GhostAccentHover" Color="#C7B77F"/>
-    <SolidColorBrush x:Key="GhostControlHover" Color="#22272F"/>
-    <SolidColorBrush x:Key="GhostControlPressed" Color="#20252D"/>
-    <SolidColorBrush x:Key="GhostActiveNav" Color="#242019"/>
-    <SolidColorBrush x:Key="GhostSidebarUser" Color="#15191F"/>
+    <SolidColorBrush x:Key="GhostAccentHover" Color="#7292B9"/>
+    <SolidColorBrush x:Key="GhostControlHover" Color="#202934"/>
+    <SolidColorBrush x:Key="GhostControlPressed" Color="#1B232D"/>
+    <SolidColorBrush x:Key="GhostActiveNav" Color="#182333"/>
+    <SolidColorBrush x:Key="GhostSidebarUser" Color="#131A22"/>
     <SolidColorBrush x:Key="GhostOverlay" Color="#AA000000"/>
-    <!-- Backward-compatible application token aliases -->
+
+    <!-- Backward-compatible application token aliases. -->
     <SolidColorBrush x:Key="GhostBg" Color="{StaticResource GhostBgColor}"/>
     <SolidColorBrush x:Key="GhostSurface" Color="{StaticResource GhostSurfaceColor}"/>
     <SolidColorBrush x:Key="GhostRaised" Color="{StaticResource GhostSurface3Color}"/>
