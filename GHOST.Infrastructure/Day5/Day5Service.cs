@@ -305,6 +305,134 @@ public sealed class Day5Service(AppDbContext db) : IDay5Service
             .ToListAsync(ct);
     }
 
+    public async Task<PlayOrderSummary> GetPlayDetailsAsync(
+        Guid sessionId,
+        CancellationToken ct = default)
+    {
+        var session = await db.Sessions
+            .AsNoTracking()
+            .Include(x => x.Device)
+                .ThenInclude(x => x.Room)
+            .Include(x => x.Pauses)
+            .SingleOrDefaultAsync(x => x.Id == sessionId, ct)
+            ?? throw new KeyNotFoundException("اللعب غير موجود.");
+
+        if (session.Status is not (SessionStatus.Running or SessionStatus.Paused or SessionStatus.Completed))
+            throw new InvalidOperationException("اللعب غير متاح.");
+
+        return await BuildPlayOrderSummary(session, ct);
+    }
+
+    public async Task<PlayOrderSummary> AddProductToPlayAsync(
+        Guid actor,
+        AddProductToPlayRequest request,
+        CancellationToken ct = default)
+    {
+        await Role(actor, "Cashier", ct);
+
+        if (request.Quantity <= 0)
+            throw new ArgumentException("الكمية يجب أن تكون أكبر من صفر.");
+
+        await using var tx = await db.Database.BeginTransactionAsync(ct);
+
+        var shiftOpen = await db.Shifts.AnyAsync(x => x.IsOpen, ct);
+        if (!shiftOpen)
+            throw new InvalidOperationException("يجب فتح شيفت قبل إضافة منتجات على اللعب.");
+
+        var session = await db.Sessions
+            .Include(x => x.Device)
+                .ThenInclude(x => x.Room)
+            .Include(x => x.Pauses)
+            .SingleOrDefaultAsync(x => x.Id == request.SessionId, ct)
+            ?? throw new KeyNotFoundException("اللعب غير موجود.");
+
+        if (session.Status is not (SessionStatus.Running or SessionStatus.Paused))
+            throw new InvalidOperationException("لا يمكن إضافة منتجات إلا أثناء اللعب.");
+
+        var product = await db.Products
+            .SingleOrDefaultAsync(x => x.Id == request.ProductId, ct)
+            ?? throw new KeyNotFoundException("المنتج غير موجود.");
+
+        if (!product.IsActive)
+            throw new InvalidOperationException("المنتج غير نشط.");
+
+        if (product.StockQuantity < request.Quantity)
+            throw new InvalidOperationException(
+                $"الكمية المطلوبة أكبر من المخزون الحالي: {product.Name}");
+
+        var order = await db.Orders
+            .Include(x => x.Items)
+            .SingleOrDefaultAsync(x => x.SessionId == request.SessionId, ct);
+
+        if (order is null)
+        {
+            order = new Order
+            {
+                SessionId = session.Id,
+                CustomerId = session.CustomerId,
+                CreatedById = actor,
+                TotalAmount = 0m,
+                FinalAmount = 0m
+            };
+
+            db.Orders.Add(order);
+        }
+
+        var item = order.Items
+            .SingleOrDefault(x => x.ProductId == product.Id);
+
+        if (item is null)
+        {
+            item = new OrderItem
+            {
+                OrderId = order.Id,
+                ProductId = product.Id,
+                Quantity = request.Quantity,
+                UnitPrice = product.SellingPrice,
+                Discount = 0m,
+                Total = product.SellingPrice * request.Quantity
+            };
+
+            order.Items.Add(item);
+        }
+        else
+        {
+            item.Quantity += request.Quantity;
+            item.Total = item.Quantity * item.UnitPrice - item.Discount;
+        }
+
+        var before = product.StockQuantity;
+        product.StockQuantity -= request.Quantity;
+
+        db.InventoryTransactions.Add(new InventoryTransaction
+        {
+            ProductId = product.Id,
+            Type = InventoryTransactionType.Sale,
+            Quantity = -request.Quantity,
+            BeforeQuantity = before,
+            AfterQuantity = product.StockQuantity,
+            Reason = $"إضافة {request.Quantity} من المنتج إلى لعب {session.Device.Name}",
+            CreatedById = actor
+        });
+
+        order.TotalAmount = order.Items.Sum(x => x.Total) + order.DiscountAmount;
+        order.FinalAmount = order.Items.Sum(x => x.Total) - order.DiscountAmount;
+
+        await SaveAudit(
+            actor,
+            "ProductAddedToPlay",
+            "Order",
+            order.Id,
+            null,
+            $"{product.Name} × {request.Quantity}",
+            ct,
+            $"Device={session.Device.Name}; Session={session.Id}");
+
+        await tx.CommitAsync(ct);
+
+        return await BuildPlayOrderSummary(session, ct);
+    }
+
     public async Task<Order> CompleteOrderAsync(
         Guid actor,
         CompleteOrderRequest request,
@@ -524,6 +652,76 @@ public sealed class Day5Service(AppDbContext db) : IDay5Service
             request.DifferenceReason);
 
         return shift;
+    }
+
+    private async Task<PlayOrderSummary> BuildPlayOrderSummary(
+        Session session,
+        CancellationToken ct)
+    {
+        var order = await db.Orders
+            .AsNoTracking()
+            .Include(x => x.Items)
+                .ThenInclude(x => x.Product)
+            .SingleOrDefaultAsync(x => x.SessionId == session.Id, ct);
+
+        var items = order?.Items
+            .OrderBy(x => x.Product.Name)
+            .Select(x => new PlayOrderItemSummary(
+                x.ProductId,
+                x.Product.Name,
+                x.Quantity,
+                x.UnitPrice,
+                x.Total))
+            .ToList()
+            ?? [];
+
+        var productsAmount = items.Sum(x => x.Total);
+
+        var playAmount = session.TotalAmount ?? 0m;
+
+        if (session.Status is SessionStatus.Running or SessionStatus.Paused)
+        {
+            var now = DateTimeOffset.UtcNow;
+
+            if (session.Status == SessionStatus.Paused)
+            {
+                var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
+                var bill = new BillingCalculator().Calculate(
+                    session.StartedAt,
+                    now,
+                    pausedSeconds,
+                    session.RatePerHour,
+                    BillingPolicy.Default);
+
+                playAmount = bill.Amount;
+            }
+            else
+            {
+                var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
+                var bill = new BillingCalculator().Calculate(
+                    session.StartedAt,
+                    now,
+                    pausedSeconds,
+                    session.RatePerHour,
+                    BillingPolicy.Default);
+
+                playAmount = bill.Amount;
+            }
+        }
+
+        return new PlayOrderSummary(
+            session.Id,
+            session.Device.Name,
+            session.Device.Room?.Name,
+            session.Mode,
+            session.StartedAt,
+            session.EndedAt,
+            session.Pauses.Sum(x => x.DurationSeconds ?? 0),
+            session.RatePerHour,
+            playAmount,
+            productsAmount,
+            playAmount + productsAmount,
+            items);
     }
 
     private static void ValidateProductInput(
