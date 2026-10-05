@@ -83,7 +83,8 @@
                     <StackPanel Grid.Column="2">
                         <TextBlock Text="الكمية" Style="{StaticResource GhostCaption}" Margin="0,0,0,7"/>
                         <TextBox x:Name="QuantityBox"
-                                 Style="{StaticResource GhostTextBox}"/>
+                                 Style="{StaticResource GhostTextBox}"
+                                 TextChanged="QuantityBox_TextChanged"/>
                     </StackPanel>
                 </Grid>
 
