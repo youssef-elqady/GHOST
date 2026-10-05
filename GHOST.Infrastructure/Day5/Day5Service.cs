@@ -423,8 +423,7 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
             query = query.Where(x => x.Type == type);
 
         return await query
-            .OrderByDescending(x => x.CreatedAt)
-            .ThenByDescending(x => x.Id)
+            .OrderByDescending(x => x.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(x => new InventoryHistoryItem(
