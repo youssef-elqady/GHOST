@@ -1,6 +1,7 @@
 using GHOST.Application.Day6;
 using GHOST.Application.Authentication;
 using GHOST.Domain.Entities;
+using GHOST.Infrastructure.Persistence;
 using Microsoft.Data.Sqlite;
 using Serilog;
 
@@ -34,22 +35,9 @@ public sealed class SqliteBackupService(
 
         Rotate(options);
 
-        await Audit(
-            actor.Id,
-            "BackupCreated",
-            "Backup",
-            target,
-            ct);
+        await Audit(actor.Id, "BackupCreated", "Backup", target, ct);
 
-        if (archivePath is not null)
-        {
-            await Audit(
-                actor.Id,
-                "BackupArchived",
-                "Backup",
-                archivePath,
-                ct);
-        }
+        await Audit(actor.Id, "BackupArchived", "Backup", archivePath, ct);
 
         Log.Information(
             "Database backup created at {BackupPath}; archive at {ArchivePath}",
@@ -103,8 +91,7 @@ public sealed class SqliteBackupService(
         var actor = Require("Admin");
 
         if (!await ValidateAsync(backup, ct))
-            throw new InvalidOperationException(
-                "Selected backup is invalid.");
+            throw new InvalidOperationException("Selected backup is invalid.");
 
         var safety = await CreateBackupAsyncInternal(
             db,
@@ -118,8 +105,7 @@ public sealed class SqliteBackupService(
             File.Copy(backup, stage, true);
 
             if (!await ValidateAsync(stage, ct))
-                throw new InvalidOperationException(
-                    "Staged restore is invalid.");
+                throw new InvalidOperationException("Staged restore is invalid.");
 
             File.Copy(stage, db, true);
 
@@ -127,12 +113,7 @@ public sealed class SqliteBackupService(
                 throw new InvalidOperationException(
                     "Restored database verification failed.");
 
-            await Audit(
-                actor.Id,
-                "BackupRestored",
-                "Backup",
-                backup,
-                ct);
+            await Audit(actor.Id, "BackupRestored", "Backup", backup, ct);
 
             Log.Information(
                 "Database restored from {BackupPath}; prior database saved as {SafetyBackup}",
@@ -159,8 +140,7 @@ public sealed class SqliteBackupService(
         CancellationToken ct)
     {
         if (!await ValidateAsync(db, ct))
-            throw new InvalidOperationException(
-                "Source database is invalid.");
+            throw new InvalidOperationException("Source database is invalid.");
 
         Directory.CreateDirectory(directoryPath);
 
@@ -192,13 +172,18 @@ public sealed class SqliteBackupService(
         }
 
         if (!File.Exists(target))
-            throw new InvalidOperationException(
-                "Backup file was not created.");
+            throw new InvalidOperationException("Backup file was not created.");
+
+        if (!await ValidateFileAsync(target, ct))
+        {
+            File.Delete(target);
+            throw new InvalidOperationException("Backup validation failed.");
+        }
 
         return target;
     }
 
-    private async Task<string?> ArchiveBackupAsync(
+    private async Task<string> ArchiveBackupAsync(
         string backupPath,
         BackupOptions options,
         CancellationToken ct)
@@ -208,9 +193,7 @@ public sealed class SqliteBackupService(
         var archiveRoot = options.ArchiveDirectoryPath;
 
         if (string.IsNullOrWhiteSpace(archiveRoot))
-            archiveRoot = Path.Combine(
-                options.DirectoryPath,
-                "archive");
+            archiveRoot = Path.Combine(options.DirectoryPath, "archive");
 
         var now = DateTimeOffset.UtcNow;
 
@@ -227,7 +210,7 @@ public sealed class SqliteBackupService(
 
         File.Copy(backupPath, archivePath, false);
 
-        if (!await ValidateAsync(archivePath, ct))
+        if (!await ValidateFileAsync(archivePath, ct))
         {
             File.Delete(archivePath);
             throw new InvalidOperationException(
@@ -235,6 +218,41 @@ public sealed class SqliteBackupService(
         }
 
         return archivePath;
+    }
+
+    private static async Task<bool> ValidateFileAsync(
+        string path,
+        CancellationToken ct)
+    {
+        if (!File.Exists(path))
+            return false;
+
+        try
+        {
+            await using var connection = new SqliteConnection(
+                $"Data Source={path};Mode=ReadOnly;Pooling=False");
+
+            await connection.OpenAsync(ct);
+
+            await using var command = connection.CreateCommand();
+
+            command.CommandText = "PRAGMA integrity_check;";
+            var integrity = (string?)await command.ExecuteScalarAsync(ct);
+
+            if (integrity != "ok")
+                return false;
+
+            command.CommandText =
+                "SELECT COUNT(*) FROM sqlite_master " +
+                "WHERE type='table' AND name IN ('Devices','Sessions','Users');";
+
+            return Convert.ToInt32(
+                await command.ExecuteScalarAsync(ct)) == 3;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private AuthenticatedUser Require(string role)
@@ -247,8 +265,7 @@ public sealed class SqliteBackupService(
                 : actor.IsInRole("Admin");
 
         if (!allowed)
-            throw new UnauthorizedAccessException(
-                "Operation is not authorized.");
+            throw new UnauthorizedAccessException("Operation is not authorized.");
 
         return actor;
     }
@@ -278,10 +295,7 @@ public sealed class SqliteBackupService(
             .OrderByDescending(x => x.CreationTimeUtc)
             .ToList();
 
-        foreach (var file in files.Skip(
-                     Math.Max(1, options.RetentionCount)))
-        {
+        foreach (var file in files.Skip(Math.Max(1, options.RetentionCount)))
             file.Delete();
-        }
     }
 }
