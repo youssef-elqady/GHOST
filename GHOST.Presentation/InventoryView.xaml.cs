@@ -30,6 +30,11 @@ public partial class InventoryView : UserControl
         InitializeComponent();
 
         ProductsGrid.ItemsSource = products;
+
+        ManageCategoriesButton.Visibility =
+            user.IsInRole("Admin")
+                ? Visibility.Visible
+                : Visibility.Collapsed;
     }
 
     private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -188,6 +193,20 @@ public partial class InventoryView : UserControl
         {
             Error(ex);
         }
+    }
+
+    private async void ManageCategories_Click(object sender, RoutedEventArgs e)
+    {
+        if (!user.IsInRole("Admin"))
+            return;
+
+        var window = new CategoryManagementWindow(service, user)
+        {
+            Owner = Window.GetWindow(this)
+        };
+
+        window.ShowDialog();
+        await RefreshAsync();
     }
 
     private async void AddProduct_Click(object sender, RoutedEventArgs e)
