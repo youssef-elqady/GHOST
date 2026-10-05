@@ -130,6 +130,66 @@ public partial class InventoryView : UserControl
         }
     }
 
+    private async Task<IReadOnlyList<ProductSummary>> GetAllProductsAsync()
+    {
+        var result = await service.GetProductCatalogAsync(
+            new ProductCatalogFilterRequest(
+                Status: ProductCatalogStatus.All,
+                Page: 1,
+                PageSize: 100));
+
+        return result.Items;
+    }
+
+    private async void OpenMovement_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var allProducts = await GetAllProductsAsync();
+
+            if (allProducts.Count == 0)
+            {
+                MessageBox.Show(
+                    "لا يوجد منتجات مسجلة. أضف منتجًا أولًا.",
+                    "GHOST",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            var window = new StockMovementWindow(service, user, allProducts)
+            {
+                Owner = Window.GetWindow(this)
+            };
+
+            if (window.ShowDialog() == true)
+                await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            Error(ex);
+        }
+    }
+
+    private async void OpenHistory_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var allProducts = await GetAllProductsAsync();
+
+            var window = new StockHistoryWindow(service, allProducts)
+            {
+                Owner = Window.GetWindow(this)
+            };
+
+            window.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            Error(ex);
+        }
+    }
+
     private async void AddProduct_Click(object sender, RoutedEventArgs e)
     {
         var window = new ProductEditorWindow(
