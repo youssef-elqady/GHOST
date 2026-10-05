@@ -122,6 +122,26 @@
             </Setter>
         </Style>
 
+        <Style x:Key="AdminOnlyNavigationButton"
+               TargetType="Button"
+               BasedOn="{StaticResource NavigationButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsManagement}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StaffOnlyNavigationButton"
+               TargetType="Button"
+               BasedOn="{StaticResource NavigationButton}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsStaff}" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <Style x:Key="IconButton" TargetType="Button">
             <Setter Property="Width" Value="38"/>
             <Setter Property="Height" Value="38"/>
@@ -822,7 +842,7 @@
                                Margin="7,0,7,7"/>
 
                     <Button x:Name="NavDashboard"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource AdminOnlyNavigationButton}"
                             Click="Dashboard_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -842,7 +862,7 @@
                     </Button>
 
                     <Button x:Name="NavDevices"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource StaffOnlyNavigationButton}"
                             Click="Devices_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -855,14 +875,14 @@
                                 Stretch="Uniform"
                                 Margin="0,0,12,0"/>
 
-                            <TextBlock Text="الأجهزة والجلسات"
+                            <TextBlock Text="الأجهزة واللعب"
                                        VerticalAlignment="Center"/>
 
                         </StackPanel>
                     </Button>
 
                     <Button x:Name="NavPayments"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource StaffOnlyNavigationButton}"
                             Click="Payments_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -883,7 +903,7 @@
                     </Button>
 
                     <Button x:Name="NavCustomers"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource StaffOnlyNavigationButton}"
                             Click="Customers_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -921,7 +941,7 @@
                                 Stretch="Uniform"
                                 Margin="0,0,12,0"/>
 
-                            <TextBlock Text="المبيعات والمخزون"
+                            <TextBlock Text="{Binding InventoryNavText}"
                                        VerticalAlignment="Center"/>
 
                         </StackPanel>
@@ -932,7 +952,7 @@
                                Margin="7,25,7,7"/>
 
                     <Button x:Name="NavShifts"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource StaffOnlyNavigationButton}"
                             Click="Shifts_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -953,7 +973,7 @@
                     </Button>
 
                     <Button x:Name="NavReports"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource AdminOnlyNavigationButton}"
                             Click="Reports_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -974,7 +994,7 @@
                     </Button>
 
                     <Button x:Name="NavAdministration"
-                            Style="{StaticResource NavigationButton}"
+                            Style="{StaticResource AdminOnlyNavigationButton}"
                             Click="Administration_Click">
 
                         <StackPanel Orientation="Horizontal">
@@ -1223,7 +1243,7 @@
                                            FontSize="25"
                                            FontWeight="SemiBold"/>
 
-                                <TextBlock Text="تشغيل ومتابعة أجهزة اللعب والجلسات الحالية."
+                                <TextBlock Text="تشغيل ومتابعة أجهزة اللعب واللعب الحالي."
                                            Foreground="{StaticResource Muted}"
                                            FontSize="11"
                                            Margin="0,5,0,17"/>
