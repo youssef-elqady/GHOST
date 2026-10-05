@@ -1,4 +1,5 @@
 using GHOST.Application.Day5;
+using GHOST.Application.Sessions;
 using GHOST.Domain.Entities;
 using GHOST.Domain.Enums;
 using GHOST.Infrastructure.Persistence;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GHOST.Infrastructure.Day5;
 
-public sealed class Day5Service(AppDbContext db) : IDay5Service
+public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculator billingCalculator) : IDay5Service
 {
     public async Task<IReadOnlyList<ProductSummary>> GetProductsAsync(
         bool includeInactive = true,
@@ -681,32 +682,15 @@ public sealed class Day5Service(AppDbContext db) : IDay5Service
 
         if (session.Status is SessionStatus.Running or SessionStatus.Paused)
         {
-            var now = DateTimeOffset.UtcNow;
+            var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
+            var bill = billingCalculator.Calculate(
+                session.StartedAt,
+                clock.UtcNow,
+                pausedSeconds,
+                session.RatePerHour,
+                BillingPolicy.Default);
 
-            if (session.Status == SessionStatus.Paused)
-            {
-                var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
-                var bill = new BillingCalculator().Calculate(
-                    session.StartedAt,
-                    now,
-                    pausedSeconds,
-                    session.RatePerHour,
-                    BillingPolicy.Default);
-
-                playAmount = bill.Amount;
-            }
-            else
-            {
-                var pausedSeconds = session.Pauses.Sum(x => x.DurationSeconds ?? 0);
-                var bill = new BillingCalculator().Calculate(
-                    session.StartedAt,
-                    now,
-                    pausedSeconds,
-                    session.RatePerHour,
-                    BillingPolicy.Default);
-
-                playAmount = bill.Amount;
-            }
+            playAmount = bill.Amount;
         }
 
         return new PlayOrderSummary(
