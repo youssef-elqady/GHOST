@@ -422,8 +422,26 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
         if (filter.Type is InventoryTransactionType type)
             query = query.Where(x => x.Type == type);
 
-        return await query
+        var rows = await query
+            .Select(x => new
+            {
+                x.Id,
+                x.ProductId,
+                ProductName = x.Product.Name,
+                x.Type,
+                x.Quantity,
+                x.BeforeQuantity,
+                x.AfterQuantity,
+                x.Reason,
+                x.CreatedById,
+                CreatedByName = x.CreatedBy.Username,
+                x.CreatedAt
+            })
+            .ToListAsync(ct);
+
+        return rows
             .OrderByDescending(x => x.CreatedAt)
+            .ThenByDescending(x => x.Id)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .Select(x => new InventoryHistoryItem(
