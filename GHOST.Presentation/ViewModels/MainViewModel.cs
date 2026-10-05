@@ -132,7 +132,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
         }
 
         await ExecuteSessionAsync(service =>
-            service.StartAsync(new StartSessionRequest(device.Id)));
+            service.StartAsync(new StartSessionRequest(device.Id, null, device.SelectedSessionMode)));
     }
 
     [RelayCommand]
