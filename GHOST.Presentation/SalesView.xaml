@@ -99,7 +99,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel>
                         <TextBlock Text="سلة الحساب" FontSize="19" FontWeight="SemiBold" Foreground="#F2F4F7"/>
-                        <TextBlock Text="المنتجات التي ستُربط بهذه الجلسة." Foreground="#8E98A5"
+                        <TextBlock Text="المنتجات التي ستُربط بهذا اللعب." Foreground="#8E98A5"
                                    FontSize="11" Margin="0,5,0,0"/>
                     </StackPanel>
                     <Button Grid.Column="1" Content="مسح السلة" Click="ClearCart_Click"/>
