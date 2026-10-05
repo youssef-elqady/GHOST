@@ -100,6 +100,42 @@ public sealed class Day5ServiceTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Product_catalog_filters_and_calculates_stock_metrics_in_database()
+    {
+        var drinks = await s.CreateCategoryAsync(admin, "Drinks" + Guid.NewGuid());
+        var snacks = await s.CreateCategoryAsync(admin, "Snacks" + Guid.NewGuid());
+
+        var cola = await s.CreateProductAsync(
+            admin,
+            new("Cola", drinks.Id, 20, 10, 5, "1001"));
+        var chips = await s.CreateProductAsync(
+            admin,
+            new("Chips", snacks.Id, 15, 8, 3, "1002"));
+
+        await s.ChangeStockAsync(
+            cashier,
+            new(cola.Id, InventoryTransactionType.Purchase, 10, "delivery"));
+        await s.ChangeStockAsync(
+            cashier,
+            new(chips.Id, InventoryTransactionType.Purchase, 2, "delivery"));
+
+        var result = await s.GetProductCatalogAsync(
+            new(
+                SearchText: "1002",
+                CategoryId: snacks.Id,
+                Status: ProductCatalogStatus.LowStock,
+                Page: 1,
+                PageSize: 50));
+
+        Assert.Equal(1, result.TotalCount);
+        Assert.Single(result.Items);
+        Assert.Equal(chips.Id, result.Items[0].Id);
+        Assert.Equal(1, result.LowStockCount);
+        Assert.Equal(30m, result.RetailStockValue);
+        Assert.Equal(16m, result.CostStockValue);
+    }
+
+    [Fact]
     public async Task Inventory_tracks_purchase_sale_and_prevents_negative()
     {
         var p = await P();
