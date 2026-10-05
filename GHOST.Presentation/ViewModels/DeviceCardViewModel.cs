@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GHOST.Application.Devices;
 using GHOST.Domain.Enums;
 
@@ -23,6 +24,7 @@ public sealed class DeviceCardViewModel : ObservableObject
             : summary.RoomName;
 
         ActiveSessionId = summary.ActiveSessionId;
+        ActiveSessionMode = summary.ActiveSessionMode;
 
         SingleRate = summary.SingleRate;
         MultiRate = summary.MultiRate;
@@ -58,6 +60,33 @@ public sealed class DeviceCardViewModel : ObservableObject
     public Guid Id { get; }
 
     public Guid? ActiveSessionId { get; }
+
+    public SessionMode? ActiveSessionMode { get; }
+
+    [ObservableProperty]
+    private SessionMode selectedSessionMode = SessionMode.Single;
+
+    public string ActiveSessionModeText =>
+        ActiveSessionMode switch
+        {
+            SessionMode.Single => "فردي",
+            SessionMode.Multi => "مالتي",
+            _ => "—"
+        };
+
+    public string SelectedSessionModeText =>
+        SelectedSessionMode == SessionMode.Single ? "فردي" : "مالتي";
+
+    [RelayCommand]
+    private void SelectSingle() => SelectedSessionMode = SessionMode.Single;
+
+    [RelayCommand]
+    private void SelectMulti() => SelectedSessionMode = SessionMode.Multi;
+
+    partial void OnSelectedSessionModeChanged(SessionMode value)
+    {
+        OnPropertyChanged(nameof(SelectedSessionModeText));
+    }
 
     public string Name { get; }
 
