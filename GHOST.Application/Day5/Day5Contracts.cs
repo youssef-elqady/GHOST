@@ -87,6 +87,16 @@ public sealed record CloseShiftRequest(
     decimal ActualCash,
     string? DifferenceReason);
 
+public sealed record ShiftSummary(
+    Guid Id,
+    decimal OpeningCash,
+    decimal ExpectedCash,
+    bool IsOpen,
+    DateTimeOffset OpenedAt,
+    DateTimeOffset? ClosedAt,
+    decimal? ActualCash,
+    decimal? Difference);
+
 public interface IDay5Service
 {
     Task<IReadOnlyList<ProductSummary>> GetProductsAsync(
@@ -148,6 +158,9 @@ public interface IDay5Service
     Task<PlayOrderSummary> AddProductToPlayAsync(
         Guid actor,
         AddProductToPlayRequest request,
+        CancellationToken ct = default);
+
+    Task<ShiftSummary?> GetOpenShiftAsync(
         CancellationToken ct = default);
 
     Task<Shift> OpenShiftAsync(
