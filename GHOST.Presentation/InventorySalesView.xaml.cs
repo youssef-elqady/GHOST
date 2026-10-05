@@ -25,6 +25,17 @@ public partial class InventorySalesView : UserControl
 
         SalesHost.Content = new SalesView(day5Service, dashboardService);
         InventoryHost.Content = new InventoryView(day5Service, currentUser);
+
+        if (currentUser.IsInRole("Cashier"))
+        {
+            InventoryTab.Visibility = Visibility.Collapsed;
+            SalesInventoryTabs.SelectedItem = SalesTab;
+        }
+        else
+        {
+            SalesTab.Visibility = Visibility.Collapsed;
+            SalesInventoryTabs.SelectedItem = InventoryTab;
+        }
     }
 
     private void SalesInventoryTabs_SelectionChanged(
