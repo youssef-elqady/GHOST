@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using GHOST.Application.Authentication;
 using GHOST.Application.Day5;
-using GHOST.Domain.Enums;
 
 namespace GHOST.Presentation;
 
@@ -15,7 +14,6 @@ public partial class InventoryView : UserControl
     private readonly ObservableCollection<ProductSummary> products = [];
     private readonly ObservableCollection<CategorySummary> categories = [];
     private readonly DispatcherTimer filterTimer;
-    private Guid? editingId;
     private bool initialized;
 
     public InventoryView(IDay5Service service, ICurrentUserContext user)
@@ -49,7 +47,8 @@ public partial class InventoryView : UserControl
         await RefreshAsync();
     }
 
-    private async void Refresh_Click(object sender, RoutedEventArgs e) => await RefreshAsync();
+    private async void Refresh_Click(object sender, RoutedEventArgs e) =>
+        await RefreshAsync();
 
     private void FilterChanged(object sender, RoutedEventArgs e)
     {
@@ -73,8 +72,8 @@ public partial class InventoryView : UserControl
             var cs = await service.GetCategoriesAsync(true);
 
             categories.Clear();
-            foreach (var c in cs)
-                categories.Add(c);
+            foreach (var category in cs)
+                categories.Add(category);
 
             if (FilterCategoryBox.SelectedValue is Guid selectedCategory &&
                 categories.All(x => x.Id != selectedCategory))
@@ -116,20 +115,15 @@ public partial class InventoryView : UserControl
                     PageSize: 100));
 
             products.Clear();
-            foreach (var p in result.Items)
-                products.Add(p);
+            foreach (var product in result.Items)
+                products.Add(product);
 
             TotalProductsText.Text = result.TotalCount.ToString("N0");
             ActiveProductsText.Text = result.ActiveCount.ToString("N0");
             LowStockText.Text = result.LowStockCount.ToString("N0");
             StockValueText.Text = $"{result.RetailStockValue:N0} ج.م";
-            ProductsCountText.Text = $"عرض {result.Items.Count:N0} من {result.TotalCount:N0}";
-
-            if (editingId is Guid currentId &&
-                result.Items.All(x => x.Id != currentId))
-            {
-                ClearForm();
-            }
+            ProductsCountText.Text =
+                $"عرض {result.Items.Count:N0} من {result.TotalCount:N0}";
         }
         catch (Exception ex)
         {
@@ -137,96 +131,38 @@ public partial class InventoryView : UserControl
         }
     }
 
-    private void AddProduct_Click(object sender, RoutedEventArgs e)
+    private async void AddProduct_Click(object sender, RoutedEventArgs e)
     {
-        ClearForm();
-        EditorPanel.Visibility = Visibility.Visible;
-        NameBox.Focus();
-    }
+        var window = new ProductEditorWindow(
+            service,
+            user,
+            categories);
 
-    private async void SaveProduct_Click(object sender, RoutedEventArgs e)
-    {
-        if (!ReadForm(out var name, out var categoryId, out var selling, out var cost, out var minimum, out var barcode))
-            return;
+        window.Owner = Window.GetWindow(this);
 
-        try
-        {
-            var actor = user.RequireAuthenticated().Id;
-
-            if (editingId is Guid id)
-            {
-                await service.UpdateProductAsync(
-                    actor,
-                    new UpdateProductRequest(id, name, categoryId, selling, cost, minimum, barcode));
-            }
-            else
-            {
-                await service.CreateProductAsync(
-                    actor,
-                    new ProductRequest(name, categoryId, selling, cost, minimum, barcode));
-            }
-
-            ClearForm();
+        if (window.ShowDialog() == true)
             await RefreshAsync();
-        }
-        catch (Exception ex)
-        {
-            Error(ex);
-        }
     }
 
-    private void ProductsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void ProductsGrid_SelectionChanged(
+        object sender,
+        SelectionChangedEventArgs e)
     {
-        if (ProductsGrid.SelectedItem is not ProductSummary p)
+        if (ProductsGrid.SelectedItem is not ProductSummary product)
             return;
 
-        editingId = p.Id;
-        NameBox.Text = p.Name;
-        BarcodeBox.Text = p.Barcode ?? string.Empty;
-        CategoryBox.SelectedValue = p.CategoryId;
-        SellingPriceBox.Text = p.SellingPrice.ToString("0.##");
-        CostPriceBox.Text = p.CostPrice.ToString("0.##");
-        MinimumStockBox.Text = p.MinimumStockLevel.ToString();
-        SaveButton.Content = "حفظ التعديلات";
-        EditorPanel.Visibility = Visibility.Visible;
-    }
+        ProductsGrid.SelectedItem = null;
 
-    private bool ReadForm(
-        out string name,
-        out Guid categoryId,
-        out decimal selling,
-        out decimal cost,
-        out int minimum,
-        out string? barcode)
-    {
-        name = NameBox.Text.Trim();
-        barcode = string.IsNullOrWhiteSpace(BarcodeBox.Text)
-            ? null
-            : BarcodeBox.Text.Trim();
-        categoryId = Guid.Empty;
-        selling = 0;
-        cost = 0;
-        minimum = 0;
+        var window = new ProductEditorWindow(
+            service,
+            user,
+            categories,
+            product);
 
-        if (string.IsNullOrWhiteSpace(name) ||
-            CategoryBox.SelectedValue is not Guid selected ||
-            !decimal.TryParse(SellingPriceBox.Text.Trim(), out selling) ||
-            selling < 0 ||
-            !decimal.TryParse(CostPriceBox.Text.Trim(), out cost) ||
-            cost < 0 ||
-            !int.TryParse(MinimumStockBox.Text.Trim(), out minimum) ||
-            minimum < 0)
-        {
-            MessageBox.Show(
-                "راجع اسم المنتج والتصنيف والأسعار والحد الأدنى.",
-                "GHOST",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return false;
-        }
+        window.Owner = Window.GetWindow(this);
 
-        categoryId = selected;
-        return true;
+        if (window.ShowDialog() == true)
+            await RefreshAsync();
     }
 
     private void ClearFilters_Click(object sender, RoutedEventArgs e)
@@ -234,22 +170,6 @@ public partial class InventoryView : UserControl
         SearchBox.Clear();
         FilterCategoryBox.SelectedIndex = 0;
         FilterStatusBox.SelectedIndex = 0;
-    }
-
-    private void ClearForm_Click(object sender, RoutedEventArgs e) => ClearForm();
-
-    private void ClearForm()
-    {
-        editingId = null;
-        ProductsGrid.SelectedItem = null;
-        NameBox.Clear();
-        BarcodeBox.Clear();
-        SellingPriceBox.Clear();
-        CostPriceBox.Clear();
-        MinimumStockBox.Clear();
-        CategoryBox.SelectedIndex = -1;
-        SaveButton.Content = "حفظ";
-        EditorPanel.Visibility = Visibility.Collapsed;
     }
 
     private static void Error(Exception ex) =>
