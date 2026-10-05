@@ -123,7 +123,7 @@ public partial class InventoryView : UserControl
             ActiveProductsText.Text = result.ActiveCount.ToString("N0");
             LowStockText.Text = result.LowStockCount.ToString("N0");
             StockValueText.Text = $"{result.RetailStockValue:N0} ج.م";
-            CatalogCountText.Text = $"عرض {result.Items.Count:N0} من {result.TotalCount:N0}";
+            ProductsCountText.Text = $"عرض {result.Items.Count:N0} من {result.TotalCount:N0}";
 
             if (editingId is Guid currentId &&
                 result.Items.All(x => x.Id != currentId))
