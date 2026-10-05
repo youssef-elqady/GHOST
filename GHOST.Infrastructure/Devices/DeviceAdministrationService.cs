@@ -67,4 +67,82 @@ public sealed class DeviceAdministrationService(
     {
         if (!await CanManageDevicesAsync(actorId, cancellationToken)) throw new UnauthorizedAccessException("Device administration requires an active Admin or Manager account.");
     }
+
+    public async Task<DeviceSummary> UpdateRatesAsync(
+    Guid actorId,
+    Guid deviceId,
+    UpdateDeviceRatesRequest request,
+    CancellationToken cancellationToken = default)
+    {
+        await EnsureAdminAsync(actorId, cancellationToken);
+
+        ValidateRate(request.SingleRate);
+        ValidateRate(request.MultiRate);
+
+        var device = await dbContext.Devices
+            .SingleOrDefaultAsync(
+                x => x.Id == deviceId,
+                cancellationToken)
+            ?? throw new KeyNotFoundException("Device not found.");
+
+        device.HourlyRate = request.SingleRate;
+        device.MultiHourlyRate = request.MultiRate;
+
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return new DeviceSummary(
+            device.Id,
+            device.Name,
+            device.DeviceType,
+            device.Status,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)
+        {
+            SingleRate = device.HourlyRate,
+            MultiRate = device.MultiHourlyRate,
+            HasAirConditioning = device.HasAirConditioning
+        };
+    }
+
+    private async Task EnsureAdminAsync(
+        Guid actorId,
+        CancellationToken cancellationToken)
+    {
+        var isAdmin = await dbContext.Users
+            .AsNoTracking()
+            .Where(x =>
+                x.Id == actorId &&
+                x.IsActive)
+            .SelectMany(x => x.Roles)
+            .AnyAsync(
+                x => x.Name == "Admin",
+                cancellationToken);
+
+        if (!isAdmin)
+        {
+            throw new UnauthorizedAccessException(
+                "Changing device rates requires an active Admin account.");
+        }
+    }
+
+    private static void ValidateRate(decimal rate)
+    {
+        if (rate < 0m || rate > 10000m)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(rate),
+                "Rate must be between 0 and 10000.");
+        }
+
+        if (decimal.Round(rate, 2) != rate)
+        {
+            throw new ArgumentException(
+                "Rate must have at most 2 decimal places.",
+                nameof(rate));
+        }
+    }
 }

@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:GHOST.Presentation.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="GHOST"
         Width="1440"
         Height="900"
@@ -9,8 +10,8 @@
         MinHeight="720"
         WindowStartupLocation="CenterScreen"
         FlowDirection="RightToLeft"
-        Background="{StaticResource AppBg}"
-        Foreground="{StaticResource White}"
+        Background="{DynamicResource GhostBackgroundBrush}"
+        Foreground="{DynamicResource GhostTextPrimaryBrush}"
         ResizeMode="CanResize"
         WindowState="Maximized"
         ShowInTaskbar="True"
@@ -777,15 +778,15 @@
         </Grid.ColumnDefinitions>
 
         <!-- ============================================================= -->
-        <!-- SIDEBAR                                                        -->
+        <!-- PREMIUM SIDEBAR                                                -->
         <!-- ============================================================= -->
 
         <Border Grid.Column="0"
-                Background="{StaticResource SidebarBg}"
-                BorderBrush="#20252C"
-                BorderThickness="0,0,1,0">
+        Background="{DynamicResource GhostSurfaceBrush}"
+        BorderBrush="{DynamicResource GhostBorderBrush}"
+        BorderThickness="0,0,1,0">
 
-            <Grid Margin="15,17,15,15">
+            <Grid Margin="16,18,16,16">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -793,288 +794,360 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- BRAND -->
+                <!-- ===================================================== -->
+                <!-- BRAND                                                   -->
+                <!-- ===================================================== -->
 
-                <StackPanel Grid.Row="0">
+                <Grid Grid.Row="0"
+              Margin="4,2,4,30">
 
-                    <Grid Margin="4,2,4,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="46"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <Border Width="48"
+                    Height="48"
+                    CornerRadius="14"
+                    Background="{DynamicResource GhostPrimaryBrush}"
+                    HorizontalAlignment="Left">
 
-                        <Border Width="46"
-                                Height="46"
-                                CornerRadius="13"
-                                Background="{StaticResource Gold}">
+                        <TextBlock Text="G"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#0B0D10"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
 
-                            <Path
-                                Data="M23,6 L38,14 L38,31 L23,40 L8,31 L8,14 Z
-                                      M15,18 L15,28 L31,28 L31,23 L23,23 L23,18 Z"
-                                Fill="#101216"
-                                Stretch="Uniform"
-                                Margin="9"/>
+                    </Border>
 
-                        </Border>
+                    <StackPanel Grid.Column="1"
+                        Margin="13,0,0,0"
+                        VerticalAlignment="Center">
 
-                        <StackPanel Grid.Column="1"
-                                    Margin="12,0,0,0"
-                                    VerticalAlignment="Center">
+                        <TextBlock Text="GHOST"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="{DynamicResource GhostTextPrimaryBrush}"/>
 
-                            <TextBlock Text="GHOST"
-                                       FontSize="21"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource White}"/>
+                        <TextBlock Text="PLAYSTATION OPERATIONS"
+                           FontSize="7"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource GhostTextMutedBrush}"
+                           Margin="1,3,0,0"/>
 
-                            <TextBlock Text="PLAYSTATION OPERATIONS"
-                                       FontSize="7"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource Dim}"
-                                       Margin="1,2,0,0"/>
+                    </StackPanel>
 
-                        </StackPanel>
+                </Grid>
 
-                    </Grid>
+                <!-- ===================================================== -->
+                <!-- NAVIGATION                                              -->
+                <!-- ===================================================== -->
 
-                    <TextBlock Text="OPERATIONS"
-                               Style="{StaticResource Eyebrow}"
-                               Margin="7,0,7,7"/>
+                <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
 
-                    <Button x:Name="NavDashboard"
-                            Style="{StaticResource AdminOnlyNavigationButton}"
-                            Click="Dashboard_Click">
+                    <StackPanel>
 
-                        <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="OPERATIONS"
+                           Style="{StaticResource GhostCaption}"
+                           FontWeight="SemiBold"
+                           Margin="7,0,7,8"/>
 
-                            <Path
-                                Data="M3,11 L12,3 L21,11 L21,21 L14,21 L14,14 L10,14 L10,21 L3,21 Z"
-                                Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                        <!-- Dashboard -->
 
-                            <TextBlock Text="الرئيسية"
-                                       VerticalAlignment="Center"/>
+                        <Button x:Name="NavDashboard"
+                        Style="{StaticResource AdminOnlyNavigationButton}"
+                        Click="Dashboard_Click">
 
-                        </StackPanel>
-                    </Button>
+                            <StackPanel Orientation="Horizontal">
 
-                    <Button x:Name="NavDevices"
-                            Style="{StaticResource StaffOnlyNavigationButton}"
-                            Click="Devices_Click">
+                                <materialDesign:PackIcon Kind="ViewDashboardOutline"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
 
-                        <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="الرئيسية"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
 
-                            <Path
-                                Data="M4,4 L20,4 L20,20 L4,20 Z M8,8 L16,8 L16,16 L8,16 Z"
-                                Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="الأجهزة واللعب"
-                                       VerticalAlignment="Center"/>
+                        </Button>
 
-                        </StackPanel>
-                    </Button>
+                        <!-- Devices -->
 
-                    <Button x:Name="NavPayments"
-                            Style="{StaticResource StaffOnlyNavigationButton}"
-                            Click="Payments_Click">
+                        <Button x:Name="NavDevices"
+                        Style="{StaticResource StaffOnlyNavigationButton}"
+                        Click="Devices_Click">
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <Path
-                                Data="M3,6 L21,6 L21,18 L3,18 Z M3,10 L21,10 M7,14 L12,14"
-                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                StrokeThickness="1.7"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                                <materialDesign:PackIcon Kind="GamepadVariantOutline"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
 
-                            <TextBlock Text="المدفوعات"
-                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="الأجهزة واللعب"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
 
-                        </StackPanel>
-                    </Button>
+                            </StackPanel>
 
-                    <Button x:Name="NavCustomers"
-                            Style="{StaticResource StaffOnlyNavigationButton}"
-                            Click="Customers_Click">
+                        </Button>
 
-                        <StackPanel Orientation="Horizontal">
+                        <!-- Payments -->
 
-                            <Path
-                                Data="M12,12 A4,4 0 1 0 12,4 A4,4 0 1 0 12,12
-                                      M4,21 C4,16 20,16 20,21"
-                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                StrokeThickness="1.7"
-                                Fill="Transparent"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                        <Button x:Name="NavPayments"
+                        Style="{StaticResource StaffOnlyNavigationButton}"
+                        Click="Payments_Click">
 
-                            <TextBlock Text="العملاء"
-                                       VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
 
-                        </StackPanel>
-                    </Button>
+                                <materialDesign:PackIcon Kind="CashMultiple"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
 
-                    <Button x:Name="NavInventory"
-                            Style="{StaticResource NavigationButton}"
-                            Click="Inventory_Click">
+                                <TextBlock Text="المدفوعات"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
 
-                        <StackPanel Orientation="Horizontal">
+                            </StackPanel>
 
-                            <Path
-                                Data="M4,6 L20,6 L18,20 L6,20 Z M8,6 A4,4 0 0 1 16,6"
-                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                StrokeThickness="1.7"
-                                Fill="Transparent"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                        </Button>
 
-                            <TextBlock Text="{Binding InventoryNavText}"
-                                       VerticalAlignment="Center"/>
+                        <!-- Customers -->
 
-                        </StackPanel>
-                    </Button>
+                        <Button x:Name="NavCustomers"
+                        Style="{StaticResource StaffOnlyNavigationButton}"
+                        Click="Customers_Click">
 
-                    <TextBlock Text="MANAGEMENT"
-                               Style="{StaticResource Eyebrow}"
-                               Margin="7,25,7,7"/>
+                            <StackPanel Orientation="Horizontal">
 
-                    <Button x:Name="NavShifts"
-                            Style="{StaticResource StaffOnlyNavigationButton}"
-                            Click="Shifts_Click">
+                                <materialDesign:PackIcon Kind="AccountGroupOutline"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
 
-                        <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="العملاء"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
 
-                            <Path
-                                Data="M12,3 L12,21 M4,8 L20,8 M7,3 L7,8 M17,3 L17,8"
-                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                StrokeThickness="1.7"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                            </StackPanel>
 
-                            <TextBlock Text="الشيفتات والخزينة"
-                                       VerticalAlignment="Center"/>
+                        </Button>
 
-                        </StackPanel>
-                    </Button>
+                        <!-- Inventory -->
 
-                    <Button x:Name="NavReports"
-                            Style="{StaticResource AdminOnlyNavigationButton}"
-                            Click="Reports_Click">
+                        <Button x:Name="NavInventory"
+                        Style="{StaticResource NavigationButton}"
+                        Click="Inventory_Click">
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <Path
-                                Data="M4,20 L4,11 L8,11 L8,20 M10,20 L10,5 L14,5 L14,20 M16,20 L16,8 L20,8 L20,20"
-                                Stroke="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                StrokeThickness="1.7"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                                <materialDesign:PackIcon Kind="PackageVariantClosed"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
 
-                            <TextBlock Text="التقارير"
-                                       VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding InventoryNavText}"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
 
-                        </StackPanel>
-                    </Button>
+                            </StackPanel>
 
-                    <Button x:Name="NavAdministration"
-                            Style="{StaticResource AdminOnlyNavigationButton}"
-                            Click="Administration_Click">
+                        </Button>
 
-                        <StackPanel Orientation="Horizontal">
+                        <!-- ================================================= -->
+                        <!-- MANAGEMENT                                          -->
+                        <!-- ================================================= -->
 
-                            <Path
-                                Data="M12,3 L14,7 L18,8 L15,11 L16,16 L12,14 L8,16 L9,11 L6,8 L10,7 Z"
-                                Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                                Width="18"
-                                Height="18"
-                                Stretch="Uniform"
-                                Margin="0,0,12,0"/>
+                        <TextBlock Text="MANAGEMENT"
+                           Style="{StaticResource GhostCaption}"
+                           FontWeight="SemiBold"
+                           Margin="7,28,7,8"/>
 
-                            <TextBlock Text="الإدارة"
-                                       VerticalAlignment="Center"/>
+                        <!-- Shifts -->
 
-                        </StackPanel>
-                    </Button>
+                        <Button x:Name="NavShifts"
+                        Style="{StaticResource StaffOnlyNavigationButton}"
+                        Click="Shifts_Click">
 
-                </StackPanel>
+                            <StackPanel Orientation="Horizontal">
 
-                <!-- USER -->
+                                <materialDesign:PackIcon Kind="CashRegister"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
+
+                                <TextBlock Text="الشيفتات والخزينة"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
+
+                            </StackPanel>
+
+                        </Button>
+
+                        <!-- Reports -->
+
+                        <Button x:Name="NavReports"
+                        Style="{StaticResource AdminOnlyNavigationButton}"
+                        Click="Reports_Click">
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <materialDesign:PackIcon Kind="ChartBoxOutline"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
+
+                                <TextBlock Text="التقارير"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
+
+                            </StackPanel>
+
+                        </Button>
+
+                        <!-- Administration -->
+
+                        <Button x:Name="NavAdministration"
+                        Style="{StaticResource AdminOnlyNavigationButton}"
+                        Click="Administration_Click">
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <materialDesign:PackIcon Kind="ShieldCrownOutline"
+                                                 Width="20"
+                                                 Height="20"
+                                                 VerticalAlignment="Center"
+                                                 Foreground="{Binding Foreground,
+                                                     RelativeSource={RelativeSource AncestorType=Button}}"
+                                                 Margin="0,0,13,0"/>
+
+                                <TextBlock Text="الإدارة"
+                                   VerticalAlignment="Center"
+                                   FontSize="13"/>
+
+                            </StackPanel>
+
+                        </Button>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+                <!-- ===================================================== -->
+                <!-- CURRENT USER                                            -->
+                <!-- ===================================================== -->
 
                 <Border Grid.Row="2"
-                        Background="{StaticResource GhostSidebarUser}"
-                        BorderBrush="#252B33"
-                        BorderThickness="1"
-                        CornerRadius="14"
-                        Padding="11">
+                Background="{DynamicResource GhostSurfaceElevatedBrush}"
+                BorderBrush="{DynamicResource GhostBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="12"
+                Margin="0,14,0,0">
 
                     <Grid>
 
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel>
+                        <!-- Avatar -->
+
+                        <Border Width="36"
+                        Height="36"
+                        CornerRadius="11"
+                        Background="{DynamicResource GhostPrimaryBrush}"
+                        VerticalAlignment="Center">
+
+                            <TextBlock Text="{Binding CurrentUserName,
+                                              StringFormat={}{0:1}}"
+                               FontSize="13"
+                               FontWeight="Bold"
+                               Foreground="#0B0D10"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <!-- User -->
+
+                        <StackPanel Grid.Column="1"
+                            Margin="10,0,8,0"
+                            VerticalAlignment="Center">
 
                             <TextBlock Text="{Binding CurrentUserName}"
-                                       FontSize="12"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource White}"/>
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource GhostTextPrimaryBrush}"
+                               TextTrimming="CharacterEllipsis"/>
 
                             <StackPanel Orientation="Horizontal"
-                                        Margin="0,4,0,0">
+                                Margin="0,4,0,0">
 
                                 <Ellipse Width="6"
-                                         Height="6"
-                                         Fill="{StaticResource Green}"
-                                         VerticalAlignment="Center"/>
+                                 Height="6"
+                                 Fill="{DynamicResource GhostSuccessBrush}"
+                                 VerticalAlignment="Center"/>
 
                                 <TextBlock Text="  جلسة دخول نشطة"
-                                           FontSize="9"
-                                           Foreground="{StaticResource Dim}"/>
+                                   FontSize="9"
+                                   Foreground="{DynamicResource GhostTextMutedBrush}"/>
 
                             </StackPanel>
 
                         </StackPanel>
 
-                        <Button Grid.Column="1"
-                                Style="{StaticResource IconButton}"
-                                Click="Logout_Click"
-                                ToolTip="تسجيل الخروج">
+                        <!-- Logout -->
 
-                            <Path
-                                Data="M11,4 L11,14 M8,7 A7,7 0 1 0 16,7"
-                                Stroke="{StaticResource Muted}"
-                                StrokeThickness="1.7"
-                                Fill="Transparent"
-                                Width="17"
-                                Height="17"/>
+                        <Button Grid.Column="2"
+                        Style="{StaticResource GhostIconButton}"
+                        Width="36"
+                        Height="36"
+                        Click="Logout_Click"
+                        ToolTip="تسجيل الخروج">
+
+                            <materialDesign:PackIcon Kind="Logout"
+                                             Width="19"
+                                             Height="19"/>
 
                         </Button>
 
                     </Grid>
+
                 </Border>
 
             </Grid>
-        </Border>
 
+        </Border>
         <!-- ============================================================= -->
         <!-- MAIN                                                           -->
         <!-- ============================================================= -->

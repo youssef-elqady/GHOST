@@ -105,5 +105,37 @@ public sealed class SessionServiceTests : IAsyncLifetime
         var session = await db.Sessions.SingleAsync(x => x.Id == id); Assert.Equal(SessionStatus.Running, session.Status); Assert.Equal(clock.UtcNow - session.StartedAt, TimeSpan.FromMinutes(42));
     }
     private sealed class TestClock(DateTimeOffset now) : IClock { public DateTimeOffset UtcNow { get; private set; } = now; public void Advance(TimeSpan duration) => UtcNow += duration; }
-    private sealed class TestCurrentUserContext(AuthenticatedUser user) : ICurrentUserContext { public AuthenticatedUser? Current => user; public AuthenticatedUser RequireAuthenticated() => user; public bool IsInRole(string role) => user.IsInRole(role); }
+    private sealed class TestCurrentUserContext(AuthenticatedUser user) : ICurrentUserContext { public AuthenticatedUser? Current => user; public AuthenticatedUser RequireAuthenticated() => user; public bool IsInRole(string role) => user.IsInRole(role);
+    }
+
+    [Fact]
+    public async Task Changing_device_rate_does_not_change_active_session_rate()
+    {
+        var device = await DeviceAsync();
+
+        device.HourlyRate = 100m;
+        device.MultiHourlyRate = 150m;
+
+        await db.SaveChangesAsync();
+
+        var sessionId = await service.StartAsync(
+            new StartSessionRequest(
+                device.Id,
+                null,
+                SessionMode.Single));
+
+        device.HourlyRate = 200m;
+        device.MultiHourlyRate = 300m;
+
+        await db.SaveChangesAsync();
+
+        var session = await db.Sessions
+            .SingleAsync(x => x.Id == sessionId);
+
+        var updatedDevice = await DeviceAsync();
+
+        Assert.Equal(100m, session.RatePerHour);
+        Assert.Equal(200m, updatedDevice.HourlyRate);
+        Assert.Equal(300m, updatedDevice.MultiHourlyRate);
+    }
 }

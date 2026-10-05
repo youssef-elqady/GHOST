@@ -9,4 +9,9 @@ public interface IDeviceAdministrationService
     Task AssignRoomAsync(Guid actorId, Guid deviceId, Guid? roomId, CancellationToken cancellationToken = default);
     Task UpdateStatusAsync(Guid actorId, Guid deviceId, DeviceStatus status, CancellationToken cancellationToken = default);
     Task<bool> CanManageDevicesAsync(Guid actorId, CancellationToken cancellationToken = default);
+    Task<DeviceSummary> UpdateRatesAsync(
+    Guid actorId,
+    Guid deviceId,
+    UpdateDeviceRatesRequest request,
+    CancellationToken cancellationToken = default);
 }

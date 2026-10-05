@@ -36,3 +36,6 @@ public sealed record CreateDeviceRequest(
 
 public sealed record CreateRoomRequest(
     string Name);
+public sealed record UpdateDeviceRatesRequest(
+    decimal SingleRate,
+    decimal MultiRate);
