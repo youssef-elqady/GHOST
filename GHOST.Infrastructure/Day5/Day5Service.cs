@@ -553,20 +553,33 @@ public sealed class Day5Service(AppDbContext db, IClock clock, IBillingCalculato
     public async Task<ShiftSummary?> GetOpenShiftAsync(
         CancellationToken ct = default)
     {
-        return await db.Shifts
+        var shift = await db.Shifts
             .AsNoTracking()
             .Where(x => x.IsOpen)
             .OrderByDescending(x => x.OpenedAt)
-            .Select(x => new ShiftSummary(
-                x.Id,
-                x.OpeningCash,
-                x.ExpectedCash,
-                x.IsOpen,
-                x.OpenedAt,
-                x.ClosedAt,
-                x.ActualCash,
-                x.Difference))
             .FirstOrDefaultAsync(ct);
+
+        if (shift is null)
+            return null;
+
+        var movement = await db.CashTransactions
+            .Where(x =>
+                x.ShiftId == shift.Id &&
+                x.Type != CashTransactionType.Opening &&
+                x.Type != CashTransactionType.Closing)
+            .SumAsync(x => (decimal?)x.Amount, ct) ?? 0m;
+
+        var expected = shift.OpeningCash + movement;
+
+        return new ShiftSummary(
+            shift.Id,
+            shift.OpeningCash,
+            expected,
+            shift.IsOpen,
+            shift.OpenedAt,
+            shift.ClosedAt,
+            shift.ActualCash,
+            shift.Difference);
     }
 
     public async Task<Shift> OpenShiftAsync(
