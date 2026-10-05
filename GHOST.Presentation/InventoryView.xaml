@@ -20,7 +20,9 @@
         </Style>
 
         <Style x:Key="ProductsDataGrid" TargetType="DataGrid">
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource GhostText}"/>
             <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="RowBackground" Value="{DynamicResource GhostSurface}"/>
@@ -31,6 +33,20 @@
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="RowHeight" Value="58"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Resources">
+                <Setter.Value>
+                    <ResourceDictionary>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                         Color="#1A2635"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                                         Color="#F5F7FA"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                         Color="#151B23"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}"
+                                         Color="#E2E7ED"/>
+                    </ResourceDictionary>
+                </Setter.Value>
+            </Setter>
             <Setter Property="ColumnHeaderStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridColumnHeader">
@@ -42,6 +58,21 @@
                         <Setter Property="FontSize" Value="12"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridColumnHeader">
+                                    <Border Background="{TemplateBinding Background}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}">
+                                        <ContentPresenter
+                                            Margin="{TemplateBinding Padding}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            RecognizesAccessKey="True"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </Setter.Value>
             </Setter>
@@ -122,8 +153,13 @@
                 <Button Click="AddProduct_Click"
                         Style="{StaticResource GhostPrimaryButton}">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Plus" Width="18" Height="18" VerticalAlignment="Center"/>
-                        <TextBlock Text="إضافة منتج" Margin="8,0,0,0"/>
+                        <materialDesign:PackIcon Kind="Plus"
+                                                 Width="18"
+                                                 Height="18"
+                                                 Margin="0,0,10,0"
+                                                 VerticalAlignment="Center"/>
+                        <TextBlock Text="إضافة منتج"
+                                   VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -152,8 +188,8 @@
                         <materialDesign:PackIcon Kind="Magnify"
                                                  Width="19"
                                                  Height="19"
-                                                 Margin="0,0,13,0"
-                                                 HorizontalAlignment="Right"
+                                                 Margin="13,0,0,0"
+                                                 HorizontalAlignment="Left"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource GhostDim}"
                                                  IsHitTestVisible="False"/>
