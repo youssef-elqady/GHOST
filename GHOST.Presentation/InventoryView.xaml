@@ -346,58 +346,5 @@
             </Grid>
         </Border>
 
-        <!-- منطقة تعديل مؤقتة — سيتم تحويلها إلى نافذة إضافة وتعديل مستقلة. -->
-        <Border x:Name="EditorPanel"
-                Grid.Row="4"
-                Style="{StaticResource GhostCard}"
-                Padding="16"
-                Margin="0,12,0,0"
-                Visibility="Collapsed">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                    <ColumnDefinition Width="1.2*"/>
-                    <ColumnDefinition Width="1.1*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Margin="0,0,8,0">
-                    <TextBlock Text="اسم المنتج" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
-                    <TextBox x:Name="NameBox"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Margin="0,0,8,0">
-                    <TextBlock Text="التصنيف" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
-                    <ComboBox x:Name="CategoryBox" DisplayMemberPath="Name" SelectedValuePath="Id"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Margin="0,0,8,0">
-                    <TextBlock Text="الباركود" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
-                    <TextBox x:Name="BarcodeBox"/>
-                </StackPanel>
-                <StackPanel Grid.Column="3" Margin="0,0,8,0">
-                    <TextBlock Text="سعر البيع" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
-                    <TextBox x:Name="SellingPriceBox"/>
-                </StackPanel>
-                <StackPanel Grid.Column="4" Margin="0,0,8,0">
-                    <TextBlock Text="سعر التكلفة / الحد الأدنى" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
-                        <TextBox x:Name="CostPriceBox" Margin="0,0,4,0"/>
-                        <TextBox x:Name="MinimumStockBox" Grid.Column="1" Margin="4,0,0,0"/>
-                    </Grid>
-                </StackPanel>
-                <StackPanel Grid.Column="5" Orientation="Horizontal" VerticalAlignment="Bottom">
-                    <Button x:Name="SaveButton"
-                            Content="حفظ"
-                            Style="{StaticResource GhostPrimaryButton}"
-                            Click="SaveProduct_Click"
-                            Margin="0,0,7,0"/>
-                    <Button Content="إلغاء"
-                            Style="{StaticResource GhostSecondaryButton}"
-                            Click="ClearForm_Click"/>
-                </StackPanel>
-            </Grid>
-        </Border>
     </Grid>
 </UserControl>
