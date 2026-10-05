@@ -1755,38 +1755,7 @@
                     <!-- ================================================= -->
 
                     <TabItem>
-
-                        <Grid>
-
-                            <Border Style="{StaticResource Panel}"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    MaxWidth="700">
-
-                                <StackPanel HorizontalAlignment="Center"
-                                            Margin="30">
-
-                                    <TextBlock Text="CASH CONTROL"
-                                               Style="{StaticResource Eyebrow}"
-                                               HorizontalAlignment="Center"/>
-
-                                    <TextBlock Text="الشيفتات والخزينة"
-                                               FontSize="27"
-                                               FontWeight="SemiBold"
-                                               HorizontalAlignment="Center"/>
-
-                                    <TextBlock Text="فتح وإغلاق الشيفت ومراجعة النقدية."
-                                               Foreground="{StaticResource Muted}"
-                                               FontSize="11"
-                                               HorizontalAlignment="Center"
-                                               Margin="0,7,0,0"/>
-
-                                </StackPanel>
-
-                            </Border>
-
-                        </Grid>
-
+                        <ContentControl x:Name="ShiftHost"/>
                     </TabItem>
 
                     <!-- ================================================= -->
