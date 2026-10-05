@@ -25,7 +25,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="RowBackground" Value="{DynamicResource GhostSurface}"/>
             <Setter Property="AlternatingRowBackground" Value="{DynamicResource GhostSurface2}"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource GhostLineSoftColor}"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource LineSoft}"/>
             <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
             <Setter Property="GridLinesVisibility" Value="Horizontal"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
@@ -324,7 +324,6 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </Border.Style>
-                                        <TextBlock Text="{Binding IsActive, Converter={x:Static BooleanToVisibilityConverter}}" Visibility="Collapsed"/>
                                         <TextBlock Text="نشط">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
