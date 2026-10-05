@@ -31,6 +31,38 @@
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="RowHeight" Value="58"/>
             <Setter Property="FontSize" Value="13"/>
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{DynamicResource GhostSurfaceElevatedBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource GhostTextSecondaryBrush}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource GhostBorderBrush}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="Padding" Value="12,11"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource GhostHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="CellStyle">
                 <Setter.Value>
