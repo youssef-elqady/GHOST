@@ -1535,6 +1535,11 @@
                                                                     CommandParameter="{Binding}"
                                                                     IsEnabled="{Binding CanEndSession}"/>
 
+                                                            <Button Content="طلبات"
+                                                                    Style="{StaticResource DeviceActionButton}"
+                                                                    Click="OpenPlayOrders_Click"
+                                                                    IsEnabled="{Binding HasActiveSession}"/>
+
                                                         </StackPanel>
 
                                                     </StackPanel>
