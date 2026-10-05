@@ -158,6 +158,8 @@
         <Setter Property="BorderBrush" Value="{DynamicResource GhostBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontSize" Value="13"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ComboBoxItem">
@@ -175,11 +177,114 @@
                             <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
                             <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
                         </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource GhostDim}"/>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="GhostDatePicker" TargetType="DatePicker">
+        <Setter Property="Height" Value="44"/>
+        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+        <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource GhostBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+
+    <Style x:Key="GhostDataGrid" TargetType="DataGrid">
+        <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource GhostBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource LineSoft}"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+        <Setter Property="RowBackground" Value="{DynamicResource GhostSurface}"/>
+        <Setter Property="AlternatingRowBackground" Value="{DynamicResource GhostSurface2}"/>
+        <Setter Property="RowHeight" Value="54"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="12,0"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                            <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ColumnHeaderStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Foreground" Value="{DynamicResource GhostTextSecondaryBrush}"/>
+                    <Setter Property="Background" Value="{DynamicResource GhostSurfaceElevatedBrush}"/>
+                    <Setter Property="BorderBrush" Value="{DynamicResource GhostBorderBrush}"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    <Setter Property="Padding" Value="12,11"/>
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource GhostHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ScrollBar">
+        <Setter Property="Width" Value="7"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource GhostBorderStrongBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="Transparent">
+                        <Track x:Name="PART_Track"
+                               IsDirectionReversed="{Binding IsVertical, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Track.Thumb>
+                                <Thumb Background="{DynamicResource GhostBorderStrongBrush}"
+                                       BorderThickness="0">
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    CornerRadius="4"
+                                                    Margin="1"/>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
