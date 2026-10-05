@@ -45,6 +45,28 @@ public partial class MainWindow : Window
         InventoryHost.Content = new InventorySalesView(day5Service, currentUser, dashboardService);
     }
 
+    private void OpenPlayOrders_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement element ||
+            element.DataContext is not DeviceCardViewModel device ||
+            device.ActiveSessionId is null)
+        {
+            return;
+        }
+
+        var window = new PlayOrderView(
+            day5Service,
+            currentUser,
+            device.ActiveSessionId.Value)
+        {
+            Owner = this
+        };
+
+        window.ShowDialog();
+    }
+
     private void ThemeToggle_Click(object sender, RoutedEventArgs e)
     {
         ThemeService.Toggle();
