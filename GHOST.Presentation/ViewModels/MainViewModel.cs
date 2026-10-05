@@ -60,6 +60,12 @@ public sealed partial class MainViewModel : ObservableObject, IDisposable
     public bool IsStaff =>
         _currentUser.IsInRole("Cashier");
 
+    public bool IsManagement =>
+        _currentUser.IsInRole("Admin") || _currentUser.IsInRole("Manager");
+
+    public string InventoryNavText =>
+        IsStaff ? "المبيعات" : "المنتجات والمخزون";
+
     public bool IsManager =>
         _currentUser.IsInRole("Manager");
 
