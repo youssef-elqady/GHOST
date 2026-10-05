@@ -740,6 +740,9 @@ namespace GHOST.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Mode")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("RatePerHour")
                         .HasPrecision(18, 2)
                         .HasColumnType("TEXT");

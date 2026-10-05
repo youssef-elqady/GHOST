@@ -1,10 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using GHOST.Application.Devices;
 using GHOST.Domain.Enums;
 
 namespace GHOST.Presentation.ViewModels;
 
-public sealed class DeviceCardViewModel : ObservableObject
+public sealed partial class DeviceCardViewModel : ObservableObject
 {
     private readonly TimeSpan? _runtimeSnapshot;
     private readonly DateTimeOffset _snapshotAtUtc;
@@ -25,12 +26,14 @@ public sealed class DeviceCardViewModel : ObservableObject
             : summary.RoomName;
 
         ActiveSessionId = summary.ActiveSessionId;
+        ActiveSessionMode = summary.ActiveSessionMode;
 
         SingleRate = summary.SingleRate;
         MultiRate = summary.MultiRate;
-        HasAirConditioning = summary.HasAirConditioning;
 
         _currentRatePerHour = summary.CurrentPrice ?? 0m;
+
+        HasAirConditioning = summary.HasAirConditioning;
 
         CurrentPrice = summary.CurrentPrice is null
             ? "لا توجد جلسة"
@@ -62,6 +65,41 @@ public sealed class DeviceCardViewModel : ObservableObject
     public Guid Id { get; }
 
     public Guid? ActiveSessionId { get; }
+
+    public SessionMode? ActiveSessionMode { get; }
+
+    [ObservableProperty]
+    private SessionMode selectedSessionMode = SessionMode.Single;
+
+    public string ActiveSessionModeText =>
+        ActiveSessionMode switch
+        {
+            SessionMode.Single => "فردي",
+            SessionMode.Multi => "مالتي",
+            _ => "—"
+        };
+
+    public string SelectedSessionModeText =>
+        SelectedSessionMode == SessionMode.Single
+            ? "فردي"
+            : "مالتي";
+
+    [RelayCommand]
+    private void SelectSingle()
+    {
+        SelectedSessionMode = SessionMode.Single;
+    }
+
+    [RelayCommand]
+    private void SelectMulti()
+    {
+        SelectedSessionMode = SessionMode.Multi;
+    }
+
+    partial void OnSelectedSessionModeChanged(SessionMode value)
+    {
+        OnPropertyChanged(nameof(SelectedSessionModeText));
+    }
 
     public string Name { get; }
 
@@ -184,18 +222,11 @@ public sealed class DeviceCardViewModel : ObservableObject
             return;
         }
 
-        /*
-         * BillingPolicy.Default:
-         * - Per minute
-         * - No minimum billable duration
-         * - Pause time is already excluded from Runtime
-         *
-         * Round UP to the next full minute,
-         * exactly like the BillingCalculator.
-         */
+        // Billing is calculated per minute.
+        // Pause time is already excluded from Runtime.
+        // The current minute is rounded up.
 
-        var billableMinutes =
-            Math.Ceiling(runtime.TotalMinutes);
+        var billableMinutes = Math.Ceiling(runtime.TotalMinutes);
 
         var amount =
             _currentRatePerHour *

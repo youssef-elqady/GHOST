@@ -38,6 +38,22 @@ public sealed class SessionServiceTests : IAsyncLifetime
         var session = await db.Sessions.SingleAsync(x => x.Id == id);
         Assert.Equal(SessionStatus.Running, session.Status); Assert.Equal(DeviceStatus.Running, (await DeviceAsync()).Status); Assert.Equal(100m, session.RatePerHour);
     }
+    [Fact] public async Task Start_multiplayer_session_uses_multi_rate_and_persists_mode()
+    {
+        var device = await DeviceAsync();
+        device.HourlyRate = 25m;
+        device.MultiHourlyRate = 40m;
+        await db.SaveChangesAsync();
+
+        var id = await service.StartAsync(
+            new StartSessionRequest(device.Id, null, SessionMode.Multi));
+
+        var session = await db.Sessions.SingleAsync(x => x.Id == id);
+
+        Assert.Equal(SessionMode.Multi, session.Mode);
+        Assert.Equal(40m, session.RatePerHour);
+    }
+
     [Fact] public async Task Start_rejects_running_maintenance_offline_and_duplicate_active_sessions()
     {
         var device = await DeviceAsync(); device.Status = DeviceStatus.Maintenance; await db.SaveChangesAsync();

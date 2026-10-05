@@ -10,6 +10,7 @@ public sealed record DeviceSummary(
     string? RoomName,
     decimal? CurrentPrice,
     Guid? ActiveSessionId,
+    SessionMode? ActiveSessionMode,
     TimeSpan? Runtime,
     decimal? CurrentAmount)
 {

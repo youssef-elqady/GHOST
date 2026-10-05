@@ -32,7 +32,7 @@ public sealed class DeviceAdministrationService(
         };
         dbContext.Devices.Add(device);
         await dbContext.SaveChangesAsync(cancellationToken);
-        return new DeviceSummary(device.Id, device.Name, device.DeviceType, device.Status, null, null, null, null, null);
+        return new DeviceSummary(device.Id, device.Name, device.DeviceType, device.Status, null, null, null, null, null, null);
     }
 
     public async Task<RoomSummary> CreateRoomAsync(Guid actorId, CreateRoomRequest request, CancellationToken cancellationToken = default)

@@ -78,6 +78,7 @@ public sealed class DeviceDashboardService(
                         device.Room?.Name,
                         active?.RatePerHour,
                         active?.Id,
+                        active?.Mode,
                         runtime,
                         amount)
                     {
