@@ -7,19 +7,19 @@
              Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
-        <Style x:Key="CatalogHeaderText" TargetType="TextBlock">
+        <Style x:Key="ProductsHeaderText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource GhostMuted}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
-        <Style x:Key="CatalogCellText" TargetType="TextBlock">
+        <Style x:Key="ProductsCellText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <Style x:Key="CatalogDataGrid" TargetType="DataGrid">
+        <Style x:Key="ProductsDataGrid" TargetType="DataGrid">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -53,7 +53,7 @@
 
             <StackPanel>
                 <TextBlock Text="المنتجات والمخزون" Style="{StaticResource GhostPageTitle}"/>
-                <TextBlock Text="كتالوج المنتجات والأسعار والمخزون في مساحة عمل واحدة."
+                <TextBlock Text="إدارة المنتجات والأسعار والمخزون من مكان واحد."
                            Style="{StaticResource GhostSecondaryText}"/>
             </StackPanel>
 
@@ -135,9 +135,9 @@
             <Border Style="{StaticResource GhostKpiCard}" Margin="0,0,8,0">
                 <Grid>
                     <StackPanel>
-                        <TextBlock Text="نتائج الكتالوج" Style="{StaticResource GhostCaption}"/>
+                        <TextBlock Text="المنتجات الظاهرة" Style="{StaticResource GhostCaption}"/>
                         <TextBlock x:Name="TotalProductsText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="حسب الفلتر الحالي" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+                        <TextBlock Text="حسب البحث والتصفية الحالية" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
                     </StackPanel>
                     <Border Width="36" Height="36" CornerRadius="10"
                             Background="{DynamicResource BlueSoft}"
@@ -156,7 +156,7 @@
                     <StackPanel>
                         <TextBlock Text="منتجات نشطة" Style="{StaticResource GhostCaption}"/>
                         <TextBlock x:Name="ActiveProductsText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="إجمالي المنتجات النشطة" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+                        <TextBlock Text="إجمالي المنتجات المتاحة" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
                     </StackPanel>
                     <Border Width="36" Height="36" CornerRadius="10"
                             Background="{DynamicResource GreenSoft}"
@@ -194,7 +194,7 @@
                     <StackPanel>
                         <TextBlock Text="قيمة المخزون" Style="{StaticResource GhostCaption}"/>
                         <TextBlock x:Name="StockValueText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="القيمة بسعر البيع" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+                        <TextBlock Text="إجمالي القيمة بسعر البيع" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
                     </StackPanel>
                     <Border Width="36" Height="36" CornerRadius="10"
                             Background="{DynamicResource GhostActiveNav}"
@@ -209,7 +209,7 @@
             </Border>
         </UniformGrid>
 
-        <!-- Catalog table -->
+        <!-- Products table -->
         <Border Grid.Row="3" Style="{StaticResource GhostCard}" Padding="0">
             <Grid>
                 <Grid.RowDefinitions>
@@ -223,11 +223,11 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="كتالوج المنتجات" Style="{StaticResource GhostSectionTitle}"/>
-                        <TextBlock Text="اختر منتجًا لفتحه في مساحة التعديل."
+                        <TextBlock Text="قائمة المنتجات" Style="{StaticResource GhostSectionTitle}"/>
+                        <TextBlock Text="اضغط على المنتج لعرض بياناته وتعديله."
                                    Style="{StaticResource GhostCaption}" Margin="0,4,0,0"/>
                     </StackPanel>
-                    <TextBlock x:Name="CatalogCountText"
+                    <TextBlock x:Name="ProductsCountText"
                                Grid.Column="1"
                                VerticalAlignment="Center"
                                Style="{StaticResource GhostSecondaryText}"/>
@@ -235,7 +235,7 @@
 
                 <DataGrid x:Name="ProductsGrid"
                           Grid.Row="1"
-                          Style="{StaticResource CatalogDataGrid}"
+                          Style="{StaticResource ProductsDataGrid}"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           CanUserAddRows="False"
@@ -274,7 +274,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Name}" Style="{StaticResource CatalogCellText}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource ProductsCellText}" FontWeight="SemiBold"/>
                                         <TextBlock Text="{Binding Barcode, TargetNullValue='بدون باركود'}"
                                                    Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
                                     </StackPanel>
@@ -346,7 +346,7 @@
             </Grid>
         </Border>
 
-        <!-- Inline editor for this chunk; it will become a proper dialog in the next chunk. -->
+        <!-- منطقة تعديل مؤقتة — سيتم تحويلها إلى نافذة إضافة وتعديل مستقلة. -->
         <Border x:Name="EditorPanel"
                 Grid.Row="4"
                 Style="{StaticResource GhostCard}"
@@ -393,7 +393,7 @@
                             Style="{StaticResource GhostPrimaryButton}"
                             Click="SaveProduct_Click"
                             Margin="0,0,7,0"/>
-                    <Button Content="إغلاق"
+                    <Button Content="إلغاء"
                             Style="{StaticResource GhostSecondaryButton}"
                             Click="ClearForm_Click"/>
                 </StackPanel>
