@@ -11,7 +11,8 @@
         FlowDirection="RightToLeft"
         Background="{DynamicResource GhostBg}"
         Foreground="{DynamicResource GhostText}"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Loaded="Window_Loaded">
 
     <Border Background="{DynamicResource GhostSurface}"
             BorderBrush="{DynamicResource GhostBorder}"
