@@ -20,6 +20,32 @@ public sealed record UpdateProductRequest(
     int MinimumStockLevel,
     string? Barcode = null);
 
+public enum ProductCatalogStatus
+{
+    All,
+    Active,
+    Inactive,
+    LowStock
+}
+
+public sealed record ProductCatalogFilterRequest(
+    string? SearchText = null,
+    Guid? CategoryId = null,
+    ProductCatalogStatus Status = ProductCatalogStatus.Active,
+    int Page = 1,
+    int PageSize = 50);
+
+public sealed record ProductCatalogResult(
+    IReadOnlyList<ProductSummary> Items,
+    int TotalCount,
+    int ActiveCount,
+    int LowStockCount,
+    decimal RetailStockValue,
+    decimal CostStockValue,
+    int Page,
+    int PageSize,
+    int TotalPages);
+
 public sealed record ProductSummary(
     Guid Id,
     string Name,
@@ -99,6 +125,10 @@ public sealed record ShiftSummary(
 
 public interface IDay5Service
 {
+    Task<ProductCatalogResult> GetProductCatalogAsync(
+        ProductCatalogFilterRequest request,
+        CancellationToken ct = default);
+
     Task<IReadOnlyList<ProductSummary>> GetProductsAsync(
         bool includeInactive = true,
         CancellationToken ct = default);
