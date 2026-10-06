@@ -7,26 +7,26 @@
 
     <UserControl.Resources>
 
-        <SolidColorBrush x:Key="Bg" Color="#0A0D12"/>
-        <SolidColorBrush x:Key="Surface" Color="#10151C"/>
-        <SolidColorBrush x:Key="Surface2" Color="#151B23"/>
-        <SolidColorBrush x:Key="Surface3" Color="#1B222C"/>
-        <SolidColorBrush x:Key="Border" Color="#26303B"/>
-        <SolidColorBrush x:Key="BorderStrong" Color="#35414D"/>
-        <SolidColorBrush x:Key="White" Color="#F5F7FA"/>
-        <SolidColorBrush x:Key="Text" Color="#DDE3EA"/>
-        <SolidColorBrush x:Key="Muted" Color="#8A96A5"/>
-        <SolidColorBrush x:Key="Dim" Color="#626D7B"/>
-        <SolidColorBrush x:Key="Accent" Color="#5E7FA8"/>
-        <SolidColorBrush x:Key="AccentSoft" Color="#1A2635"/>
-        <SolidColorBrush x:Key="Gold" Color="#C49A58"/>
-        <SolidColorBrush x:Key="GoldSoft" Color="#2A241A"/>
-        <SolidColorBrush x:Key="Green" Color="#55A884"/>
-        <SolidColorBrush x:Key="GreenSoft" Color="#152A22"/>
-        <SolidColorBrush x:Key="Blue" Color="#6E9BD0"/>
-        <SolidColorBrush x:Key="BlueSoft" Color="#182638"/>
-        <SolidColorBrush x:Key="Red" Color="#C96F73"/>
-        <SolidColorBrush x:Key="RedSoft" Color="#2B1D21"/>
+        <SolidColorBrush x:Key="Bg" Color="#141310"/>
+        <SolidColorBrush x:Key="Surface" Color="#1C1B17"/>
+        <SolidColorBrush x:Key="Surface2" Color="#232119"/>
+        <SolidColorBrush x:Key="Surface3" Color="#2A281F"/>
+        <SolidColorBrush x:Key="Border" Color="#373329"/>
+        <SolidColorBrush x:Key="BorderStrong" Color="#4A4336"/>
+        <SolidColorBrush x:Key="White" Color="#F7F4EC"/>
+        <SolidColorBrush x:Key="Text" Color="#E5E0D5"/>
+        <SolidColorBrush x:Key="Muted" Color="#A39D90"/>
+        <SolidColorBrush x:Key="Dim" Color="#706B61"/>
+        <SolidColorBrush x:Key="Accent" Color="#D4AF37"/>
+        <SolidColorBrush x:Key="AccentSoft" Color="#332A15"/>
+        <SolidColorBrush x:Key="Gold" Color="#D4AF37"/>
+        <SolidColorBrush x:Key="GoldSoft" Color="#332A15"/>
+        <SolidColorBrush x:Key="Green" Color="#43C982"/>
+        <SolidColorBrush x:Key="GreenSoft" Color="#15291F"/>
+        <SolidColorBrush x:Key="Blue" Color="#7EA8D8"/>
+        <SolidColorBrush x:Key="BlueSoft" Color="#1C2837"/>
+        <SolidColorBrush x:Key="Red" Color="#E36B6B"/>
+        <SolidColorBrush x:Key="RedSoft" Color="#301B1B"/>
 
         <Style x:Key="Card" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource Surface}"/>
@@ -157,11 +157,11 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel>
-                        <TextBlock Text="لوحة الإدارة"
+                        <TextBlock Text="لوحة الإدارة الرئيسية"
                                    Foreground="{StaticResource White}"
                                    FontSize="30"
                                    FontWeight="SemiBold"/>
-                        <TextBlock Text="نظرة مباشرة على أداء GHOST المالي والتشغيلي"
+                        <TextBlock Text="مركز التحكم التشغيلي والمالي لمكان GHOST"
                                    Foreground="{StaticResource Muted}"
                                    FontSize="12"
                                    Margin="0,6,0,0"/>
