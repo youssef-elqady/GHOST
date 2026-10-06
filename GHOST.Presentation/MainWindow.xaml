@@ -624,93 +624,47 @@
         <!-- ============================================================= -->
 
         <Style x:Key="DeviceCard" TargetType="Border">
-            <Setter Property="Width" Value="300"/>
-            <Setter Property="Margin" Value="0,0,12,12"/>
-            <Setter Property="Padding" Value="17"/>
+            <Setter Property="Width" Value="286"/>
+            <Setter Property="MinHeight" Value="235"/>
+            <Setter Property="Margin" Value="0,0,14,14"/>
+            <Setter Property="Padding" Value="16"/>
             <Setter Property="Background" Value="{StaticResource Surface}"/>
             <Setter Property="BorderBrush" Value="{StaticResource LineSoft}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="15"/>
-            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
-
-            <Setter Property="RenderTransform">
-                <Setter.Value>
-                    <ScaleTransform ScaleX="1"
-                                    ScaleY="1"/>
-                </Setter.Value>
-            </Setter>
-
+            <Setter Property="CornerRadius" Value="14"/>
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="24"
+                    <DropShadowEffect BlurRadius="22"
                                       ShadowDepth="0"
-                                      Opacity="0.20"/>
+                                      Opacity="0.18"/>
                 </Setter.Value>
             </Setter>
 
             <Style.Triggers>
-
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="BorderBrush"
-                            Value="#3D4652"/>
-                    <Setter Property="Background"
-                            Value="#161A20"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource Gold}"/>
+                    <Setter Property="Background" Value="{StaticResource Surface2}"/>
                 </Trigger>
 
                 <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                    <Setter Property="BorderBrush"
-                            Value="#315343"/>
-
-                    <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard RepeatBehavior="Forever"
-                                        AutoReverse="True">
-
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    From="1"
-                                    To="0.91"
-                                    Duration="0:0:1.35"/>
-
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.EnterActions>
-
-                    <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-
-                                <DoubleAnimation
-                                    Storyboard.TargetProperty="Opacity"
-                                    To="1"
-                                    Duration="0:0:0.15"/>
-
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </DataTrigger.ExitActions>
-
+                    <Setter Property="BorderBrush" Value="#315D47"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsPaused}" Value="True">
-                    <Setter Property="BorderBrush"
-                            Value="#5A492C"/>
+                    <Setter Property="BorderBrush" Value="#5A492C"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsReserved}" Value="True">
-                    <Setter Property="BorderBrush"
-                            Value="#354864"/>
+                    <Setter Property="BorderBrush" Value="#354864"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsMaintenance}" Value="True">
-                    <Setter Property="BorderBrush"
-                            Value="#5A3538"/>
+                    <Setter Property="BorderBrush" Value="#5A3538"/>
                 </DataTrigger>
 
                 <DataTrigger Binding="{Binding IsOffline}" Value="True">
-                    <Setter Property="Opacity"
-                            Value="0.58"/>
+                    <Setter Property="Opacity" Value="0.58"/>
                 </DataTrigger>
-
             </Style.Triggers>
         </Style>
 
@@ -1343,238 +1297,175 @@
 
                                                     <StackPanel>
 
+                                                        <!-- HEADER -->
                                                         <Grid>
-
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
 
                                                             <StackPanel>
-
                                                                 <TextBlock Text="{Binding Name}"
-                                                                           FontSize="19"
+                                                                           Foreground="{StaticResource White}"
+                                                                           FontSize="17"
                                                                            FontWeight="Bold"/>
-
                                                                 <TextBlock Text="{Binding Type}"
+                                                                           Foreground="{StaticResource Muted}"
                                                                            FontSize="9"
-                                                                           Foreground="{StaticResource Dim}"
-                                                                           Margin="0,3,0,0"/>
-
+                                                                           Margin="0,4,0,0"/>
                                                             </StackPanel>
 
-                                                            <TextBlock Grid.Column="1"
-                                                                       Text="{Binding StatusText}"
-                                                                       Foreground="{StaticResource Green}"
-                                                                       FontSize="9"
-                                                                       FontWeight="SemiBold"/>
-
+                                                            <StackPanel Grid.Column="1"
+                                                                        Orientation="Horizontal"
+                                                                        VerticalAlignment="Top">
+                                                                <Ellipse Width="8"
+                                                                         Height="8"
+                                                                         Fill="{StaticResource Gold}"
+                                                                         Margin="0,2,5,0"/>
+                                                                <TextBlock Text="{Binding StatusText}"
+                                                                           Foreground="{StaticResource Gold}"
+                                                                           FontSize="9"
+                                                                           FontWeight="SemiBold"/>
+                                                            </StackPanel>
                                                         </Grid>
 
-                                                        <Border Height="1"
-                                                                Background="{StaticResource LineSoft}"
-                                                                Margin="0,13"/>
-
-                                                        <TextBlock
-                                                            Text="{Binding RoomName, StringFormat={}الغرفة  •  {0}}"
-                                                            Foreground="{StaticResource Text}"
-                                                            FontSize="10"/>
-
-                                                        <!-- ============================================================= -->
-                                                        <!-- SESSION MODE SELECTOR                                        -->
-                                                        <!-- ============================================================= -->
-
-                                                        <StackPanel Margin="0,8,0,0">
-
-                                                            <StackPanel.Style>
-                                                                <Style TargetType="StackPanel">
-
-                                                                    <Setter Property="Visibility"
-                    Value="Visible"/>
-
-                                                                    <Style.Triggers>
-
-                                                                        <DataTrigger Binding="{Binding ShowSessionModeSelector}"
-                             Value="False">
-
-                                                                            <Setter Property="Visibility"
-                            Value="Collapsed"/>
-
-                                                                        </DataTrigger>
-
-                                                                    </Style.Triggers>
-
-                                                                </Style>
-                                                            </StackPanel.Style>
-
-                                                            <TextBlock Text="نوع اللعب"
-               Foreground="{StaticResource Dim}"
-               FontSize="8"
-               Margin="0,0,0,6"/>
-
-                                                            <StackPanel Orientation="Horizontal">
-
-                                                                <Button Content="فردي"
-                Style="{StaticResource SessionModeSingleButton}"
-                Command="{Binding SelectSingleCommand}"
-                IsEnabled="{Binding CanStartSession}"/>
-
-                                                                <Button Content="مالتي"
-                Style="{StaticResource SessionModeMultiButton}"
-                Command="{Binding SelectMultiCommand}"
-                IsEnabled="{Binding CanStartSession}"/>
-
-                                                            </StackPanel>
-
-                                                        </StackPanel>
-
-                                                        <TextBlock
-    Text="{Binding SingleRateText, StringFormat={}فردي  •  {0}}"
-    Foreground="{StaticResource Dim}"
-    FontSize="8"
-    Margin="0,6,0,0"/>
-
-                                                        <TextBlock
-    Text="{Binding MultiRateText, StringFormat={}مالتي  •  {0}}"
-    Foreground="{StaticResource Dim}"
-    FontSize="8"
-    Margin="0,3,0,0"/>
-
-
-                                                        <!-- ============================================================= -->
-                                                        <!-- ACTIVE SESSION MODE                                           -->
-                                                        <!-- ============================================================= -->
-
-                                                        <Border Margin="0,10,0,0"
-        Padding="9,7"
-        CornerRadius="9"
-        BorderThickness="1">
-
-                                                            <Border.Style>
-                                                                <Style TargetType="Border">
-
-                                                                    <Setter Property="Visibility"
-                    Value="Collapsed"/>
-
-                                                                    <Setter Property="Background"
-                    Value="#15191F"/>
-
-                                                                    <Setter Property="BorderBrush"
-                    Value="{StaticResource LineSoft}"/>
-
-                                                                    <Style.Triggers>
-
-                                                                        <DataTrigger Binding="{Binding IsActiveSingle}"
-                             Value="True">
-
-                                                                            <Setter Property="Visibility"
-                            Value="Visible"/>
-
-                                                                            <Setter Property="Background"
-                            Value="#2A2315"/>
-
-                                                                            <Setter Property="BorderBrush"
-                            Value="{StaticResource Gold}"/>
-
-                                                                        </DataTrigger>
-
-                                                                        <DataTrigger Binding="{Binding IsActiveMulti}"
-                             Value="True">
-
-                                                                            <Setter Property="Visibility"
-                            Value="Visible"/>
-
-                                                                            <Setter Property="Background"
-                            Value="{StaticResource BlueSoft}"/>
-
-                                                                            <Setter Property="BorderBrush"
-                            Value="{StaticResource Blue}"/>
-
-                                                                        </DataTrigger>
-
-                                                                    </Style.Triggers>
-
-                                                                </Style>
-                                                            </Border.Style>
-
-                                                            <StackPanel Orientation="Horizontal">
-
-                                                                <Ellipse Width="7"
-                 Height="7"
-                 VerticalAlignment="Center"
-                 Margin="0,0,7,0">
-
-                                                                    <Ellipse.Style>
-                                                                        <Style TargetType="Ellipse">
-
-                                                                            <Setter Property="Fill"
-                            Value="{StaticResource Gold}"/>
-
-                                                                            <Style.Triggers>
-
-                                                                                <DataTrigger Binding="{Binding IsActiveMulti}"
-                                     Value="True">
-
-                                                                                    <Setter Property="Fill"
-                                    Value="{StaticResource Blue}"/>
-
-                                                                                </DataTrigger>
-
-                                                                            </Style.Triggers>
-
-                                                                        </Style>
-                                                                    </Ellipse.Style>
-
-                                                                </Ellipse>
-
-                                                                <TextBlock
-            Text="{Binding ActiveSessionModeText, StringFormat={}الجلسة الحالية  •  {0}}"
-            Foreground="{StaticResource White}"
-            FontSize="9"
-            FontWeight="SemiBold"/>
-
-                                                                <TextBlock Text="  •  "
-                   Foreground="{StaticResource Dim}"
-                   FontSize="9"/>
-
-                                                                <TextBlock
-            Text="{Binding ActiveSessionRateText}"
-            Foreground="{StaticResource Muted}"
-            FontSize="8"/>
-
-                                                            </StackPanel>
-
+                                                        <!-- ROOM -->
+                                                        <Border Background="{StaticResource Surface2}"
+                                                                CornerRadius="8"
+                                                                Padding="9,6"
+                                                                Margin="0,14,0,10">
+                                                            <Grid>
+                                                                <TextBlock Text="{Binding RoomName}"
+                                                                           Foreground="{StaticResource Text}"
+                                                                           FontSize="9"/>
+                                                                <TextBlock Text="{Binding AirConditioningText}"
+                                                                           Foreground="{StaticResource Dim}"
+                                                                           FontSize="8"
+                                                                           HorizontalAlignment="Left"/>
+                                                            </Grid>
                                                         </Border>
 
-                                                        <Border Background="#0F1216"
-                                                                BorderBrush="{StaticResource LineSoft}"
+                                                        <!-- SESSION -->
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <StackPanel>
+                                                                <TextBlock Text="الجلسة الحالية"
+                                                                           Foreground="{StaticResource Dim}"
+                                                                           FontSize="8"/>
+                                                                <TextBlock Text="{Binding ActiveSessionModeText}"
+                                                                           Foreground="{StaticResource Text}"
+                                                                           FontSize="11"
+                                                                           FontWeight="SemiBold"
+                                                                           Margin="0,3,0,0"/>
+                                                            </StackPanel>
+
+                                                            <StackPanel Grid.Column="1"
+                                                                        HorizontalAlignment="Left">
+                                                                <TextBlock Text="السعر"
+                                                                           Foreground="{StaticResource Dim}"
+                                                                           FontSize="8"
+                                                                           HorizontalAlignment="Left"/>
+                                                                <TextBlock Text="{Binding ActiveSessionRateText}"
+                                                                           Foreground="{StaticResource Gold}"
+                                                                           FontSize="9"
+                                                                           FontWeight="SemiBold"
+                                                                           Margin="0,3,0,0"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <!-- LIVE TIMER + AMOUNT -->
+                                                        <Border Background="{StaticResource GoldSoft}"
+                                                                BorderBrush="#4B3B1D"
                                                                 BorderThickness="1"
                                                                 CornerRadius="10"
-                                                                Padding="10"
+                                                                Padding="12"
                                                                 Margin="0,12,0,0">
 
                                                             <Grid>
-
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="*"/>
                                                                     <ColumnDefinition Width="Auto"/>
-                                                                    <ColumnDefinition Width="*"/>
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <StackPanel Grid.Column="0"
-                                                                            HorizontalAlignment="Right">
-
+                                                                <StackPanel>
                                                                     <TextBlock Text="مدة اللعب"
-                                                                               Foreground="{StaticResource Dim}"
+                                                                               Foreground="{StaticResource Muted}"
                                                                                FontSize="8"/>
-
                                                                     <TextBlock Text="{Binding Runtime}"
-                                                                               Foreground="{StaticResource Gold}"
-                                                                               FontSize="14"
+                                                                               Foreground="{StaticResource GoldBright}"
+                                                                               FontSize="18"
                                                                                FontWeight="Bold"
                                                                                Margin="0,3,0,0"/>
-
                                                                 </StackPanel>
+
+                                                                <StackPanel Grid.Column="1"
+                                                                            HorizontalAlignment="Left">
+                                                                    <TextBlock Text="الحساب الحالي"
+                                                                               Foreground="{StaticResource Muted}"
+                                                                               FontSize="8"
+                                                                               HorizontalAlignment="Left"/>
+                                                                    <TextBlock Text="{Binding CurrentAmount}"
+                                                                               Foreground="{StaticResource White}"
+                                                                               FontSize="12"
+                                                                               FontWeight="Bold"
+                                                                               Margin="0,3,0,0"/>
+                                                                </StackPanel>
+                                                            </Grid>
+                                                        </Border>
+
+                                                        <!-- ACTIONS -->
+                                                        <Grid Margin="0,12,0,0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="6"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Button Grid.Column="0"
+                                                                    Content="بدء الجلسة"
+                                                                    Style="{StaticResource DeviceActionButton}"
+                                                                    Command="{Binding DataContext.StartSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    IsEnabled="{Binding CanStartSession}"
+                                                                    Margin="0"/>
+
+                                                            <Button Grid.Column="2"
+                                                                    Content="إيقاف / استئناف"
+                                                                    Style="{StaticResource DeviceActionButton}"
+                                                                    Command="{Binding DataContext.PauseOrResumeCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    IsEnabled="{Binding CanPauseSession}"
+                                                                    Margin="0"/>
+                                                        </Grid>
+
+                                                        <Grid Margin="0,7,0,0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="6"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <Button Grid.Column="0"
+                                                                    Content="إنهاء الجلسة"
+                                                                    Style="{StaticResource DeviceActionButton}"
+                                                                    Command="{Binding DataContext.EndSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    IsEnabled="{Binding CanEndSession}"
+                                                                    Margin="0"/>
+
+                                                            <Button Grid.Column="2"
+                                                                    Content="طلبات"
+                                                                    Style="{StaticResource DeviceActionButton}"
+                                                                    Click="OpenPlayOrders_Click"
+                                                                    IsEnabled="{Binding HasActiveSession}"
+                                                                    Margin="0"/>
+                                                        </Grid>
+
+                                                    </StackPanel>
 
                                                                 <Border Grid.Column="1"
                                                                         Width="1"
