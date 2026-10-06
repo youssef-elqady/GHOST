@@ -7,6 +7,7 @@
              Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
+
         <Style x:Key="ProductsHeaderText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="{DynamicResource GhostMuted}"/>
             <Setter Property="FontSize" Value="12"/>
@@ -20,96 +21,190 @@
         </Style>
 
         <Style x:Key="ProductsDataGrid" TargetType="DataGrid">
-            <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
-            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
-            <Setter Property="TextElement.Foreground" Value="{DynamicResource GhostText}"/>
-            <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="RowBackground" Value="{DynamicResource GhostSurface}"/>
-            <Setter Property="AlternatingRowBackground" Value="{DynamicResource GhostSurface2}"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource LineSoft}"/>
-            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="RowHeight" Value="58"/>
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Resources">
-                <Setter.Value>
-                    <ResourceDictionary>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                                         Color="#1A2635"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                                         Color="#F5F7FA"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
-                                         Color="#151B23"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}"
-                                         Color="#E2E7ED"/>
-                    </ResourceDictionary>
-                </Setter.Value>
-            </Setter>
+
+            <!-- DataGrid resources -->
+            <Style.Resources>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                     Color="#1A2635"/>
+
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                                     Color="#F5F7FA"/>
+
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                     Color="#151B23"/>
+
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}"
+                                     Color="#E2E7ED"/>
+                </ResourceDictionary>
+            </Style.Resources>
+
+            <Setter Property="Background"
+                    Value="{DynamicResource GhostSurface}"/>
+
+            <Setter Property="Foreground"
+                    Value="{DynamicResource GhostText}"/>
+
+            <Setter Property="TextElement.Foreground"
+                    Value="{DynamicResource GhostText}"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="RowBackground"
+                    Value="{DynamicResource GhostSurface}"/>
+
+            <Setter Property="AlternatingRowBackground"
+                    Value="{DynamicResource GhostSurface2}"/>
+
+            <Setter Property="HorizontalGridLinesBrush"
+                    Value="{DynamicResource LineSoft}"/>
+
+            <Setter Property="VerticalGridLinesBrush"
+                    Value="Transparent"/>
+
+            <Setter Property="GridLinesVisibility"
+                    Value="Horizontal"/>
+
+            <Setter Property="HeadersVisibility"
+                    Value="Column"/>
+
+            <Setter Property="RowHeight"
+                    Value="58"/>
+
+            <Setter Property="FontSize"
+                    Value="13"/>
+
+            <Setter Property="FontWeight"
+                    Value="Normal"/>
+
+            <!-- Column Header -->
             <Setter Property="ColumnHeaderStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="{DynamicResource GhostSurfaceElevatedBrush}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource GhostTextSecondaryBrush}"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource GhostBorderBrush}"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        <Setter Property="Padding" Value="12,11"/>
-                        <Setter Property="FontSize" Value="12"/>
-                        <Setter Property="FontWeight" Value="SemiBold"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Right"/>
+
+                        <Setter Property="Background"
+                                Value="{DynamicResource GhostSurfaceElevatedBrush}"/>
+
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource GhostTextSecondaryBrush}"/>
+
+                        <Setter Property="BorderBrush"
+                                Value="{DynamicResource GhostBorderBrush}"/>
+
+                        <Setter Property="BorderThickness"
+                                Value="0,0,0,1"/>
+
+                        <Setter Property="Padding"
+                                Value="12,11"/>
+
+                        <Setter Property="FontSize"
+                                Value="12"/>
+
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Right"/>
+
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="DataGridColumnHeader">
+
                                     <Border Background="{TemplateBinding Background}"
                                             BorderBrush="{TemplateBinding BorderBrush}"
                                             BorderThickness="{TemplateBinding BorderThickness}">
+
                                         <ContentPresenter
                                             Margin="{TemplateBinding Padding}"
                                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                             RecognizesAccessKey="True"/>
+
                                     </Border>
+
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+
                     </Style>
                 </Setter.Value>
             </Setter>
+
+            <!-- Row Style -->
             <Setter Property="RowStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
-                        <Setter Property="BorderThickness" Value="0"/>
+
+                        <Setter Property="Background"
+                                Value="{DynamicResource GhostSurface}"/>
+
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource GhostText}"/>
+
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+
                         <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource GhostHover}"/>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter Property="Background"
+                                        Value="{DynamicResource GhostHover}"/>
+
                             </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
-                                <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
+
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+
+                                <Setter Property="Background"
+                                        Value="{DynamicResource GhostActiveNav}"/>
+
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource GhostText}"/>
+
                             </Trigger>
+
                         </Style.Triggers>
+
                     </Style>
                 </Setter.Value>
             </Setter>
-            <Setter Property="SelectionUnit" Value="FullRow"/>
+
+            <Setter Property="SelectionUnit"
+                    Value="FullRow"/>
+
+            <!-- Cell Style -->
             <Setter Property="CellStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridCell">
-                        <Setter Property="Foreground" Value="{DynamicResource GhostText}"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Padding" Value="10,0"/>
-                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                        <Setter Property="Foreground"
+                                Value="{DynamicResource GhostText}"/>
+
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+
+                        <Setter Property="Padding"
+                                Value="10,0"/>
+
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+
                     </Style>
                 </Setter.Value>
             </Setter>
+
         </Style>
+
     </UserControl.Resources>
 
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -120,49 +215,68 @@
 
         <!-- Header -->
         <Grid Margin="0,0,0,18">
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel>
-                <TextBlock Text="المنتجات والمخزون" Style="{StaticResource GhostPageTitle}"/>
+
+                <TextBlock Text="المنتجات والمخزون"
+                           Style="{StaticResource GhostPageTitle}"/>
+
                 <TextBlock Text="إدارة المنتجات والأسعار والمخزون من مكان واحد."
                            Style="{StaticResource GhostSecondaryText}"/>
+
             </StackPanel>
 
-            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
                 <Button Content="تحديث"
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="Refresh_Click"
                         Margin="0,0,8,0"/>
+
                 <Button Content="سجل المخزون"
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="OpenHistory_Click"
                         Margin="0,0,8,0"/>
+
                 <Button Content="حركة مخزون"
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="OpenMovement_Click"
                         Margin="0,0,8,0"/>
+
                 <Button x:Name="ManageCategoriesButton"
                         Content="التصنيفات"
                         Style="{StaticResource GhostSecondaryButton}"
                         Click="ManageCategories_Click"
                         Visibility="Collapsed"
                         Margin="0,0,8,0"/>
+
                 <Button Click="AddProduct_Click"
                         Style="{StaticResource GhostPrimaryButton}">
+
                     <StackPanel Orientation="Horizontal">
+
                         <materialDesign:PackIcon Kind="Plus"
                                                  Width="18"
                                                  Height="18"
                                                  Margin="0,0,10,0"
                                                  VerticalAlignment="Center"/>
+
                         <TextBlock Text="إضافة منتج"
                                    VerticalAlignment="Center"/>
+
                     </StackPanel>
+
                 </Button>
+
             </StackPanel>
+
         </Grid>
 
         <!-- Search and filters -->
@@ -170,7 +284,9 @@
                 Style="{StaticResource GhostCard}"
                 Padding="14"
                 Margin="0,0,0,14">
+
             <Grid>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2.5*"/>
                     <ColumnDefinition Width="1.25*"/>
@@ -179,12 +295,18 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="0,0,10,0">
-                    <TextBlock Text="بحث" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
+
+                    <TextBlock Text="بحث"
+                               Style="{StaticResource GhostCaption}"
+                               Margin="0,0,0,6"/>
+
                     <Grid>
+
                         <TextBox x:Name="SearchBox"
                                  Style="{StaticResource GhostTextBox}"
                                  TextChanged="FilterChanged"
                                  ToolTip="ابحث باسم المنتج أو الباركود"/>
+
                         <materialDesign:PackIcon Kind="Magnify"
                                                  Width="19"
                                                  Height="19"
@@ -193,26 +315,53 @@
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource GhostDim}"
                                                  IsHitTestVisible="False"/>
+
                     </Grid>
+
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                    <TextBlock Text="التصنيف" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
+                <StackPanel Grid.Column="1"
+                            Margin="0,0,10,0">
+
+                    <TextBlock Text="التصنيف"
+                               Style="{StaticResource GhostCaption}"
+                               Margin="0,0,0,6"/>
+
                     <ComboBox x:Name="FilterCategoryBox"
                               DisplayMemberPath="Name"
                               SelectedValuePath="Id"
                               SelectionChanged="FilterChanged"/>
+
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Margin="0,0,10,0">
-                    <TextBlock Text="الحالة" Style="{StaticResource GhostCaption}" Margin="0,0,0,6"/>
+                <StackPanel Grid.Column="2"
+                            Margin="0,0,10,0">
+
+                    <TextBlock Text="الحالة"
+                               Style="{StaticResource GhostCaption}"
+                               Margin="0,0,0,6"/>
+
                     <ComboBox x:Name="FilterStatusBox"
                               SelectionChanged="FilterChanged">
-                        <ComboBoxItem Tag="Active">نشطة</ComboBoxItem>
-                        <ComboBoxItem Tag="Inactive">غير نشطة</ComboBoxItem>
-                        <ComboBoxItem Tag="LowStock">مخزون منخفض</ComboBoxItem>
-                        <ComboBoxItem Tag="All">الكل</ComboBoxItem>
+
+                        <ComboBoxItem Tag="Active">
+                            نشطة
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Tag="Inactive">
+                            غير نشطة
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Tag="LowStock">
+                            مخزون منخفض
+                        </ComboBoxItem>
+
+                        <ComboBoxItem Tag="All">
+                            الكل
+                        </ComboBoxItem>
+
                     </ComboBox>
+
                 </StackPanel>
 
                 <Button Grid.Column="3"
@@ -220,110 +369,224 @@
                         Style="{StaticResource GhostSecondaryButton}"
                         VerticalAlignment="Bottom"
                         Click="ClearFilters_Click"/>
+
             </Grid>
+
         </Border>
 
         <!-- KPI row -->
-        <UniformGrid Grid.Row="2" Columns="4" Margin="0,0,0,14">
-            <Border Style="{StaticResource GhostKpiCard}" Margin="0,0,8,0">
+        <UniformGrid Grid.Row="2"
+                     Columns="4"
+                     Margin="0,0,0,14">
+
+            <!-- Total Products -->
+            <Border Style="{StaticResource GhostKpiCard}"
+                    Margin="0,0,8,0">
+
                 <Grid>
+
                     <StackPanel>
-                        <TextBlock Text="المنتجات الظاهرة" Style="{StaticResource GhostCaption}"/>
-                        <TextBlock x:Name="TotalProductsText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="حسب البحث والتصفية الحالية" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+
+                        <TextBlock Text="المنتجات الظاهرة"
+                                   Style="{StaticResource GhostCaption}"/>
+
+                        <TextBlock x:Name="TotalProductsText"
+                                   Text="—"
+                                   FontSize="25"
+                                   FontWeight="SemiBold"
+                                   Margin="0,7,0,0"/>
+
+                        <TextBlock Text="حسب البحث والتصفية الحالية"
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,3,0,0"/>
+
                     </StackPanel>
-                    <Border Width="36" Height="36" CornerRadius="10"
+
+                    <Border Width="36"
+                            Height="36"
+                            CornerRadius="10"
                             Background="{DynamicResource BlueSoft}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top">
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top">
+
                         <materialDesign:PackIcon Kind="PackageVariant"
-                                                 Width="20" Height="20"
+                                                 Width="20"
+                                                 Height="20"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource Blue}"/>
+
                     </Border>
+
                 </Grid>
+
             </Border>
 
-            <Border Style="{StaticResource GhostKpiCard}" Margin="0,0,8,0">
+            <!-- Active Products -->
+            <Border Style="{StaticResource GhostKpiCard}"
+                    Margin="0,0,8,0">
+
                 <Grid>
+
                     <StackPanel>
-                        <TextBlock Text="منتجات نشطة" Style="{StaticResource GhostCaption}"/>
-                        <TextBlock x:Name="ActiveProductsText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="إجمالي المنتجات المتاحة" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+
+                        <TextBlock Text="منتجات نشطة"
+                                   Style="{StaticResource GhostCaption}"/>
+
+                        <TextBlock x:Name="ActiveProductsText"
+                                   Text="—"
+                                   FontSize="25"
+                                   FontWeight="SemiBold"
+                                   Margin="0,7,0,0"/>
+
+                        <TextBlock Text="إجمالي المنتجات المتاحة"
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,3,0,0"/>
+
                     </StackPanel>
-                    <Border Width="36" Height="36" CornerRadius="10"
+
+                    <Border Width="36"
+                            Height="36"
+                            CornerRadius="10"
                             Background="{DynamicResource GreenSoft}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top">
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top">
+
                         <materialDesign:PackIcon Kind="CheckCircleOutline"
-                                                 Width="20" Height="20"
+                                                 Width="20"
+                                                 Height="20"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource Green}"/>
+
                     </Border>
+
                 </Grid>
+
             </Border>
 
-            <Border Style="{StaticResource GhostKpiCard}" Margin="0,0,8,0">
+            <!-- Low Stock -->
+            <Border Style="{StaticResource GhostKpiCard}"
+                    Margin="0,0,8,0">
+
                 <Grid>
+
                     <StackPanel>
-                        <TextBlock Text="مخزون منخفض" Style="{StaticResource GhostCaption}"/>
-                        <TextBlock x:Name="LowStockText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="يحتاج مراجعة" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+
+                        <TextBlock Text="مخزون منخفض"
+                                   Style="{StaticResource GhostCaption}"/>
+
+                        <TextBlock x:Name="LowStockText"
+                                   Text="—"
+                                   FontSize="25"
+                                   FontWeight="SemiBold"
+                                   Margin="0,7,0,0"/>
+
+                        <TextBlock Text="يحتاج مراجعة"
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,3,0,0"/>
+
                     </StackPanel>
-                    <Border Width="36" Height="36" CornerRadius="10"
+
+                    <Border Width="36"
+                            Height="36"
+                            CornerRadius="10"
                             Background="{DynamicResource AmberSoft}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top">
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top">
+
                         <materialDesign:PackIcon Kind="AlertOutline"
-                                                 Width="20" Height="20"
+                                                 Width="20"
+                                                 Height="20"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource Amber}"/>
+
                     </Border>
+
                 </Grid>
+
             </Border>
 
+            <!-- Stock Value -->
             <Border Style="{StaticResource GhostKpiCard}">
+
                 <Grid>
+
                     <StackPanel>
-                        <TextBlock Text="قيمة المخزون" Style="{StaticResource GhostCaption}"/>
-                        <TextBlock x:Name="StockValueText" Text="—" FontSize="25" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="إجمالي القيمة بسعر البيع" Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+
+                        <TextBlock Text="قيمة المخزون"
+                                   Style="{StaticResource GhostCaption}"/>
+
+                        <TextBlock x:Name="StockValueText"
+                                   Text="—"
+                                   FontSize="25"
+                                   FontWeight="SemiBold"
+                                   Margin="0,7,0,0"/>
+
+                        <TextBlock Text="إجمالي القيمة بسعر البيع"
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,3,0,0"/>
+
                     </StackPanel>
-                    <Border Width="36" Height="36" CornerRadius="10"
+
+                    <Border Width="36"
+                            Height="36"
+                            CornerRadius="10"
                             Background="{DynamicResource GhostActiveNav}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top">
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top">
+
                         <materialDesign:PackIcon Kind="ChartBoxOutline"
-                                                 Width="20" Height="20"
+                                                 Width="20"
+                                                 Height="20"
                                                  HorizontalAlignment="Center"
                                                  VerticalAlignment="Center"
                                                  Foreground="{DynamicResource Gold}"/>
+
                     </Border>
+
                 </Grid>
+
             </Border>
+
         </UniformGrid>
 
         <!-- Products table -->
-        <Border Grid.Row="3" Style="{StaticResource GhostCard}" Padding="0">
+        <Border Grid.Row="3"
+                Style="{StaticResource GhostCard}"
+                Padding="0">
+
             <Grid>
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
                 <Grid Margin="18,15,18,12">
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+
                     <StackPanel>
-                        <TextBlock Text="قائمة المنتجات" Style="{StaticResource GhostSectionTitle}"/>
+
+                        <TextBlock Text="قائمة المنتجات"
+                                   Style="{StaticResource GhostSectionTitle}"/>
+
                         <TextBlock Text="اضغط على المنتج لعرض بياناته وتعديله."
-                                   Style="{StaticResource GhostCaption}" Margin="0,4,0,0"/>
+                                   Style="{StaticResource GhostCaption}"
+                                   Margin="0,4,0,0"/>
+
                     </StackPanel>
+
                     <TextBlock x:Name="ProductsCountText"
                                Grid.Column="1"
                                VerticalAlignment="Center"
                                Style="{StaticResource GhostSecondaryText}"/>
+
                 </Grid>
 
                 <DataGrid x:Name="ProductsGrid"
@@ -334,110 +597,257 @@
                           CanUserAddRows="False"
                           SelectionChanged="ProductsGrid_SelectionChanged"
                           Margin="8,0,8,8">
+
                     <DataGrid.ColumnHeaderStyle>
+
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="{DynamicResource GhostSurface2}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource GhostMuted}"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Padding" Value="14,12"/>
-                            <Setter Property="FontSize" Value="12"/>
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+
+                            <Setter Property="Background"
+                                    Value="{DynamicResource GhostSurface2}"/>
+
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource GhostMuted}"/>
+
+                            <Setter Property="BorderThickness"
+                                    Value="0"/>
+
+                            <Setter Property="Padding"
+                                    Value="14,12"/>
+
+                            <Setter Property="FontSize"
+                                    Value="12"/>
+
+                            <Setter Property="FontWeight"
+                                    Value="SemiBold"/>
+
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Right"/>
+
                         </Style>
+
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.RowStyle>
+
                         <Style TargetType="DataGridRow">
-                            <Setter Property="Background" Value="{DynamicResource GhostSurface}"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Cursor" Value="Hand"/>
+
+                            <Setter Property="Background"
+                                    Value="{DynamicResource GhostSurface}"/>
+
+                            <Setter Property="BorderThickness"
+                                    Value="0"/>
+
+                            <Setter Property="Cursor"
+                                    Value="Hand"/>
+
                             <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource GhostHover}"/>
+
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource GhostHover}"/>
+
                                 </Trigger>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource GhostActiveNav}"/>
+
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource GhostActiveNav}"/>
+
                                 </Trigger>
+
                             </Style.Triggers>
+
                         </Style>
+
                     </DataGrid.RowStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="المنتج" Width="2.2*">
+
+                        <!-- Product -->
+                        <DataGridTemplateColumn Header="المنتج"
+                                                Width="2.2*">
+
                             <DataGridTemplateColumn.CellTemplate>
+
                                 <DataTemplate>
+
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="{Binding Name}" Style="{StaticResource ProductsCellText}" FontWeight="SemiBold"/>
+
+                                        <TextBlock Text="{Binding Name}"
+                                                   Style="{StaticResource ProductsCellText}"
+                                                   FontWeight="SemiBold"/>
+
                                         <TextBlock Text="{Binding Barcode, TargetNullValue='بدون باركود'}"
-                                                   Style="{StaticResource GhostCaption}" Margin="0,3,0,0"/>
+                                                   Style="{StaticResource GhostCaption}"
+                                                   Margin="0,3,0,0"/>
+
                                     </StackPanel>
+
                                 </DataTemplate>
+
                             </DataGridTemplateColumn.CellTemplate>
+
                         </DataGridTemplateColumn>
 
-                        <DataGridTextColumn Header="التصنيف" Binding="{Binding CategoryName}" Width="1.25*"/>
-                        <DataGridTextColumn Header="سعر البيع" Binding="{Binding SellingPrice, StringFormat={}{0:N2} ج.م}" Width="1*"/>
-                        <DataGridTextColumn Header="التكلفة" Binding="{Binding CostPrice, StringFormat={}{0:N2} ج.م}" Width="1*"/>
-                        <DataGridTemplateColumn Header="المخزون" Width="1*">
+                        <!-- Category -->
+                        <DataGridTextColumn Header="التصنيف"
+                                            Binding="{Binding CategoryName}"
+                                            Width="1.25*"/>
+
+                        <!-- Selling Price -->
+                        <DataGridTextColumn Header="سعر البيع"
+                                            Binding="{Binding SellingPrice, StringFormat={}{0:N2} ج.م}"
+                                            Width="1*"/>
+
+                        <!-- Cost Price -->
+                        <DataGridTextColumn Header="التكلفة"
+                                            Binding="{Binding CostPrice, StringFormat={}{0:N2} ج.م}"
+                                            Width="1*"/>
+
+                        <!-- Stock -->
+                        <DataGridTemplateColumn Header="المخزون"
+                                                Width="1*">
+
                             <DataGridTemplateColumn.CellTemplate>
+
                                 <DataTemplate>
-                                    <Border CornerRadius="13" Padding="9,4"
+
+                                    <Border CornerRadius="13"
+                                            Padding="9,4"
                                             HorizontalAlignment="Right">
+
                                         <Border.Style>
+
                                             <Style TargetType="Border">
-                                                <Setter Property="Background" Value="{DynamicResource GhostSurface2}"/>
+
+                                                <Setter Property="Background"
+                                                        Value="{DynamicResource GhostSurface2}"/>
+
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                                        <Setter Property="Background" Value="{DynamicResource GhostSurface2}"/>
+
+                                                    <DataTrigger Binding="{Binding IsActive}"
+                                                                 Value="True">
+
+                                                        <Setter Property="Background"
+                                                                Value="{DynamicResource GhostSurface2}"/>
+
                                                     </DataTrigger>
+
                                                 </Style.Triggers>
+
                                             </Style>
+
                                         </Border.Style>
-                                        <TextBlock Text="{Binding StockQuantity}" HorizontalAlignment="Center"/>
+
+                                        <TextBlock Text="{Binding StockQuantity}"
+                                                   HorizontalAlignment="Center"/>
+
                                     </Border>
+
                                 </DataTemplate>
+
                             </DataGridTemplateColumn.CellTemplate>
+
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="الحد الأدنى" Binding="{Binding MinimumStockLevel}" Width="1*"/>
-                        <DataGridTemplateColumn Header="الحالة" Width="1*">
+
+                        <!-- Minimum Stock -->
+                        <DataGridTextColumn Header="الحد الأدنى"
+                                            Binding="{Binding MinimumStockLevel}"
+                                            Width="1*"/>
+
+                        <!-- Status -->
+                        <DataGridTemplateColumn Header="الحالة"
+                                                Width="1*">
+
                             <DataGridTemplateColumn.CellTemplate>
+
                                 <DataTemplate>
-                                    <Border CornerRadius="14" Padding="9,4"
+
+                                    <Border CornerRadius="14"
+                                            Padding="9,4"
                                             HorizontalAlignment="Right">
+
                                         <Border.Style>
+
                                             <Style TargetType="Border">
-                                                <Setter Property="Background" Value="{DynamicResource GreenSoft}"/>
-                                                <Setter Property="BorderBrush" Value="{DynamicResource Green}"/>
-                                                <Setter Property="BorderThickness" Value="1"/>
+
+                                                <Setter Property="Background"
+                                                        Value="{DynamicResource GreenSoft}"/>
+
+                                                <Setter Property="BorderBrush"
+                                                        Value="{DynamicResource Green}"/>
+
+                                                <Setter Property="BorderThickness"
+                                                        Value="1"/>
+
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                                        <Setter Property="Background" Value="{DynamicResource RedSoft}"/>
-                                                        <Setter Property="BorderBrush" Value="{DynamicResource Red}"/>
+
+                                                    <DataTrigger Binding="{Binding IsActive}"
+                                                                 Value="False">
+
+                                                        <Setter Property="Background"
+                                                                Value="{DynamicResource RedSoft}"/>
+
+                                                        <Setter Property="BorderBrush"
+                                                                Value="{DynamicResource Red}"/>
+
                                                     </DataTrigger>
+
                                                 </Style.Triggers>
+
                                             </Style>
+
                                         </Border.Style>
+
                                         <TextBlock Text="نشط">
+
                                             <TextBlock.Style>
+
                                                 <Style TargetType="TextBlock">
-                                                    <Setter Property="Foreground" Value="{DynamicResource Green}"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="{DynamicResource Green}"/>
+
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsActive}" Value="False">
-                                                            <Setter Property="Text" Value="غير نشط"/>
-                                                            <Setter Property="Foreground" Value="{DynamicResource Red}"/>
+
+                                                        <DataTrigger Binding="{Binding IsActive}"
+                                                                     Value="False">
+
+                                                            <Setter Property="Text"
+                                                                    Value="غير نشط"/>
+
+                                                            <Setter Property="Foreground"
+                                                                    Value="{DynamicResource Red}"/>
+
                                                         </DataTrigger>
+
                                                     </Style.Triggers>
+
                                                 </Style>
+
                                             </TextBlock.Style>
+
                                         </TextBlock>
+
                                     </Border>
+
                                 </DataTemplate>
+
                             </DataGridTemplateColumn.CellTemplate>
+
                         </DataGridTemplateColumn>
+
                     </DataGrid.Columns>
+
                 </DataGrid>
+
             </Grid>
+
         </Border>
 
     </Grid>
+
 </UserControl>

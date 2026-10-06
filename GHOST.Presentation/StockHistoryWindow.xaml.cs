@@ -89,19 +89,19 @@ public partial class StockHistoryWindow : Window
 
             rows.Clear();
 
-            foreach (var item in result)
+            foreach (var typeItem in result)
             {
                 rows.Add(new HistoryRow(
-                    item.CreatedAt,
-                    item.ProductName,
-                    TypeName(item.Type),
-                    item.Quantity > 0
-                        ? $"+{item.Quantity:N0}"
-                        : item.Quantity.ToString("N0"),
-                    item.BeforeQuantity,
-                    item.AfterQuantity,
-                    item.CreatedByName,
-                    item.Reason));
+                    typeItem.CreatedAt,
+                    typeItem.ProductName,
+                    TypeName(typeItem.Type),
+                    typeItem.Quantity > 0
+                        ? $"+{typeItem.Quantity:N0}"
+                        : typeItem.Quantity.ToString("N0"),
+                    typeItem.BeforeQuantity,
+                    typeItem.AfterQuantity,
+                    typeItem.CreatedByName,
+                    typeItem.Reason));
             }
         }
         catch (Exception ex)
